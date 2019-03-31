@@ -1,0 +1,28 @@
+Package: CyChecks
+Type: Package
+Title: Obtains and Analyzes Iowa State University Salary Data
+Version: 0.1.0
+Authors@R: c(
+    person("Gina", "Nichols", , "vnichols@iastate.edu", c("aut", "cre")),
+    person("Lydia", "English", , role = "aut"),
+    person("Yones", "Khaledian", , role = "aut"),
+    person("Brianna", "Lawton", role = "aut"),
+    person("Stephanie", "Reinders", role = "aut")
+    )
+Maintainer: The package maintainer <vnichols@iastate.edu>
+Description: Provides functions to scrape Iowa State Salary Data from the web for a given fiscal year. 
+     Also provides functions to analyze salary data by department, gender, and position.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Depends:
+    R (>= 3.1)
+Imports: 
+    dplyr,
+    tidyr,
+    ggplot2,
+    rvest
+URL: https://github.com/vanichols/CyChecks
+BugReports: https://github.com/vanichols/CyChecks/issues
