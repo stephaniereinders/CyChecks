@@ -11,7 +11,7 @@ Installation
 You can install the development version CyChecks from [github](https://CRAN.R-project.org) with:
 
 ``` r
-devtools::install_github("")
+devtools::install_github("https://github.com/vanichols/CyChecks")
 ```
 
 Example

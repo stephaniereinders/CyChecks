@@ -23,6 +23,7 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    rvest
+    rvest,
+    magrittr
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
