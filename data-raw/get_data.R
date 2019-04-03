@@ -10,11 +10,11 @@ fiscal_year <- 2018 # Will we just have different dataframes for each year?
 
 get_dat <- function(token, limit, offset, fiscal_year){
   url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?%s&$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University&fiscal_year=%d", token, limit, offset, fiscal_year)
-  sals <- fromJSON(url)
+  sals <- as_tibble(fromJSON(url))
   return(sals)}
 
 sals18 <- get_dat(token, limit, offset, fiscal_year)
-use_data(sals18, overwrite = TRUE)
+usethis::use_data(sals18, overwrite = TRUE)
 
 
 levels(forcats::as_factor(sals18$place_of_residence)) # 287 levels
@@ -27,3 +27,6 @@ sals18 %>%
   arrange(desc(n))
 
 # 201 people have no position **
+
+
+sals18
