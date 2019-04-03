@@ -1,0 +1,67 @@
+---
+title: "585 Project"
+author: "GLSI"
+date: "April 2, 2019"
+output: html_document
+---
+
+# R function for page source defined # 
+
+```{r page source}
+
+library(tidyverse)
+library("httr")
+
+get_http <- GET("https://data.iowa.gov/resource/s3p7-wy6w.json") 
+## Make a request. status_code: To note it, Status: 200, means successful request. Status: 404, as you know very well, means server not found. 
+
+library(httr)
+page_source <- function(department, fiscal_year){
+  url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?$limit=100&$offset=0&$order=:id&department=%s&fiscal_year=%f", department, fiscal_year)
+  initialjson <- jsonlite::fromJSON(url)
+  response <- GET(url)
+  if(http_error(response)){
+    stop("The request failed")}
+  else {
+    result <- content(response)
+    return(result)
+  }
+  salary_2018 <- jsonlite::fromJSON(initialjson)
+}
+
+json_format <- page_source("Iowa%20State%20University", 2018)
+```
+
+```{r dataframe}
+# To create dataframe
+
+df_list <- lapply(json_format, function(x) {
+  x[sapply(x, is.null)] <- NA
+  unlist(x)
+})
+
+df <- do.call("rbind", df_list) # Convert list to dataframe
+df_Cysalary <- as.data.frame.matrix(df) 
+df_Cysalary
+
+#data <- fromJSON("https://data.iowa.gov/resource/s3p7-wy6w.json?$limit=100&$offset=0&$order=:id&department=Iowa%20State%20University&fiscal_year=2018", flatten = TRUE)
+#colnames(data)
+
+```
+
+```{r Salary per gender}
+male_emplyee <- filter(df_Cysalary, gender == "M")
+female_emplyee <- filter(df_Cysalary, gender == "F")
+mean_salary_male <- sum(as.numeric(male_emplyee$total_salary_paid))*100/sum(as.numeric(df_Cysalary$total_salary_paid))
+mean_salary_female <- sum(as.numeric(female_emplyee$total_salary_paid))*100/sum(as.numeric(df_Cysalary$total_salary_paid))
+c(mean_salary_male = mean_salary_male, mean_salary_female= mean_salary_female)
+```
+
+```{r Boxplot}
+df_Cysalary %>% 
+  ggplot(aes(x = gender, y = as.numeric(total_salary_paid), fill = gender))+
+  geom_boxplot(aes(fill = gender))+
+  stat_summary(fun.y="mean", geom="point", shape=20, size=2, color="red", fill="red")+
+  labs(main = "title", y="Total Salary", x="Gender", color = "Legend Title\n")
+```
+
