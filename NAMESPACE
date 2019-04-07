@@ -2,4 +2,7 @@
 
 export("%>%")
 export(sal_df)
+export(slice_by1)
+export(slice_by2)
+import(tidyverse)
 importFrom(magrittr,"%>%")

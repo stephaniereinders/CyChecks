@@ -1,0 +1,31 @@
+#' Function to slice dataframe of salaries by two variables
+#'
+#' @name slice_by2
+#' @aliases slice_by2
+#' @title slice_by2
+#' @usage slice_by2(all_sals,slice_var1,slice_var2)
+#' @import tidyverse
+#' @param all_sals A dataframe of ISU salary data. Default is for year 2007.
+#' @param slice_var1 First variable to group_by
+#' @param slice_var2 Second variable to group_by
+#' @return A dataframe of mean, median, min, 1st quartile, 3rd quartile, and max of total_salary_paid, grouped by slice_var1 and slice_var2
+#' @examples
+#' slice_by1(all_sals,'gender','position')
+#' @export
+
+
+slice_by2 <- function(data = all_sals, slice_var1='gender', slice_var2='position'){
+
+df <- all_sals %>%
+  filter(!is.na(total_salary_paid)) %>%
+  group_by_(slice_var1,slice_var2) %>%
+  summarize(mean = mean(total_salary_paid),
+            min = min(total_salary_paid),
+            twentyfive = quantile(total_salary_paid,0.25),
+            median = median(total_salary_paid),
+            seventyfive = quantile(total_salary_paid,0.75),
+            max = max(total_salary_paid),
+            n=n())
+
+return(df)
+}
