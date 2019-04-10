@@ -3,21 +3,8 @@ library("tidyverse")
 
 # Right now this is Lydia's token...
 token <- "$$app_token=GJISvIEj4Jg2KmwRkV3oCGJrj"
-
 limit <- 150000 # Max number of entries
 offset <- 0 # Where to start gathering from (0 = the beginning)
-fiscal_year <- 2018 # Will we just have different dataframes for each year?
-
-get_dat <- function(token, limit, offset, fiscal_year){
-  url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?%s&$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University&fiscal_year=%d", token, limit, offset, fiscal_year)
-  s <- tibble::as_tibble(fromJSON(url))
-  sals <- s %>%
-    dplyr::select(-base_salary)%>%
-    dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
-    dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
-    dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
-    dplyr::mutate(name = gsub(",","",name))
-  return(sals)}
 
 ### getting all data
 get_dat2 <- function(token, limit, offset){
