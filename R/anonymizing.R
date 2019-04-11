@@ -6,7 +6,7 @@
 #' @export
 #' @return Returns the dataframe.
 #' @examples
-#' #Choose the trageted columns to mask.
+#' # Anonymize(data, cols_to_mask = "V")
 #'
 
 #df <- load(file = data/all_sals.rda)
