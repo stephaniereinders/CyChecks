@@ -35,4 +35,4 @@ assertthat::see_if(is.data.table (df_Cysalary), msg = "The dataframe is not conv
 df_Cysalary_org <- copy(df_Cysalary)
 df_Cysalary <- df_Cysalary[,cols_to_mask := lapply(.SD, anonymize),.SDcols=cols_to_mask,with=FALSE]
 
-head(df_Cysalary, 6)
+head(df_Cysalary, 5)
