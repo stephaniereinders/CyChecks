@@ -35,7 +35,8 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
     dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
     dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
-    dplyr::mutate(name = gsub(",","",name))
+    dplyr::mutate(name = gsub(",","",name)) %>%
+    dplyr::mutate(position = forcats::as_factor(stringr::str_trim(position, side = "right")))
   checkmate::assertDataFrame(sals)
   return(sals)
 }

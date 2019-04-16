@@ -14,12 +14,11 @@
 #' @export
 
 
-slice_by1 <- function(data = all_sals,slice_var='gender'){
-
-df <- all_sals %>%
-  filter(!is.na(total_salary_paid)) %>%
-  group_by_(slice_var) %>%
-  summarize(mean = mean(total_salary_paid),
+slice_by1 <- function(data = all_sals, slice_var='gender'){
+  df <- all_sals %>%
+    dplyr::filter(!is.na(total_salary_paid)) %>%
+    dplyr::group_by_(slice_var) %>%
+    dplyr::summarize(mean = mean(total_salary_paid),
             min = min(total_salary_paid),
             twentyfive = quantile(total_salary_paid,0.25),
             median = median(total_salary_paid),
@@ -29,3 +28,4 @@ df <- all_sals %>%
 
 return(df)
 }
+slice_by1()

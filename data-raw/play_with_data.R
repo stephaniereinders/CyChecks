@@ -1,11 +1,11 @@
-all_sals
-sals18
+data("all_sals")
+data("sals18")
 names(sals18)
 
 library(tidyverse)
 dat <- as_tibble(sals18)
 
-dat %>%
+cdat %>%
   filter(department == "AGRONOMY") %>%
   filter(grepl('PROF', position)) %>%
   ggplot(aes(gender, total_salary_paid)) +
@@ -39,3 +39,5 @@ dat %>%
   stat_summary(fun.y = mean, geom = "point") +
 #  guides(color = F) +
   facet_wrap(~organization)
+
+
