@@ -40,4 +40,41 @@ dat %>%
 #  guides(color = F) +
   facet_wrap(~organization)
 
+### models
 
+# numbers of year working
+yrs <- all_sals %>%
+    group_by(name)%>%
+    summarize(years_worked = n())
+unos <- all_sals %>%
+  filter(gender == "M" | gender == "F") %>%
+  group_by(gender, position) %>%
+  summarize(n = n())%>%
+  arrange(n)%>%
+  filter(n == 1)
+all_pos <- all_sals %>%
+  filter(!(position %in% unos$position)) %>%
+  filter(gender == "M" | gender == "F")%>%
+  filter(!(is.na(position)))%>%
+  filter(position != "**") %>%
+  mutate_if(is.factor, fct_explicit_na, na_level = "missing")%>%
+  group_by(department, organization) %>%
+  nest()
+
+nos <- c("AG/BIOSYS ENG", "FOOD SC/HN-AGLS", "MANAGEMENT", "AG/BIOSYS ENG-E", "VET PATHOLOGY",
+         "IT SERVICES CIO", "VP RESEARCH", "VP RESEARCH")
+
+profs <- all_sals %>%
+  filter(position == "PROF") %>%
+  filter(gender != "*")%>%
+  mutate(gender = fct_drop(gender, only = "*"))%>%
+  filter(!(department %in% nos)) %>%
+  mutate_if(is.factor, fct_explicit_na, na_level = "missing")%>%
+  group_by(department, organization) %>%
+  nest()
+
+
+pos_model <- function(df){
+  t.test(total_salary_paid ~ gender, data = df)
+}
+models <- map(profs$data, pos_model)
