@@ -1,13 +1,15 @@
 library("jsonlite")
 library("tidyverse")
 
-# Department info...
-depts <- readxl::read_xlsx("data-raw/Copy of Employees with Department and Org 4-8-19.xlsx")%>%
-  dplyr::mutate_at(vars(ORG_SHORT_NAME, DRCTY_DEPT_NAME), forcats::as_factor)%>%
-  dplyr::rename_all(tolower)%>%
-  dplyr::rename("organization" = "org_short_name")%>%
-  dplyr::rename("department" = "drcty_dept_name")%>%
-  dplyr::mutate(name = str_trunc(name, 20, ellipsis = ""))
+# Department info... (should this be deleted now that it has been used?)
+# depts <- readxl::read_xlsx("data-raw/DeptOrgInfo.xlsx")%>%
+#   dplyr::mutate_at(vars(ORG_SHORT_NAME, DRCTY_DEPT_NAME), forcats::as_factor)%>%
+#   dplyr::rename_all(tolower)%>%
+#   dplyr::rename("organization" = "org_short_name")%>%
+#   dplyr::rename("department" = "drcty_dept_name")%>%
+#   dplyr::mutate(name = str_trunc(name, 20, ellipsis = ""))
+#
+# usethis::use_data(depts, overwrite = TRUE, internal = TRUE)
 
 # Right now this is Lydia's token...
 token <- "$$app_token=GJISvIEj4Jg2KmwRkV3oCGJrj"
@@ -28,7 +30,19 @@ get_dat2 <- function(token, limit, offset){
     dplyr::mutate(position = forcats::as_factor(stringr::str_trim(position, side = "right")))
   return(sals)}
 all <- get_dat2(token, 150000, 0)
-all_sals <- left_join(all, depts, by = "name")
+load("R/sysdata.rda") # loads department info
+all_sals <- left_join(all, depts, by = "name") # joining everything together
+# anonymizing
+cols_to_anon <- "name"
+anonymize <- function(x, cols_to_anon, algo = "crc32"){
+  if(!require(digest)) stop("digest package is required")
+  to_anon <- dplyr::select(x, cols_to_anon)
+  unname(apply(to_anon, 1, digest, algo = algo))
+}
+sals_dept <- all_sals %>%
+  dplyr::mutate(id = anonymize(., cols_to_anon)) %>%
+  dplyr::select(-name)
+
 
 # data from just 2018
 
@@ -48,4 +62,4 @@ sals18 <- left_join(s18, depts, by = "name")
 # re-writing tables
 usethis::use_data(sals18, overwrite = TRUE)
 usethis::use_data(all_sals, overwrite = TRUE)
-
+usethis::use_data(sals_dept, overwrite = TRUE)

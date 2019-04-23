@@ -24,6 +24,8 @@ Imports:
     tidyr,
     ggplot2,
     rvest,
-    magrittr
+    magrittr,
+    checkmate,
+    tibble
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
