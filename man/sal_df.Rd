@@ -15,6 +15,9 @@ sal_df(limit = 1000, offset = 0, fiscal_year = 2007, token = NULL)
 
 \item{token}{An API token. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}}
 }
+\value{
+A dataframe with salary information, position, and date for Iowa State University employees
+}
 \description{
 Scrape ISU salary data by year from the web and turn it into a tidy dataframe
 

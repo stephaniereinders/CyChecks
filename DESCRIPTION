@@ -30,3 +30,5 @@ Imports:
     data.table
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
+Suggests: 
+    testthat

@@ -22,7 +22,7 @@ get_dat2 <- function(token, limit, offset){
   url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?%s&$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University", token, limit, offset)
   s <- tibble::as_tibble(fromJSON(url))
   sals <- s %>%
-    dplyr::select(-c(base_salary, department))%>%
+    dplyr::select(-department)%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
     dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
     dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence), forcats::as_factor)%>%
@@ -43,23 +43,24 @@ sals_dept <- all_sals %>%
   dplyr::mutate(id = anonymize(., cols_to_anon)) %>%
   dplyr::select(-name)
 
-
 # data from just 2018
 
 get_dat <- function(token, limit, offset, fiscal_year){
   url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?%s&$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University&fiscal_year=%d", token, limit, offset, fiscal_year)
   s <- tibble::as_tibble(fromJSON(url))
   sals <- s %>%
-    dplyr::select(-c(base_salary, department))%>%
+    dplyr::select(-department)%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
     dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
     dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
     dplyr::mutate(name = gsub(",","",name))
   return(sals)}
-s18 <- get_dat(token, limit, offset, fiscal_year = 2018)
-sals18 <- left_join(s18, depts, by = "name")
-
+s18 <- get_dat(token, limit, offset, fiscal_year = 2018) %>%
+  left_join(., depts, by = "name")
+# anonymize 2018 data too
+sals18 <- s18 %>%
+  dplyr::mutate(id = anonymize(., cols_to_anon)) %>%
+  dplyr::select(-name)
 # re-writing tables
 usethis::use_data(sals18, overwrite = TRUE)
-usethis::use_data(all_sals, overwrite = TRUE)
 usethis::use_data(sals_dept, overwrite = TRUE)

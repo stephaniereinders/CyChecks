@@ -95,8 +95,8 @@ stats_mf <- function(data = sals18){
     tidyr::nest() %>%
     dplyr::mutate(
       mod = data %>%
-             purrr::map(purrr::possibly(fun1,
-               otherwise = NA_real_))) %>%
+        purrr::map(purrr::possibly(fun1,
+                                   otherwise = NA_real_))) %>%
     tidyr::unnest(mod) %>%
     arrange(p_val)
 
