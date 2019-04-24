@@ -4,10 +4,10 @@
 \alias{get_profs}
 \title{get_profs}
 \usage{
-get_profs(data)
+get_profs(dataframe)
 }
 \arguments{
-\item{data}{A dataframe of salary data with a variable 'position'}
+\item{dataframe}{A dataframe of salary data with a variable 'position'}
 }
 \value{
 profs A dataframe of professors' salary data with tidied position
@@ -23,6 +23,6 @@ and emeritus.
 Create a dataframe of professors' salary data
 }
 \examples{
-get_profs(data)
+get_profs(dataframe)
 
 }

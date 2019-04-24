@@ -6,34 +6,30 @@
 #'   and emeritus.
 #' @name get_profs
 #' @title get_profs
-#' @usage get_profs(data)
+#' @usage get_profs(dataframe)
+#' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
-#' @param data A dataframe of salary data with a variable 'position'
+#' @param dataframe A dataframe of salary data with a variable 'position'
 #'
 #' @return profs A dataframe of professors' salary data with tidied position
 #'   categories
 #' @export
 #'
 #' @examples
-#' get_profs(data)
+#' get_profs(dataframe)
 #'
 
-get_profs <- function(data=sals_dept){
-
-# Make sure it has the columns I want, and that it's not empty
-assertthat::assert_that(is.data.frame(data))
-assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
-assertthat::not_empty(data)
+get_profs <- function(dataframe=all_sals){
 
 # Filter dataframe for all positions that contain the string 'PROF'
-data <- data %>%
+dataframe <- dataframe %>%
   dplyr::mutate(position = as.character(position)) %>%
   dplyr::filter(grepl('PROF', position))
 
 # Create a new variable 'position_simplified' that groups professor titles into groups
 # such as associate, visting, and emeritus.
-data <- data %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus', position),
+dataframe <- dataframe %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus', position),
                           position_simplified = gsub(".*DISTG.*",'distinguished', position_simplified),
                           position_simplified = gsub(".*UNIV.*",'university',position_simplified),
                           position_simplified = gsub(".*MORRILL.*",'morrill',position_simplified),
@@ -47,9 +43,9 @@ data <- data %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus',
                           position_simplified = gsub(".*(RES PROF|CLIN PROF).*",'professor',position_simplified),
                           position_simplified = replace(position_simplified,position_simplified=="PROF",'professor'))
 
-data <- data %>% dplyr::mutate(position = gsub(".*PROF.*",'professor', position))
+dataframe <- dataframe %>% dplyr::mutate(position = gsub(".*PROF.*",'professor', position))
 
-return(data)
+return(dataframe)
 }
 
 

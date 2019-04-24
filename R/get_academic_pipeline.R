@@ -5,6 +5,7 @@
 #' @name get_academic_pipeline
 #' @title get_academic_pipeline
 #' @usage get_academic_pipeline(dataframe)
+#' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
 #' @param dataframe A dataframe of salary data with a variable 'position'

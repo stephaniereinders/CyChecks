@@ -10,6 +10,8 @@
 #' @return A dataframe with salary information, position, and date for Iowa State University employees
 #'
 #' @importFrom dplyr mutate
+#' @importFrom lubridate ymd_hms
+#' @importFrom forcats as_factor
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 #'
 #' @export
@@ -30,7 +32,7 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   else {
     url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University&fiscal_year=%d", limit, offset, fiscal_year)
   }
-  s <- tibble::as_tibble(fromJSON(url))
+  s <- tibble::as_tibble(jsonlite::fromJSON(url))
   checkmate::assertTibble(s, min.rows = 1, ncols =10)
   sals <- s %>%
     dplyr::select(-c(base_salary,department))%>%
