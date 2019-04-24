@@ -15,7 +15,7 @@ categories
 }
 \description{
 Create a dataframe that only contains professors' salaray data
-from a larger dataframe of salary data. Create a new variable 'level'
+from a larger dataframe of salary data. Create a new variable 'position_simplified'
 that groups professor titles into categories such as associate, visting,
 and emeritus.
 }
@@ -23,6 +23,6 @@ and emeritus.
 Create a dataframe of professors' salary data
 }
 \examples{
-get_profs(all_sals)
+get_profs(dataframe)
 
 }

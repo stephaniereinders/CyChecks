@@ -7,7 +7,7 @@
 #' \describe{
 #' \item{base_salary_date}{the date base salary was computed}
 #' \item{fiscal_year}{year (July 1 - June 30) salary data is associated with}
-#' \item{gender}
+#' \item{gender}{gender}
 #' \item{place_of_residence}{county or city whereby employee resides}
 #' \item{position}{position within the university}
 #' \item{total_salary_paid}{total amount (in dollars) of salary for that fiscal year}
