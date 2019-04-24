@@ -17,7 +17,7 @@ cols_to_anon <- ("name")
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
   if(!require(digest)) stop("digest package is required")
   assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not character!")
-  assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe")
+  assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe!")
   to_anon <- dplyr::select(df, cols_to_anon)
   ids <- unname(apply(to_anon, 1, digest, algo = algo))
   df2 <- df %>%
