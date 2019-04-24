@@ -1,9 +1,9 @@
-#' Salary information for Iowa State Univeristy employees from 2007 - 2018
+#' Salary information for Iowa State Univeristy employees in2018
 #'
 #' A dataset containing the salary information, position, and gender of over
-#' 10,000 employees at Iowa State University
+#' 9,000 employees at Iowa State University
 #'
-#' @format A dataframe with 122,784 rows and 10 variables
+#' @format A dataframe with 9,989 rows and 10 variables
 #' \describe{
 #' \item{base_salary_date}{the date base salary was computed}
 #' \item{fiscal_year}{year (July 1 - June 30) salary data is associated with}
@@ -19,4 +19,4 @@
 #'
 #'
 #' @source\url{https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w}
-"sals_dept"
+"sals18"
