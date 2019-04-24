@@ -30,7 +30,7 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   else {
     url <- sprintf("https://data.iowa.gov/resource/s3p7-wy6w.json?$limit=%d&$offset=%d&$order=:id&department=Iowa%%20State%%20University&fiscal_year=%d", limit, offset, fiscal_year)
   }
-  s <- tibble::as_tibble(fromJSON(url))
+  s <- tibble::as_tibble(jsonlite::fromJSON(url))
   checkmate::assertTibble(s, min.rows = 1, ncols =10)
   sals <- s %>%
     dplyr::select(-c(base_salary,department))%>%

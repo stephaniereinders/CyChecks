@@ -4,17 +4,17 @@
 \alias{stats_mf}
 \title{Function to compare M vs F salaries within a department}
 \usage{
-stats_mf(data = sals18)
+stats_mf(data = sals_dept)
 }
 \arguments{
-\item{data}{A dataframe of ISU salary data with academic department info. Default is for year 2018.}
+\item{data}{A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function}
 }
 \value{
-A dataframe of department, nested data, p-value for gender pay gap, and a verdict
+A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 }
 \description{
 Function to compare M vs F salaries within a department
 }
 \examples{
-stats_mf(data = filter(sals18, department == "AGRONOMY", grepl("PROF", position)))
+stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
 }

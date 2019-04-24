@@ -27,7 +27,11 @@ Imports:
     magrittr,
     checkmate,
     tibble,
-    data.table
+    data.table,
+    assertable,
+    broom,
+    purrr,
+    assertthat
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 
