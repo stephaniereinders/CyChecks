@@ -1,6 +1,9 @@
 context("test-sal_df")
 
 test_that("sal_df function works", {
+  library(jsonlite)
+  library(dplyr)
+  library(checkmate)
   exampDF1 <- sal_df(limit = 20, fiscal_year = 2018)
   expect_error(sal_df(limit = -50)) # negative number of entries
   expect_error(sal_df(fiscal_year = 2005)) # fiscal year outside of range

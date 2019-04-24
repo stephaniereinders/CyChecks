@@ -4,10 +4,10 @@
 \alias{get_profs}
 \title{get_profs}
 \usage{
-get_profs(dataframe)
+get_profs(data)
 }
 \arguments{
-\item{dataframe}{A dataframe of salary data with a variable 'position'}
+\item{data}{A dataframe of salary data with a variable 'position'}
 }
 \value{
 profs A dataframe of professors' salary data with tidied position
@@ -15,7 +15,7 @@ categories
 }
 \description{
 Create a dataframe that only contains professors' salaray data
-from a larger dataframe of salary data. Create a new variable 'level'
+from a larger dataframe of salary data. Create a new variable 'position_simplified'
 that groups professor titles into categories such as associate, visting,
 and emeritus.
 }
@@ -23,6 +23,6 @@ and emeritus.
 Create a dataframe of professors' salary data
 }
 \examples{
-get_profs(all_sals)
+get_profs(data)
 
 }

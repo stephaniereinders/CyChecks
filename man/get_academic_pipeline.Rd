@@ -10,17 +10,17 @@ get_academic_pipeline(dataframe)
 \item{dataframe}{A dataframe of salary data with a variable 'position'}
 }
 \value{
-academic_pipeline A dataframe of professors' salary data with tidied position
-categories
+academic_pipeline A dataframe of graduate assistants', lecturers' and
+professors' salary data with tidied position and level variables
 }
 \description{
-Create a dataframe that contains salaray data
-for graduate assistants, lecturers, and professors
+Create a dataframe that contains salaray data for graduate
+assistants, lecturers, and professors
 }
 \details{
 Create a dataframe of salary data for positions in the academic pipeline
 }
 \examples{
-get_academic_pipeline(all_sals)
+get_academic_pipeline(dataframe)
 
 }

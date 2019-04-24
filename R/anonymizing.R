@@ -10,6 +10,10 @@
 #' DF <- sal_df()
 #' anonymize(DF)
 
+load("~/CyChecks/data/sals_dept.rda")
+df <- sals_dept
+cols_to_anon <- ("name")
+
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
   if(!require(digest)) stop("digest package is required")
   assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not character!")
@@ -21,4 +25,3 @@ anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
     dplyr::select(-name)
   return(df2)
 }
-
