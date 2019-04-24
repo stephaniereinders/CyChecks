@@ -14,6 +14,7 @@ fun1 <- function(data) {
   twogenders <- data %>%
     dplyr::group_by(position, gender) %>%
     dplyr::summarise(n = n()) %>%
+    dplyr::mutate(gender = as.character(gender)) %>%
     dplyr::filter(gender %in% c("F", "M")) %>%
     tidyr::spread(gender, n)
 
@@ -73,26 +74,28 @@ fun1 <- function(data) {
 #'
 #' @name stats_mf
 #' @importFrom tidyr spread nest unnest
-#' @importFrom dplyr group_by summarise select rename mutate filter
+#' @importFrom dplyr group_by summarise select rename mutate filter arrange
 #' @importFrom broom tidy
 #' @importFrom purrr map possibly
 #' @importFrom assertthat assert_that not_empty
 #' @importFrom assertable assert_colnames
-#' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018.
-#' @return A dataframe of department, nested data, p-value for gender pay gap, and a verdict
+#' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function
+#' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
-#' stats_mf(data = filter(sals18, department == "AGRONOMY", grepl("PROF", position)))
+#' stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
 #' @export
 
 
 # Actual function
-stats_mf <- function(data = sals18){
+stats_mf <- function(data = sals_dept){
 
   # Make sure it has the columns I want, and that it's not empty
   assertthat::assert_that(is.data.frame(data))
-  assertable::assert_colnames(data, c("department","position", "gender", "total_salary_paid"), only_colnames = FALSE)
+  assertable::assert_colnames(data, c("department",
+                                      "position",
+                                      "gender",
+                                      "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
-
 
   yourstats <- data %>%
     dplyr::group_by(department) %>%
@@ -102,24 +105,27 @@ stats_mf <- function(data = sals18){
         purrr::map(purrr::possibly(fun1,
                                    otherwise = NA_real_))) %>%
     tidyr::unnest(mod) %>%
-    arrange(p_val)
+    dplyr::arrange(p_val)
 
   return(yourstats)
 
 }
 
+
+#stats_mf(sals18)
+
 # For trouble shooting
 #library(tidyverse)
-# hm <- sals18 %>% filter(department == "H SCI STUDNT SR")
+# hm <- sals_dept %>% filter(department == "H SCI STUDNT SR")
 # res <- stats_mf(data = hm)
 #
-# depts <- unique(sals18$department)
+# depts <- unique(sals_dept$department)
 # depts[25]
 # length(depts)
 # for (i in 201:300) {
-# hm <- sals18 %>% filter(department == depts[i])
+# hm <- sals_dept %>% filter(department == depts[i])
 # res1 <- stats_mf(data = hm)
 # res <- rbind(res, res1)
 # }
 #
-#res <- stats_mf(data = sals18)
+#res <- stats_mf(data = sals_dept)
