@@ -2,9 +2,13 @@
 fun1 <- function(data) {
   # -------Start fun
   assertthat::assert_that(is.data.frame(data))
-  assertable::assert_colnames(data, c("position", "gender"), only_colnames = FALSE)
+  assertable::assert_colnames(data, c("position",
+                                      "gender",
+                                      "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
-  assertthat::assert_that(is.factor(data$position), is.factor(data$gender))
+  assertthat::assert_that(is.factor(data$position),
+                          is.factor(data$gender),
+                          is.numeric(data$total_salary_paid))
 
   # Make sure there are two genders in that department (eye roll)
   twogenders <- data %>%
@@ -86,7 +90,7 @@ stats_mf <- function(data = sals18){
 
   # Make sure it has the columns I want, and that it's not empty
   assertthat::assert_that(is.data.frame(data))
-  assertable::assert_colnames(data, c("department","position", "gender"), only_colnames = FALSE)
+  assertable::assert_colnames(data, c("department","position", "gender", "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
 
 

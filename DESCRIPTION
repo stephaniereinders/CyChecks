@@ -23,7 +23,7 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    rvest,
+    jsonlite,
     magrittr,
     checkmate,
     tibble,
