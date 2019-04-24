@@ -31,7 +31,9 @@ Imports:
     assertable,
     broom,
     purrr,
-    assertthat
+    assertthat,
+    forcats,
+    lubridate
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 

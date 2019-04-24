@@ -2,7 +2,6 @@
 
 export("%>%")
 export()
-export(get_academic_pipeline)
 export(get_profs)
 export(sal_df)
 export(stats_mf)
