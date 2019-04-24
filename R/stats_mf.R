@@ -77,7 +77,7 @@ fun1 <- function(data) {
 #' @importFrom broom tidy
 #' @importFrom purrr map possibly
 #' @importFrom assertthat assert_that not_empty
-#' @importFrom asserrtable assert_colnames
+#' @importFrom assertable assert_colnames
 #' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018.
 #' @return A dataframe of department, nested data, p-value for gender pay gap, and a verdict
 #' @examples
