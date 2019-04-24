@@ -9,6 +9,7 @@
 #' @param token An API token. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}
 #' @return A dataframe with salary information, position, and date for Iowa State University employees
 #'
+#' @importFrom dplyr mutate
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 #'
 #' @export

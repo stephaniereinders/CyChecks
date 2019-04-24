@@ -3,8 +3,8 @@
 #' @name stats_mf
 #' @import dplyr
 #' @import tidyr
-#' @import purrr
-#' @import broom
+#' @importFrom purrr map
+#' @importFrom broom tidy
 #' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018.
 #' @return A dataframe of department, nested data, p-value for gender pay gap, and a verdict
 #' @examples

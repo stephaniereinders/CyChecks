@@ -17,6 +17,5 @@
 #' \item{department}{home department on campus}
 #' }
 #'
-#'
 #' @source\url{https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w}
 "sals18"
