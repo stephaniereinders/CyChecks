@@ -110,22 +110,3 @@ stats_mf <- function(data = sals_dept){
   return(yourstats)
 
 }
-
-
-#stats_mf(sals18)
-
-# For trouble shooting
-#library(tidyverse)
-# hm <- sals_dept %>% filter(department == "H SCI STUDNT SR")
-# res <- stats_mf(data = hm)
-#
-# depts <- unique(sals_dept$department)
-# depts[25]
-# length(depts)
-# for (i in 201:300) {
-# hm <- sals_dept %>% filter(department == depts[i])
-# res1 <- stats_mf(data = hm)
-# res <- rbind(res, res1)
-# }
-#
-#res <- stats_mf(data = sals_dept)
