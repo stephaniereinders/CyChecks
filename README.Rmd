@@ -60,3 +60,5 @@ You can access the data using our XX function.
 
 
 ```
+
+[![Travis build status](https://travis-ci.org/vanichols/CyChecks.svg?branch=master)](https://travis-ci.org/vanichols/CyChecks)
