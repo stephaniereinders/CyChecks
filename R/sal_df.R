@@ -10,6 +10,11 @@
 #' @return A dataframe with salary information, position, and date for Iowa State University employees
 #'
 #' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom lubridate ymd_hms
+#' @importFrom checkmate assertNumber
+#' @importFrom tibble as_tibble
+#' @importFrom checkmate assertDataFrame
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 #'
 #' @export
