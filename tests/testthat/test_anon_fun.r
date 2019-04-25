@@ -1,10 +1,9 @@
 ######### Testing anonymize function ############
 
-
-library(testthat)
 context("test_anonymize_function")
 
 test_that("Anonymize function is working", {
+  library(testthat)
   expect_true(is.character(cols_to_anon)) ##
   expect_true(is.data.frame(df)) #
   expect_true(is.function(anonymize)) #
