@@ -4,7 +4,7 @@
 \alias{get_profs}
 \title{get_profs}
 \usage{
-get_profs(dataframe)
+get_profs(data)
 }
 \arguments{
 \item{data}{A dataframe of salary data with a variable 'position'}

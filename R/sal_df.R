@@ -17,6 +17,7 @@
 #' @importFrom checkmate assertDataFrame
 #' @importFrom lubridate ymd_hms
 #' @importFrom forcats as_factor
+#' @importFrom stringr str_trim
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 #'
 #' @export

@@ -33,7 +33,9 @@ Imports:
     purrr,
     assertthat,
     forcats,
-    lubridate
+    lubridate,
+    stringr,
+    digest
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 
