@@ -10,9 +10,8 @@
 #' DF <- sal_df()
 #' anonymize(DF)
 
-
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
-  #if(!require(digest)) stop("digest package is required")
+  if(!require(digest)) stop("digest package is required")
   assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not character!")
   assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe")
   assertthat::assert_that(is.data.frame(df), msg = "df is not a dataframe!")

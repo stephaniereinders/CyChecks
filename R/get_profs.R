@@ -10,23 +10,23 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
-#' @param dataframe A dataframe of salary data with a variable 'position'
+#' @param data A dataframe of salary data with a variable 'position'
 #'
 #' @return profs A dataframe of professors' salary data with tidied position
 #'   categories
 #' @export
 #'
 #' @examples
-#' get_profs(dataframe)
+#' get_profs()
 #'
 
-get_profs <- function(dataframe=all_sals){
+get_profs <- function(data=sals_dept){
 
 assertthat::assert_that(is.data.frame(data))
 assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
 
 # Filter dataframe for all positions that contain the string 'PROF'
-dataframe <- dataframe %>%
+dataframe <- data %>%
   dplyr::mutate(position = as.character(position)) %>%
   dplyr::filter(grepl('PROF', position))
 
@@ -50,7 +50,5 @@ dataframe <- dataframe %>% dplyr::mutate(position = gsub(".*PROF.*",'professor',
 
 return(dataframe)
 }
-
-
 
 
