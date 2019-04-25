@@ -7,7 +7,6 @@
 #' @name get_profs
 #' @title get_profs
 #' @usage get_profs(dataframe)
-#' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
 #' @param data A dataframe of salary data with a variable 'position'
