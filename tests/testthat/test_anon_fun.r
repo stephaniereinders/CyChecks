@@ -5,6 +5,7 @@ context("test_anonymize_function")
 
 test_that("Anonymize function is working", {
   library(testthat)
+  cols_to_anon <- "example"
   expect_true(is.character(cols_to_anon)) ##
   expect_true(is.data.frame(df)) #
   expect_true(is.function(anonymize)) #

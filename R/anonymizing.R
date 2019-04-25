@@ -10,8 +10,6 @@
 #' DF <- sal_df()
 #' anonymize(DF)
 
-load("~/CyChecks/data/sals_dept.rda")
-df <- sals_dept
 
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
   #if(!require(digest)) stop("digest package is required")
