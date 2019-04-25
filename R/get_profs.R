@@ -22,6 +22,9 @@
 
 get_profs <- function(dataframe=all_sals){
 
+assertthat::assert_that(is.data.frame(data))
+assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
+
 # Filter dataframe for all positions that contain the string 'PROF'
 dataframe <- dataframe %>%
   dplyr::mutate(position = as.character(position)) %>%

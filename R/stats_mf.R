@@ -73,7 +73,7 @@ fun1 <- function(data) {
 #' Function to compare M vs F salaries within a department
 #'
 #' @name stats_mf
-#' @importFrom tidyr spread nest unnest
+#' @importFrom tidyr nest unnest
 #' @importFrom dplyr group_by summarise select rename mutate filter arrange
 #' @importFrom assertthat assert_that not_empty
 #' @importFrom assertable assert_colnames
