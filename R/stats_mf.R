@@ -1,6 +1,8 @@
 # Function to be called inside real function
 fun1 <- function(data) {
   # -------Start fun
+
+  # Handle bad input
   assertthat::assert_that(is.data.frame(data))
   assertable::assert_colnames(data, c("position",
                                       "gender",
@@ -93,6 +95,8 @@ stats_mf <- function(data = sals_dept){
                                       "gender",
                                       "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
+  assertthat::assert_that(is.numeric(data$total_salary_paid))
+
 
   yourstats <- data %>%
     dplyr::group_by(department) %>%
