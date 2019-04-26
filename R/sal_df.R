@@ -24,11 +24,7 @@
 #'
 #' @export
 #' @author Lydia English
-#'
-#' @examples
-#' sal_df()
-#' sal_df(limit = 25, fiscal_year = 2015)
-#'
+
 
 sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   checkmate::assertNumber(limit, lower = 0)
