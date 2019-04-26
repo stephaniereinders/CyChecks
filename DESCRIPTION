@@ -20,6 +20,7 @@ RoxygenNote: 6.1.1
 Depends:
     R (>= 3.1)
 Imports: 
+    curl,
     dplyr,
     tidyr,
     ggplot2,
@@ -33,7 +34,10 @@ Imports:
     purrr,
     assertthat,
     forcats,
-    lubridate
+    lubridate,
+    stringr,
+    digest,
+    shiny
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 

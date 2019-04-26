@@ -16,5 +16,10 @@ A dataframe of department, nested data, p-value for gender pay gap after account
 Function to compare M vs F salaries within a department
 }
 \examples{
-stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
+data(sals_dept)
+sals_dept \%>\%
+dplyr::filter(department == "AGRONOMY") \%>\%
+dplyr::filter(stringr::str_detect(position, "PROF")) \%>\%
+stats_mf()
+
 }

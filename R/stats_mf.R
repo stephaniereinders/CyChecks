@@ -1,6 +1,8 @@
 # Function to be called inside real function
 fun1 <- function(data) {
   # -------Start fun
+
+  # Handle bad input
   assertthat::assert_that(is.data.frame(data))
   assertable::assert_colnames(data, c("position",
                                       "gender",
@@ -80,10 +82,15 @@ fun1 <- function(data) {
 #' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function
 #' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
-#' stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
+#' data(sals_dept)
+#' sals_dept %>%
+#' dplyr::filter(department == "AGRONOMY") %>%
+#' dplyr::filter(stringr::str_detect(position, "PROF")) %>%
+#' stats_mf()
+#'
 #' @export
 
-# Actual function
+# Actual p
 stats_mf <- function(data = sals_dept){
 
   # Make sure it has the columns I want, and that it's not empty
@@ -93,6 +100,8 @@ stats_mf <- function(data = sals_dept){
                                       "gender",
                                       "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
+  assertthat::assert_that(is.numeric(data$total_salary_paid))
+
 
   yourstats <- data %>%
     dplyr::group_by(department) %>%

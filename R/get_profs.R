@@ -6,8 +6,7 @@
 #'   and emeritus.
 #' @name get_profs
 #' @title get_profs
-#' @usage get_profs(dataframe)
-#' @importFrom magrittr %>%
+#' @usage get_profs(data)
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
 #' @param data A dataframe of salary data with a variable 'position'
@@ -17,22 +16,24 @@
 #' @export
 #'
 #' @examples
-#' get_profs(sals_dept)
+#' get_profs()
 #'
 
-get_profs <- function(data){
+get_profs <- function(data=sals_dept){
 
 assertthat::assert_that(is.data.frame(data))
 assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
 
 # Filter dataframe for all positions that contain the string 'PROF'
-data <- data %>%
+
+dataframe <- data %>%
+
   dplyr::mutate(position = as.character(position)) %>%
   dplyr::filter(grepl('PROF', position))
 
 # Create a new variable 'position_simplified' that groups professor titles into groups
 # such as associate, visting, and emeritus.
-data <- data %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus', position),
+dataframe <- dataframe %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus', position),
                           position_simplified = gsub(".*DISTG.*",'distinguished', position_simplified),
                           position_simplified = gsub(".*UNIV.*",'university',position_simplified),
                           position_simplified = gsub(".*MORRILL.*",'morrill',position_simplified),
@@ -46,11 +47,9 @@ data <- data %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus',
                           position_simplified = gsub(".*(RES PROF|CLIN PROF).*",'professor',position_simplified),
                           position_simplified = replace(position_simplified,position_simplified=="PROF",'professor'))
 
-data <- data %>% dplyr::mutate(position = gsub(".*PROF.*",'professor', position))
+dataframe <- dataframe %>% dplyr::mutate(position = gsub(".*PROF.*",'professor', position))
 
-return(data)
+return(dataframe)
 }
-
-
 
 

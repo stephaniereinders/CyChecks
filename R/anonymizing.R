@@ -4,24 +4,30 @@
 #' @param df The name of the file includes a dataframe.
 #' @param cols_to_anon The columns to anonymize. The default is people's names
 #' @param algo The algorithms to be used. The available choices are md5, which is also the default, sha1, crc32, sha256, sha512, xxhash32, xxhash64, and murmur32.
+#' @importFrom digest digest
 #' @export
-#' @return Returns a dataframe with an anonymized column (id).
+#' @return Returns a dataframe with an anonymized column named 'id'.
 #' @examples
-#' DF <- sal_df()
+#' DF <- data.frame(name = c("John", "Jon", "Jonathan", "Jon"), year = c(2010,2010,2011,2011), pay = c(5000,7000,8000,7000))
 #' anonymize(DF)
-data("sals_dept", package = "CyChecks")
-# load("~/CyChecks/data/sals_dept.rda")
-# df <- sals_dept
-# cols_to_anon <- ("name")
+#' df <- anonymize(df=sals18, cols_to_anon = "place_of_residence")
+
 
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
-  if(!require(digest)) stop("digest package is required")
-  assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not character!")
+
+  assertthat::not_empty(df)
   assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe")
+  assertthat::assert_that(is.data.frame(df),
+                          is.character(algo),
+                          nrow(df) > 0)
+
   to_anon <- dplyr::select(df, cols_to_anon)
-  ids <- unname(apply(to_anon, 1, digest, algo = algo))
+
+  ids <- unname(apply(to_anon, 1, digest::digest, algo = algo))
+
   df2 <- df %>%
-    dplyr::mutate(id = ids) %>%
-    dplyr::select(-name)
+    dplyr::mutate(id = ids)
+
   return(df2)
 }
+
