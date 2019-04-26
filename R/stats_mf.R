@@ -83,7 +83,11 @@ fun1 <- function(data) {
 #' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
 #' data(sals_dept)
-#' stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
+#' sals_dept %>%
+#' dplyr::filter(department == "AGRONOMY") %>%
+#' dplyr::filter(stringr::str_detect(position, "PROF")) %>%
+#' stats_mf()
+#'
 #' @export
 
 # Actual p

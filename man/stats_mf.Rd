@@ -17,5 +17,9 @@ Function to compare M vs F salaries within a department
 }
 \examples{
 data(sals_dept)
-stats_mf(data = filter(sals_dept, department == "AGRONOMY", grepl("PROF", position)))
+sals_dept \%>\%
+dplyr::filter(department == "AGRONOMY") \%>\%
+dplyr::filter(stringr::str_detect(position, "PROF")) \%>\%
+stats_mf()
+
 }

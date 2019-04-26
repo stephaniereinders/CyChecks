@@ -27,10 +27,8 @@ See \href{https://github.com/vanichols/CyChecks}{CyChecks}
 An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 }
 \examples{
-\dontrun{
 sal_df()
 x <- sal_df(limit = 10, fiscal_year = 2015)
-}
 }
 \author{
 Lydia English
