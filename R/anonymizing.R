@@ -8,7 +8,7 @@
 #' @export
 #' @return Returns a dataframe with an anonymized column named 'id'.
 #' @examples
-#' anonymize(sals18, "place_of_residence")
+#' df <- anonymize(df=sals18, cols_to_anon = "place_of_residence")
 
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
 

@@ -14,12 +14,11 @@ anonymize(df, cols_to_anon = "name", algo = "crc32")
 \item{algo}{The algorithms to be used. The available choices are md5, which is also the default, sha1, crc32, sha256, sha512, xxhash32, xxhash64, and murmur32.}
 }
 \value{
-Returns a dataframe with an anonymized column (id).
+Returns a dataframe with an anonymized column named 'id'.
 }
 \description{
 Anonymize some information in the dataframe.
 }
 \examples{
-DF <- sal_df()
-anonymize(DF)
+df <- anonymize(df=sals18, cols_to_anon = "place_of_residence")
 }
