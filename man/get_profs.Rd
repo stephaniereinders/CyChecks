@@ -7,7 +7,7 @@
 get_profs(dataframe)
 }
 \arguments{
-\item{dataframe}{A dataframe of salary data with a variable 'position'}
+\item{data}{A dataframe of salary data with a variable 'position'}
 }
 \value{
 profs A dataframe of professors' salary data with tidied position
@@ -23,6 +23,6 @@ and emeritus.
 Create a dataframe of professors' salary data
 }
 \examples{
-get_profs(dataframe)
+get_profs(sals_dept)
 
 }
