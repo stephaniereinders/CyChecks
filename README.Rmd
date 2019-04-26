@@ -14,11 +14,13 @@ knitr::opts_chunk$set(
 ```
 # CyChecks
 
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
+
 *Overview*
 
 The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries. 
-
-![](http://diysolarpanelsv.com/images/iowa-state-cyclone-clip-art-27.png)
 
 Some of the services this access could offer include:
 
@@ -37,12 +39,15 @@ The data from this site does not include the employee's home department. Unfortu
 
 This package currently includes:
 
-1. A function to download data directly from the iowa.gov website.
-2. Employee/salary dataset for 2007-2018 (scraped from the web)
-3. Employee/department/college dataset valid as of Jan 1 2019 (received by ISU Human Resources)
-4. Employee/salary/department/college dataset assumed to be valid for 2018
-5. A function to anonymize names in the web scraped dataset
-6. A shiny app for visualizing the 2018 dataset (4)
+1. A function to:
+   (i) download data directly from the iowa.gov website
+   (ii) anonymize names of downloaded data
+   (iii) simplify professor and post-doc position titles
+   (iv) quickly identify departments with possible gender pay inequities
+2. Data from:
+    (i) Employee/salary/department dataset for 2007-2018 
+    (ii) Employee/salary/department/college dataset assumed to be valid for 2018
+3. A shiny app for visualizing data
 
 ## Installation
 
