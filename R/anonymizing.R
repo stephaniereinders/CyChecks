@@ -12,14 +12,19 @@
 #' anonymize(DF)
 
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
-  assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not character!")
+
+  assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not characters!")
   assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe")
-  assertthat::assert_that(is.data.frame(df), msg = "df is not a dataframe!")
-  assertthat::assert_that(is.character(algo), msg = "algo is not string")
+  assertthat::assert_that(is.data.frame(df), msg = "df is not a dataframe!",
+                          is.character(algo), msg = "algo is not a character string")
+
   to_anon <- dplyr::select(df, cols_to_anon)
+
   ids <- unname(apply(to_anon, 1, digest::digest, algo = algo))
+
   df2 <- df %>%
     dplyr::mutate(id = ids)
+
   return(df2)
 }
 
