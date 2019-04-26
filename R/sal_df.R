@@ -11,7 +11,7 @@
 #'
 #' @importFrom dplyr mutate select vars
 #' @importFrom lubridate ymd_hms
-#' @importFrom checkmate assertNumber assertTibble assertDataFrame
+#' @importFrom checkmate assertNumber assertTibble
 #' @importFrom tibble as_tibble
 #' @importFrom lubridate ymd_hms
 #' @importFrom forcats as_factor
@@ -25,7 +25,6 @@
 #' @export
 #'
 
-
 sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   checkmate::assertNumber(limit, lower = 0)
   checkmate::assertNumber(offset, lower = 0)
@@ -38,6 +37,7 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   }
   s <- tibble::as_tibble(jsonlite::fromJSON(url))
   checkmate::assertTibble(s, min.rows = 1, ncols =10)
+
   sals <- s %>%
     dplyr::select(-c(base_salary,department))%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
@@ -45,7 +45,7 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
     dplyr::mutate_at(dplyr::vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
     dplyr::mutate(name = gsub(",","",name)) %>%
     dplyr::mutate(position = forcats::as_factor(stringr::str_trim(position, side = "right")))
-  checkmate::assertDataFrame(sals)
+
+  checkmate::assertTibble(sals, min.rows = 1, ncols = 8)
   return(sals)
 }
-
