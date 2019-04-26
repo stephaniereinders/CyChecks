@@ -20,7 +20,8 @@ Returns a dataframe with an anonymized column named 'id'.
 Anonymize some information in the dataframe.
 }
 \examples{
-DF <- data.frame(name = c("John", "Jon", "Jonathan", "Jon"), year = c(2010,2010,2011,2011), pay = c(5000,7000,8000,7000))
+DF <- data.frame(name = c("John", "Jon", "Jonathan", "Jon"),
+      year = c(2010,2010,2011,2011), pay = c(5000,7000,8000,7000))
 anonymize(DF)
 df <- anonymize(df=sals18, cols_to_anon = "place_of_residence")
 }
