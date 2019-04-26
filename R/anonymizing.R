@@ -6,17 +6,17 @@
 #' @param algo The algorithms to be used. The available choices are md5, which is also the default, sha1, crc32, sha256, sha512, xxhash32, xxhash64, and murmur32.
 #' @importFrom digest digest
 #' @export
-#' @return Returns a dataframe with an anonymized column (id).
+#' @return Returns a dataframe with an anonymized column named 'id'.
 #' @examples
-#' DF <- sal_df()
-#' anonymize(DF)
+#' anonymize(sals18, "place_of_residence")
 
 anonymize <- function(df, cols_to_anon = "name", algo = "crc32"){
 
-  assertthat::see_if(is.character(cols_to_anon), msg = "The selected columns are not characters!")
+  assertthat::not_empty(df)
   assertthat::see_if(cols_to_anon %in% names(df), msg = "The selected column isn't in the dataframe")
-  assertthat::assert_that(is.data.frame(df), msg = "df is not a dataframe!",
-                          is.character(algo), msg = "algo is not a character string")
+  assertthat::assert_that(is.data.frame(df),
+                          is.character(algo),
+                          nrow(df) > 0)
 
   to_anon <- dplyr::select(df, cols_to_anon)
 
