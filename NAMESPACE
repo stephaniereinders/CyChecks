@@ -3,6 +3,7 @@
 export("%>%")
 export(anonymize)
 export(get_profs)
+export(runShiny)
 export(sal_df)
 export(stats_mf)
 importFrom(assertable,assert_colnames)

@@ -35,7 +35,8 @@ Imports:
     forcats,
     lubridate,
     stringr,
-    digest
+    digest,
+    shiny
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 
