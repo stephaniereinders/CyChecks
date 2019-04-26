@@ -6,18 +6,20 @@
 #' @param limit How many data entries you'd like to receive (default = 1000)
 #' @param offset Where you'd like the dataentries to start pulling from (default = 0)
 #' @param fiscal_year The fiscal year the data are taken from. Limited to 2007-2018
-#' @param token An API token. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}
+#' @param token An API token. Only necessary for large amounts of datascraping. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}
 #' @return A dataframe with salary information, position, and date for Iowa State University employees
 #'
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom lubridate ymd_hms
 #' @importFrom checkmate assertNumber
+#' @importFrom checkmate assertTibble
 #' @importFrom tibble as_tibble
 #' @importFrom checkmate assertDataFrame
 #' @importFrom lubridate ymd_hms
 #' @importFrom forcats as_factor
 #' @importFrom stringr str_trim
+#' @importFrom jsonlite fromJSON
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
 #'
 #' @export

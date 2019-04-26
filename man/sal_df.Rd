@@ -13,7 +13,7 @@ sal_df(limit = 1000, offset = 0, fiscal_year = 2007, token = NULL)
 
 \item{fiscal_year}{The fiscal year the data are taken from. Limited to 2007-2018}
 
-\item{token}{An API token. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}}
+\item{token}{An API token. Only necessary for large amounts of datascraping. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}}
 }
 \value{
 A dataframe with salary information, position, and date for Iowa State University employees
