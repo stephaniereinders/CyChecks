@@ -4,7 +4,8 @@ require(ggplot2)
 require(dplyr)
 
 #Cysalary <- read.csv("C:/Users/ykh/Desktop/Cysalary.csv")
-Cysalary <- data("all_sals")
+load(file = "sals_dept.rda")
+Cysalary <- sals_dept
 
 ui <- fluidPage(
   # App Title

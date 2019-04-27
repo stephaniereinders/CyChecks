@@ -5,7 +5,10 @@ library(DT)
 
 # read in data
 load(file = "sals_dept.rda")
+load(file = "sals_dept_profs.rda")
 sals_dept <- sals_dept %>% filter(!is.na(gender))
+department <- c("All departments", sort(unique(as.character(sals_dept$department))))
+fiscal_year <- c("All years", sort(unique(as.character(sals_dept$fiscal_year))))
 
 
 ui <- fluidPage(
@@ -15,8 +18,11 @@ ui <- fluidPage(
   # Sidebar # - Based on gender
   sidebarPanel(
     selectInput("department", label = ("Department"), # - Based on gender
-                choices = sort(unique(sals_dept$department)),
-                selected = "AGRONOMY")
+                choices = department,
+                selected = "AGRONOMY"),
+    selectInput("fiscal_year", label = ("Year"), # - Based on gender
+                choices = fiscal_year,
+                selected = "2018")
   ),
   mainPanel(
     tabsetPanel(
@@ -30,33 +36,93 @@ ui <- fluidPage(
 # server
 server <- function(input, output){
   liq_all <- reactive({
-    sals_dept %>%
-      filter(department == input$department) %>%
-      select("total_salary_paid", "gender", "position")
+    # Show all departments and all years
+    if (input$department == "All departments" & input$fiscal_year == 'All years'){
+      sals_dept %>%
+        filter(!is.na(total_salary_paid)) %>%
+        select("total_salary_paid", "gender", "position")
+    }
+    # Show all departments but filter on years
+    else if (input$department == "All departments"){
+      sals_dept %>%
+        filter(!is.na(total_salary_paid),fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid", "gender", "position")
+    }
+    # Show all years but filter on department
+    else if (input$fiscal_year == "All years"){
+      sals_dept %>%
+        filter(!is.na(total_salary_paid),department == input$department) %>%
+        select("total_salary_paid", "gender", "position")
+    }
+    # Filter on department and year
+    else {
+      sals_dept %>%
+        filter(!is.na(total_salary_paid),department == input$department, fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid", "gender", "position")
+    }
+
   })
   output$allDat <- renderPlot({
+    # Plot for all departments
+    if (input$department == "All departments"){
+      ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid,color=gender)) +
+        geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
+        stat_summary(fun.y = mean, geom = "line") +
+        stat_summary(fun.y = mean, geom = "point", size = 3) +
+        #guides(color=FALSE) +
+        theme_bw()
+    }
+    # Plot for single department
+    else {
     ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid, color = position, group = position)) +
       geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
       stat_summary(fun.y = mean, geom = "line") +
       stat_summary(fun.y = mean, geom = "point", size = 3) +
       theme_bw()
-  })
+    }
+
+    })
+
   output$allDatTab <- renderDataTable({
     dataset <- liq_all()
     summary(dataset)
   })
+
   liq_prof <- reactive({
-    sals_dept %>%
-      filter(department == input$department) %>%
-      filter(grepl('PROF', position)) %>%
-      select("total_salary_paid","travel_subsistence","gender", "position", "fiscal_year")
-  })
+
+    # Show all departments and all years
+    if (input$department == "All departments" & input$fiscal_year == 'All years'){
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid)) %>%
+        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+    }
+    # Show all departments but filter on years
+    else if (input$department == "All departments"){
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid),fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+    }
+    # Show all years but filter on department
+    else if (input$fiscal_year == "All years"){
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid),department == input$department) %>%
+        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+    }
+    # Filter on department and year
+    else {
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid),department == input$department, fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+    }
+
+    })
+
   output$prof <- renderPlot({
     ggplot(data = liq_prof(),
            aes(x = gender,
                y = total_salary_paid/1000,
-               color = position,
-               group = position)) +
+               color = position_simplified,
+               group = position_simplified)) +
       geom_jitter(size = 2, width = 0.2, alpha = 0.2) +
       stat_summary(fun.y = mean, geom = "line", size = 2) +
       stat_summary(fun.y = mean, geom = "point", size = 3) +
@@ -69,6 +135,7 @@ server <- function(input, output){
       group_by(fiscal_year, gender)%>%
       summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))
   })
+
   liq_postdoc<- reactive ({
     sals_dept %>%
       filter(department == input$department)%>%

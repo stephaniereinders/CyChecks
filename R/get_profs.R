@@ -27,7 +27,6 @@ assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
 # Filter dataframe for all positions that contain the string 'PROF'
 
 dataframe <- data %>%
-
   dplyr::mutate(position = as.character(position)) %>%
   dplyr::filter(grepl('PROF', position))
 
@@ -48,6 +47,8 @@ dataframe <- dataframe %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'
                           position_simplified = replace(position_simplified,position_simplified=="PROF",'professor'))
 
 dataframe <- dataframe %>% dplyr::mutate(position = gsub(".*PROF.*",'professor', position))
+
+dataframe <- data.frame(dataframe)
 
 return(dataframe)
 }
