@@ -60,4 +60,4 @@ You can access the data using our XX function.
 ## basic example code
 ```
 
-[![Travis build status](https://travis-ci.org/vanichols/CyChecks.svg?branch=master)](https://travis-ci.org/vanichols/CyChecks)
+[![Travis build status](https://travis-ci.org/vanichols/CyChecks.svg?branch=master)](https://travis-ci.org/vanichols/CyChecks) [![Coverage status](https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg)](https://codecov.io/github/vanichols/CyChecks?branch=master)

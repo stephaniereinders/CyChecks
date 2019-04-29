@@ -30,6 +30,7 @@ test_that("sal_df function works", {
                       "position", "total_salary_paid", "travel_subsistence"),
                ignore.order = TRUE, ignore.case = TRUE)
   expect_equal(sals_raw, sal_df(fiscal_year = 2007, limit = 10))
+  expect_equal(sals_raw, sal_df(fiscal_year = 2007, limit = 10, token = "$$app_token=GJISvIEj4Jg2KmwRkV3oCGJrj"))
 })
 
 
