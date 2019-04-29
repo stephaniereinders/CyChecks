@@ -1,6 +1,8 @@
 library(shiny)
 require(ggplot2)
 require(dplyr)
+require(tidyr)
+require(stringr)
 library(DT)
 
 # read in data
@@ -74,7 +76,8 @@ server <- function(input, output){
     }
     # Plot for single department
     else {
-    ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid, color = position, group = position)) +
+    ggplot(data = liq_all() %>% filter(gender != "*"),
+           aes(x = gender, y= total_salary_paid, color = position, group = position)) +
       geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
       stat_summary(fun.y = mean, geom = "line") +
       stat_summary(fun.y = mean, geom = "point", size = 3) +
@@ -85,7 +88,10 @@ server <- function(input, output){
 
   output$allDatTab <- renderDataTable({
     dataset <- liq_all()
-    summary(dataset)
+    dataset %>%
+      filter(gender != "*")%>%
+      group_by(gender)%>%
+      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))
   })
 
   liq_prof <- reactive({
@@ -133,7 +139,11 @@ server <- function(input, output){
     dataset <- liq_prof()
     dataset %>%
       group_by(fiscal_year, gender)%>%
-      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))
+      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))%>%
+      tidyr::unite("avg_pay_n", avg_pay, n, sep = " (")%>%
+      dplyr::mutate("avg_pay_n" = stringr::str_c(avg_pay_n, ")" , sep = ""))%>%
+      tidyr::spread(key = fiscal_year, value = avg_pay_n)
+
   })
 
   liq_postdoc<- reactive ({
@@ -158,7 +168,10 @@ server <- function(input, output){
     dataset <- liq_postdoc()
     dataset %>%
       group_by(fiscal_year, gender)%>%
-      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))
+      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))%>%
+      tidyr::unite("avg_pay_n", avg_pay, n, sep = " (")%>%
+      dplyr::mutate("avg_pay_n" = stringr::str_c(avg_pay_n, ")" , sep = ""))%>%
+      tidyr::spread(key = fiscal_year, value = avg_pay_n)
   })
 }
 
