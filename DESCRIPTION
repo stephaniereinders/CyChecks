@@ -41,5 +41,5 @@ Imports:
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 
-    testthat
-
+    testthat,
+    covr
