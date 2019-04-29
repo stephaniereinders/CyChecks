@@ -8,7 +8,8 @@ library(DT)
 # read in data
 load(file = "sals_dept.rda")
 load(file = "sals_dept_profs.rda")
-sals_dept <- sals_dept %>% filter(!is.na(gender))
+sals_dept <- sals_dept %>% filter(!is.na(gender), gender != "*")
+sals_dept_profs <- sals_dept_profs %>% filter(!is.na(gender), gender != "*")
 department <- c("All departments", sort(unique(as.character(sals_dept$department))))
 fiscal_year <- c("All years", sort(unique(as.character(sals_dept$fiscal_year))))
 
@@ -37,63 +38,100 @@ ui <- fluidPage(
 
 # server
 server <- function(input, output){
+
+  # All tab----
   liq_all <- reactive({
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
       sals_dept %>%
         filter(!is.na(total_salary_paid)) %>%
-        select("total_salary_paid", "gender", "position")
+        select("total_salary_paid", "gender", "position", "fiscal_year")
     }
     # Show all departments but filter on years
     else if (input$department == "All departments"){
       sals_dept %>%
-        filter(!is.na(total_salary_paid),fiscal_year == input$fiscal_year) %>%
-        select("total_salary_paid", "gender", "position")
+        filter(!is.na(total_salary_paid), fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid", "gender", "position", "fiscal_year")
     }
     # Show all years but filter on department
     else if (input$fiscal_year == "All years"){
       sals_dept %>%
-        filter(!is.na(total_salary_paid),department == input$department) %>%
-        select("total_salary_paid", "gender", "position")
+        filter(!is.na(total_salary_paid), department == input$department) %>%
+        select("total_salary_paid", "gender", "position", "fiscal_year")
     }
     # Filter on department and year
     else {
       sals_dept %>%
-        filter(!is.na(total_salary_paid),department == input$department, fiscal_year == input$fiscal_year) %>%
-        select("total_salary_paid", "gender", "position")
+        filter(!is.na(total_salary_paid),
+               department == input$department,
+               fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid", "gender", "position", "fiscal_year")
     }
 
   })
   output$allDat <- renderPlot({
-    # Plot for all departments
+    # Plot for all departments, all years
     if (input$department == "All departments"){
-      ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid,color=gender)) +
+      ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid/1000, color=gender)) +
         geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
         stat_summary(fun.y = mean, geom = "line") +
         stat_summary(fun.y = mean, geom = "point", size = 3) +
         #guides(color=FALSE) +
-        theme_bw()
+        theme_bw() +
+        labs(x = NULL, y = "Total Salary Paid\nThousands of $")
     }
-    # Plot for single department
+    # Plot for single department, all years
     else {
     ggplot(data = liq_all() %>% filter(gender != "*"),
-           aes(x = gender, y= total_salary_paid, color = position, group = position)) +
+           aes(x = gender, y = total_salary_paid/1000, color = position, group = position)) +
       geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
       stat_summary(fun.y = mean, geom = "line") +
       stat_summary(fun.y = mean, geom = "point", size = 3) +
-      theme_bw()
+      theme_bw() +
+      labs(x = NULL, y = "Total Salary Paid\nThousands of $")
     }
 
     })
 
   output$allDatTab <- renderDataTable({
+
     dataset <- liq_all()
-    dataset %>%
-      filter(gender != "*")%>%
-      group_by(gender)%>%
-      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))
+    if (input$fiscal_year == 'All years') {
+
+      dataset %>%
+        group_by(gender) %>%
+        summarize(
+          n = n(),
+          avg_pay = round(mean(total_salary_paid), 0)) %>%
+        dplyr::mutate(fiscal_year = "all years") %>%
+        dplyr::select(fiscal_year, gender, n, avg_pay) %>%
+        dplyr::rename(
+          "Gender" = gender,
+          "Fiscal Year" = fiscal_year,
+          "Mean Total Salary" = avg_pay
+        ) %>%
+        DT::datatable() %>%
+        DT::formatCurrency(
+          "Mean Total Salary",
+          interval = 3,
+          mark = ",",
+          digits = 0
+        )
+
+    } else {
+      dataset %>%
+        group_by(fiscal_year, gender)%>%
+        summarize(n = n(),
+                  avg_pay = round(mean(total_salary_paid), 0)) %>%
+        dplyr::rename("Gender" = gender,
+                      "Fiscal Year" = fiscal_year,
+                      "Mean Total Salary" = avg_pay) %>%
+        DT::datatable() %>%
+        DT::formatCurrency("Mean Total Salary", interval = 3, mark = ",", digits = 0)
+    }
   })
 
+  # Prof tab-----
   liq_prof <- reactive({
 
     # Show all departments and all years
@@ -123,6 +161,7 @@ server <- function(input, output){
 
     })
 
+    # Figure
   output$prof <- renderPlot({
     ggplot(data = liq_prof(),
            aes(x = gender,
@@ -135,23 +174,81 @@ server <- function(input, output){
       theme_bw() +
       labs(x = NULL, y = "Total Salary Paid\nThousands of $")
   })
+  # Data table
   output$profTab <- renderDataTable({
     dataset <- liq_prof()
-    dataset %>%
-      group_by(fiscal_year, gender)%>%
-      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))%>%
-      tidyr::unite("avg_pay_n", avg_pay, n, sep = " (")%>%
-      dplyr::mutate("avg_pay_n" = stringr::str_c(avg_pay_n, ")" , sep = ""))%>%
-      tidyr::spread(key = fiscal_year, value = avg_pay_n)
+    if (input$fiscal_year == 'All years') {
+      dataset %>%
+        mutate(fiscal_year = as.character(fiscal_year),
+               fiscal_year2 = as.numeric(fiscal_year)) %>%
+        group_by(gender)%>%
+        summarize(n = n(),
+                  avg_pay = round(mean(total_salary_paid), 0),
+                  min_year = min(fiscal_year2),
+                  max_year = max(fiscal_year2)) %>%
+        mutate(fiscal_year = paste0(min_year, "-", max_year)) %>%
+        dplyr::select(fiscal_year, gender, n, avg_pay) %>%
+        dplyr::rename("Gender" = gender,
+                      "Fiscal Year" = fiscal_year,
+                      "Mean Total Salary" = avg_pay) %>%
+        DT::datatable() %>%
+        DT::formatCurrency("Mean Total Salary", interval = 3, mark = ",", digits = 0)
+
+    } else {
+      dataset %>%
+        group_by(fiscal_year, gender)%>%
+        summarize(n = n(),
+                  avg_pay = round(mean(total_salary_paid), 0)) %>%
+        dplyr::rename("Gender" = gender,
+                      "Fiscal Year" = fiscal_year,
+                      "Mean Total Salary" = avg_pay) %>%
+        DT::datatable() %>%
+        DT::formatCurrency("Mean Total Salary", interval = 3, mark = ",", digits = 0)
+
+    }
+
 
   })
 
+  # Post-doc tab----
   liq_postdoc<- reactive ({
-    sals_dept %>%
-      filter(department == input$department)%>%
-      filter(grepl('POSTDOC', position)) %>%
-      select("total_salary_paid","travel_subsistence","gender", "fiscal_year")
+
+    # Show all departments and all years
+    if (input$department == "All departments" & input$fiscal_year == 'All years'){
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid)) %>%
+        select("total_salary_paid","travel_subsistence","gender", "fiscal_year")
+    }
+    # Show all departments but filter on years
+    else if (input$department == "All departments"){
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid),
+               fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid","travel_subsistence","gender", "fiscal_year")
+    }
+    # Show all years but filter on department
+    else if (input$fiscal_year == "All years"){
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid),
+               department == input$department) %>%
+        select("total_salary_paid","travel_subsistence","gender", "fiscal_year")
+    }
+    # Filter on department and year
+    else {
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid),
+               department == input$department,
+               fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid","travel_subsistence","gender", "fiscal_year")
+    }
+
+
   })
+  # Figure
   output$postdoc <- renderPlot({
     ggplot(data = liq_postdoc(),
            aes(x = gender,
@@ -164,14 +261,45 @@ server <- function(input, output){
       labs(x = NULL, y = "Total Salary Paid\nThousands of $") +
       guides(color = F)
   })
+  # Data table
   output$postdocTab <- renderDataTable({
     dataset <- liq_postdoc()
-    dataset %>%
-      group_by(fiscal_year, gender)%>%
-      summarize(n = n(), avg_pay = signif(mean(total_salary_paid), 6))%>%
-      tidyr::unite("avg_pay_n", avg_pay, n, sep = " (")%>%
-      dplyr::mutate("avg_pay_n" = stringr::str_c(avg_pay_n, ")" , sep = ""))%>%
-      tidyr::spread(key = fiscal_year, value = avg_pay_n)
+
+    if (input$fiscal_year == 'All years') {
+
+      dataset %>%
+        group_by(gender) %>%
+        summarize(
+          n = n(),
+          avg_pay = round(mean(total_salary_paid), 0)) %>%
+        dplyr::mutate(fiscal_year = "all years") %>%
+        dplyr::select(fiscal_year, gender, n, avg_pay) %>%
+        dplyr::rename(
+          "Gender" = gender,
+          "Fiscal Year" = fiscal_year,
+          "Mean Total Salary" = avg_pay
+        ) %>%
+        DT::datatable() %>%
+        DT::formatCurrency(
+          "Mean Total Salary",
+          interval = 3,
+          mark = ",",
+          digits = 0
+        )
+
+    } else {
+      dataset %>%
+        group_by(fiscal_year, gender)%>%
+        summarize(n = n(),
+                  avg_pay = round(mean(total_salary_paid), 0)) %>%
+        dplyr::rename("Gender" = gender,
+                      "Fiscal Year" = fiscal_year,
+                      "Mean Total Salary" = avg_pay) %>%
+        DT::datatable() %>%
+        DT::formatCurrency("Mean Total Salary", interval = 3, mark = ",", digits = 0)
+    }
+
+
   })
 }
 
