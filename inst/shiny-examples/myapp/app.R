@@ -6,8 +6,8 @@ require(stringr)
 library(DT)
 
 # read in data
-load(file = "sals_dept.rda")
-load(file = "sals_dept_profs.rda")
+#load(file = "sals_dept.rda")
+#load(file = "sals_dept_profs.rda")
 sals_dept <- sals_dept %>% filter(!is.na(gender), gender != "*")
 sals_dept_profs <- sals_dept_profs %>% filter(!is.na(gender), gender != "*")
 department <- c("All departments", sort(unique(as.character(sals_dept$department))))
@@ -29,9 +29,31 @@ ui <- fluidPage(
   ),
   mainPanel(
     tabsetPanel(
-      tabPanel("All", plotOutput(outputId = "allDat"), DT::dataTableOutput("allDatTab")),
-      tabPanel("Professors", plotOutput(outputId = "prof"), DT::dataTableOutput("profTab")),
-      tabPanel("Post Docs", plotOutput(outputId = "postdoc"), DT::dataTableOutput("postdocTab"))
+      tabPanel("All",
+               fluidRow(
+                 splitLayout(cellWidths = c("50%", "50%"),
+                             plotOutput("allDat1"),
+                             plotOutput("allDat2"))
+               ),
+               #plotOutput(outputId = "allDat"),
+               #plotOutput(outputId = "allDat2"),
+               DT::dataTableOutput("allDatTab")),
+      tabPanel("Professors",
+               #plotOutput(outputId = "prof"),
+               fluidRow(
+                 splitLayout(cellWidths = c("50%", "50%"),
+                             plotOutput("prof1"),
+                             plotOutput("prof2"))
+               ),
+               DT::dataTableOutput("profTab")),
+      tabPanel("Post Docs",
+               #plotOutput(outputId = "postdoc"),
+               fluidRow(
+                 splitLayout(cellWidths = c("50%", "50%"),
+                             plotOutput("postdoc1"),
+                             plotOutput("postdoc2"))
+               ),
+               DT::dataTableOutput("postdocTab"))
     )
   )
 )
@@ -69,29 +91,81 @@ server <- function(input, output){
     }
 
   })
-  output$allDat <- renderPlot({
+
+
+  liq_all_ns <- reactive({
+    # Show all departments
+    if (input$department == "All departments") {
+      sals_dept %>%
+        filter(!is.na(total_salary_paid), !is.na(gender), gender != "*") %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    } else {
+      sals_dept %>%
+        filter(!is.na(total_salary_paid),
+               !is.na(gender),
+               gender != "*",
+               department == input$department) %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    }
+  })
+
+
+  # All scatter -------------------------------------------------------------
+
+  output$allDat1 <- renderPlot({
     # Plot for all departments, all years
     if (input$department == "All departments"){
-      ggplot(data = liq_all(), aes(x = gender, y= total_salary_paid/1000, color=gender)) +
+      ggplot(data = liq_all(), aes(x = gender,
+                                   y= total_salary_paid/1000,
+                                   color = gender)) +
         geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
-        stat_summary(fun.y = mean, geom = "line") +
-        stat_summary(fun.y = mean, geom = "point", size = 3) +
-        #guides(color=FALSE) +
+        stat_summary(fun.y = mean, geom = "line", color = "gray") +
+        stat_summary(fun.y = mean, geom = "point", size = 3,  pch = 17) +
+        labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = "Gender") +
         theme_bw() +
-        labs(x = NULL, y = "Total Salary Paid\nThousands of $")
+        scale_color_manual(values = c("darkblue", "goldenrod")) +
+        theme(legend.position = c(0.01, 0.99),
+              legend.justification = c(0, 1),
+              legend.background = element_rect(linetype = "solid",
+                                               color = "black"))
+
     }
     # Plot for single department, all years
     else {
-    ggplot(data = liq_all() %>% filter(gender != "*"),
-           aes(x = gender, y = total_salary_paid/1000, color = position, group = position)) +
-      geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
-      stat_summary(fun.y = mean, geom = "line") +
-      stat_summary(fun.y = mean, geom = "point", size = 3) +
-      theme_bw() +
-      labs(x = NULL, y = "Total Salary Paid\nThousands of $")
+      ggplot(data = liq_all() %>% filter(gender != "*"),
+             aes(x = gender, y = total_salary_paid/1000, color = gender, group = position)) +
+        geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
+        stat_summary(fun.y = mean, geom = "line", color = "gray") +
+        stat_summary(fun.y = mean, geom = "point", size = 3,  pch = 17) +
+        theme_bw() +
+        labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = "Gender") +
+        scale_color_manual(values = c("darkblue", "goldenrod")) +
+        theme(legend.position = c(0.01, 0.99),
+              legend.justification = c(0, 1),
+              legend.background = element_rect(linetype = "solid",
+                                               color = "black"))
+
     }
 
-    })
+  })
+
+
+  # All bar chart -----------------------------------------------------------
+
+  output$allDat2 <- renderPlot({
+    # Plot for all departments, all years
+    ggplot(data = liq_all_ns(),
+           aes(x = fiscal_year, y = n, fill =gender)) +
+      geom_col() +
+      theme_bw() +
+      scale_fill_manual(values = c("darkblue", "goldenrod")) +
+      labs(x = NULL, y = "Number of Employees", fill = "Gender") +
+      theme(legend.position = c(0.01,0.99),
+            legend.justification = c(0,1),
+            legend.background = element_rect(linetype = "solid", color = "black"))
+  })
 
   output$allDatTab <- renderDataTable({
 
@@ -111,13 +185,8 @@ server <- function(input, output){
           "Mean Total Salary" = avg_pay
         ) %>%
         DT::datatable() %>%
-        DT::formatCurrency(
-          "Mean Total Salary",
-          interval = 3,
-          mark = ",",
-          digits = 0
-        )
-
+        DT::formatCurrency("Mean Total Salary", interval = 3,
+                           mark = ",",  digits = 0)
     } else {
       dataset %>%
         group_by(fiscal_year, gender)%>%
@@ -131,48 +200,100 @@ server <- function(input, output){
     }
   })
 
-  # Prof tab-----
+
+  # liq_prof ----------------------------------------------------------------
   liq_prof <- reactive({
 
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
       sals_dept_profs %>%
         filter(!is.na(total_salary_paid)) %>%
-        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+        select("total_salary_paid","travel_subsistence",
+               "gender", "position_simplified","fiscal_year")
     }
     # Show all departments but filter on years
     else if (input$department == "All departments"){
       sals_dept_profs %>%
         filter(!is.na(total_salary_paid),fiscal_year == input$fiscal_year) %>%
-        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+        select("total_salary_paid","travel_subsistence",
+               "gender", "position_simplified","fiscal_year")
     }
     # Show all years but filter on department
     else if (input$fiscal_year == "All years"){
       sals_dept_profs %>%
         filter(!is.na(total_salary_paid),department == input$department) %>%
-        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+        select("total_salary_paid","travel_subsistence",
+               "gender", "position_simplified","fiscal_year")
     }
     # Filter on department and year
     else {
       sals_dept_profs %>%
-        filter(!is.na(total_salary_paid),department == input$department, fiscal_year == input$fiscal_year) %>%
-        select("total_salary_paid","travel_subsistence","gender", "position_simplified","fiscal_year")
+        filter(!is.na(total_salary_paid),
+               department == input$department,
+               fiscal_year == input$fiscal_year) %>%
+        select("total_salary_paid","travel_subsistence",
+               "gender", "position_simplified","fiscal_year")
     }
 
-    })
+  })
 
-    # Figure
-  output$prof <- renderPlot({
+
+  # liq_prof_ns -------------------------------------------------------------
+  liq_prof_ns <- reactive({
+    # Show all departments
+    if (input$department == "All departments") {
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid), !is.na(gender), gender != "*") %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    } else {
+      sals_dept_profs %>%
+        filter(!is.na(total_salary_paid),
+               !is.na(gender),
+               gender != "*",
+               department == input$department) %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    }
+  })
+
+  # Prof scatter ------------------------------------------------------------
+  output$prof1 <- renderPlot({
     ggplot(data = liq_prof(),
            aes(x = gender,
                y = total_salary_paid/1000,
                color = position_simplified,
                group = position_simplified)) +
-      geom_jitter(size = 2, width = 0.2, alpha = 0.2) +
+      geom_jitter(size = 2, width = 0.2, alpha = 0.5, pch = 19) +
       stat_summary(fun.y = mean, geom = "line", size = 2) +
-      stat_summary(fun.y = mean, geom = "point", size = 3) +
+      stat_summary(fun.y = mean, geom = "point", size = 3,  pch = 17) +
+      labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = NULL) +
       theme_bw() +
-      labs(x = NULL, y = "Total Salary Paid\nThousands of $")
+      scale_color_brewer(palette = "Spectral") +
+      theme(legend.position = "top",
+            legend.background = element_rect(linetype = "solid", color = "black"))
+  })
+
+
+  # Prof bar graph ------------------------------------------------------------
+  output$prof2 <- renderPlot({
+    ggplot(data = liq_prof_ns(),
+           aes(x = fiscal_year,
+               y = n,
+               fill = gender)) +
+      geom_col() +
+      theme_bw() +
+      labs(x = NULL,
+           y = "Number of Employees",
+           fill = "Gender") +
+      scale_fill_manual(values = c("darkblue", "goldenrod")) +
+      theme(
+        legend.position = c(0.01, 0.99),
+        legend.justification = c(0, 1),
+        legend.background = element_rect(linetype = "solid", color = "black"
+        ))
+
+
   })
   # Data table
   output$profTab <- renderDataTable({
@@ -194,6 +315,8 @@ server <- function(input, output){
         DT::datatable() %>%
         DT::formatCurrency("Mean Total Salary", interval = 3, mark = ",", digits = 0)
 
+
+
     } else {
       dataset %>%
         group_by(fiscal_year, gender)%>%
@@ -211,7 +334,7 @@ server <- function(input, output){
   })
 
   # Post-doc tab----
-  liq_postdoc<- reactive ({
+  liq_postdoc <- reactive ({
 
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
@@ -248,18 +371,67 @@ server <- function(input, output){
 
 
   })
-  # Figure
-  output$postdoc <- renderPlot({
+
+  # liq_postdocs_ns -------------------------------------------------------------
+  liq_postdoc_ns <- reactive({
+    # Show all departments
+    if (input$department == "All departments") {
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid), !is.na(gender), gender != "*") %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    } else {
+      sals_dept %>%
+        filter(grepl('POSTDOC', position)) %>%
+        filter(!is.na(total_salary_paid),
+               !is.na(gender),
+               gender != "*",
+               department == input$department) %>%
+        group_by(fiscal_year, gender) %>%
+        summarise(n = n())
+    }
+  })
+
+  # Post-doc scatter ------------------------------------------------------------
+  output$postdoc1 <- renderPlot({
     ggplot(data = liq_postdoc(),
            aes(x = gender,
-               y = total_salary_paid/1000)) +
-      geom_jitter(size = 3, width = 0.2, alpha = 0.5, aes(color = gender)) +
-      stat_summary(fun.y = mean, geom = "line") +
-      stat_summary(fun.y = mean, geom = "point", size = 5) +
-      theme_bw()+
-      scale_color_manual(values = c("tomato", "dodgerblue2")) +
-      labs(x = NULL, y = "Total Salary Paid\nThousands of $") +
-      guides(color = F)
+               y = total_salary_paid/1000,
+               color = gender)) +
+      geom_jitter(size = 2, width = 0.2, alpha = 0.5, pch = 19) +
+      stat_summary(fun.y = mean, geom = "line", size = 2, color = "gray") +
+      stat_summary(fun.y = mean, geom = "point", size = 5, pch = 17) +
+      labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = "Gender") +
+      theme_bw() +
+      scale_color_manual(values = c("darkblue", "goldenrod")) +
+      theme(
+        legend.position = c(0.01, 0.99),
+        legend.justification = c(0, 1),
+        legend.background = element_rect(linetype = "solid", color = "black"))
+
+  })
+
+
+  # Post-doc bar graph ------------------------------------------------------------
+  output$postdoc2 <- renderPlot({
+    ggplot(data = liq_postdoc_ns(),
+           aes(x = fiscal_year,
+               y = n,
+               fill = gender)) +
+      geom_col() +
+      theme_bw() +
+      labs(x = NULL,
+           y = "Number of Employees",
+           fill = "Gender") +
+      scale_fill_manual(values = c("darkblue", "goldenrod")) +
+      theme(
+        legend.position = c(0.01, 0.99),
+        legend.justification = c(0, 1),
+        legend.background = element_rect(linetype = "solid", color = "black"
+        ))
+
+
   })
   # Data table
   output$postdocTab <- renderDataTable({
