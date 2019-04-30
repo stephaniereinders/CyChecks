@@ -1,7 +1,14 @@
 # Function to be called inside real function
 fun1 <- function(data) {
   # -------Start fun
-
+  # just to calm down R CMD CHECK
+  position <- NULL
+  gender <- NULL
+  n <- NULL
+  M <- NULL
+  term <- NULL
+  p.value <- NULL
+  p_val <- NULL
   # Handle bad input
   assertthat::assert_that(is.data.frame(data))
   assertable::assert_colnames(data, c("position",
