@@ -43,7 +43,9 @@ The data from this site does not include the employee's home department. Unfortu
 Below you will see the structure of the data, which displays information about the size of the dataset (number of observations), the number of variables (categories), and the type of data that variable provides.
 
 ```{r}
-load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")
+library(CyChecks)
+data("sals_dept_profs")
+#load(file = "./data/sals_dept_profs.rda")
 #view(sals_dept_profs)
 cychecks_dept_data <- sals_dept_profs
 str(cychecks_dept_data)
@@ -109,16 +111,18 @@ The following graphs display some examples of the pay pattern across departments
 
 ```{r}
 #used packages
+library(CyChecks)
 library(dplyr)
 library(tidyverse)
 library(ggplot2)
 
 ###Load data
-load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept.rda")
+data("sals_dept.rda")
+#load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept.rda")
 #view(sals_dept)
 cychecks_data <- sals_dept
 #view(cychecks_data)
-load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")
+#load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")
 #view(sals_dept_profs)
 cychecks_dept_data <- sals_dept_profs
 #view(cychecks_dept_data)
