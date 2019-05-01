@@ -1,0 +1,168 @@
+---
+title: "CyChecks"
+author: "Brianna Lawton"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CyChecks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+## Abstract
+
+Salary data for Iowa State University (ISU) employees is publicly available through the state government. CyChecks, an R package, was developed with the intent of examining and interpreting the university's salary dataset. This package will allow users to compare pay between genders, positions, and departments, while displaying the results in a dynamic interface (shiny app). While this data is publicly available, it was also understood that salaries are sensitive, personal information and therefore an individual's name that could easily be associated with their salary was anonymized. We hope Cychecks will provide useful fodder for discussing pay patterns within a publicly funded university.
+
+
+## Introduction
+The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries.
+#### Some of the services this access could offer include:
+
+1.	Aiding job seekers in negotiating starting salaries.
+2.	Shedding light on possible pay inequities with respect to gender.
+3.	Identifying the highest paid positions at the university.
+
+
+## Literature Review
+
+Pay patterns and/or pay disparities have been an on-going topic of discussion and focus for research since [insert date]. 
+The [insert law] aimed to dismantle these disparities but unfortunately the female gender is still under xx.
+
+## Data Description
+
+The state of Iowa offers a large amount of public data at this [site](https://data.iowa.gov/). You can access the data by signing up for an API token [here](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w). Iowa state employee salaries are available at this [site](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w). Using an API token, CyChecks provides a function to easily get data for any given year.
+The data from this site does not include the employee's home department. Unfortunately, after much exploring, the data linking names to departments is not easily accessible. Iowa State Univerisity's Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, included is a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. It was discovered that employees that had left before the year 2019 will not listed under their respective department in this dataset. This isn't ideal, but a reality of trying to display this sort of data.
+
+### The following displays parts of the dataset more explicitly.
+Below you will see the structure of the data, which displays information about the size of the dataset (number of observations), the number of variables (categories), and the type of data that variable provides.
+
+```{r}
+load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")
+#view(sals_dept_profs)
+cychecks_dept_data <- sals_dept_profs
+str(cychecks_dept_data)
+
+```
+
+### listed below are the first 6 rows of the dataset just to give you an idea of how it looks
+```{r}
+head(cychecks_dept_data)
+
+```
+
+### listed below are all the categorical variables a user can look into
+```{r}
+names(cychecks_dept_data)
+
+```
+## Package Description & Package Functions
+ This package (CyChecks) is an R package that helps a user conveniently "check" various information concerning salary information for Iowa State University employees and faculty. CyChecks 
+ 
+CyChecks currently includes several functions that help the user navigate and explore this data more easliy, while also 
+1.	A function to:
+1.	download data directly from the iowa.gov website
+2.	anonymize names of downloaded data
+3.	simplify professor and post-doc position titles
+4.	quickly identify departments with possible gender pay inequities
+1.	Data from:
+i.	Employee/salary/department dataset for 2007-2018
+ii.	Employee/salary/department/college dataset assumed to be valid for 2018
+
+## Function 1: Web Scrapping (aka sal_df)
+-Get data from the web
+```{r}
+#insert example of what function executes
+
+```
+
+
+## Function 2: Anonymize names (aka anonymize)
+-convert each individual's personal name to an alphanumeric id to mask the individual's real identity
+```{r}
+#insert example of what function executes
+
+```
+
+## Function 3:Get professor info (aka get_profs)
+-find the pay gap between different positions
+```{r}
+#insert example of what function executes
+
+```
+
+## Function 4: Running statistics (aka stats_mf)
+Run stats to find significance between male versus female with respect to total salary
+```{r}
+#insert example of what function executes
+
+```
+
+## Analysis and Results (Graphs and Tables)
+
+The following graphs display some examples of the pay pattern across departments and over the years for different positons at Iowa State University.
+
+```{r}
+#used packages
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+
+###Load data
+load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept.rda")
+#view(sals_dept)
+cychecks_data <- sals_dept
+#view(cychecks_data)
+load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")
+#view(sals_dept_profs)
+cychecks_dept_data <- sals_dept_profs
+#view(cychecks_dept_data)
+
+#clean data
+#sals_dept <- sals_dept %>% filter(!is.na(gender), gender != "*")
+# sals_dept_profs <- sals_dept_profs %>% filter(!is.na(gender), gender != "*")
+# department <- c("All departments", sort(unique(as.character(sals_dept$department))))
+# fiscal_year <- c("All years", sort(unique(as.character(sals_dept$fiscal_year))))
+
+#plot data to analyze
+gender_pay <- cychecks_data %>% 
+  ggplot(aes(x = fiscal_year, y = total_salary_paid)) +
+  geom_point(aes(col=gender)) +
+  labs(subtitle = "Gender Vs Total Salary Paid Each Year",
+       y="Total Salary Paid",
+       x="Year")
+plotly::ggplotly(gender_pay) #interactive map
+
+
+gender_pay2 <- cychecks_data %>%
+  ggplot(aes(x = total_salary_paid)) +
+  geom_bar(aes(col=gender)) +
+   xlim(c(0, 2020)) + 
+  ylim(c(0, 100)) + 
+  labs(subtitle = "Gender Vs Total Salary Paid Each Year",
+       y="Total Salary Paid",
+       x="Year")
+plotly::ggplotly(gender_pay2)
+#plot(gender_pay2)
+
+
+```
+## click the link to find the pay pattern in your department!
+
+```{r}
+#runShiny()
+```
+
+## Conclusion
+
+## Limitations & Future Work
+
+## References/Bibliography
+
+## Packaage Website/Vignette
+Follow the [link](https://vanichols.github.io/CyChecks/)
