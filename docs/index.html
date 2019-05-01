@@ -46,6 +46,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/name-of-cychecks.html">CyChecks</a>
+    </li>
+  </ul>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -73,11 +85,11 @@
 <div id="cychecks" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#cychecks" class="anchor"></a>CyChecks</h1></div>
+<!-- 
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) 
+-->
 <p><em>Overview</em></p>
 <p>The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries.</p>
-<div class="figure">
-<img src="http://diysolarpanelsv.com/images/iowa-state-cyclone-clip-art-27.png">
-</div>
 <p>Some of the services this access could offer include:</p>
 <ol style="list-style-type: decimal">
 <li>Aiding job seekers in negotiating starting salaries.</li>
@@ -90,12 +102,22 @@
 <p><em>Summary</em></p>
 <p>This package currently includes:</p>
 <ol style="list-style-type: decimal">
-<li>A function to download data directly from the iowa.gov website.</li>
-<li>Employee/salary dataset for 2007-2018 (scraped from the web)</li>
-<li>Employee/department/college dataset valid as of Jan 1 2019 (received by ISU Human Resources)</li>
+<li>A function to:</li>
+</ol>
+<ol style="list-style-type: lower-roman">
+<li>download data directly from the iowa.gov website</li>
+<li>anonymize names of downloaded data</li>
+<li>simplify professor and post-doc position titles</li>
+<li>quickly identify departments with possible gender pay inequities</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li>Data from:
+<ol style="list-style-type: lower-roman">
+<li>Employee/salary/department dataset for 2007-2018</li>
 <li>Employee/salary/department/college dataset assumed to be valid for 2018</li>
-<li>A function to anonymize names in the web scraped dataset</li>
-<li>A shiny app for visualizing the 2018 dataset (4)</li>
+</ol>
+</li>
+<li>A shiny app for visualizing data</li>
 </ol>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -108,6 +130,7 @@
 <a href="#example" class="anchor"></a>Example</h2>
 <p>You can access the data using our XX function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## basic example code</code></pre></div>
+<p><a href="https://travis-ci.org/vanichols/CyChecks"><img src="https://travis-ci.org/vanichols/CyChecks.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/vanichols/CyChecks?branch=master"><img src="https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg" alt="Coverage status"></a></p>
 </div>
 </div>
   </div>
