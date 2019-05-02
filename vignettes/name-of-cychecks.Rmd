@@ -113,8 +113,8 @@ The following graphs display some examples of the pay pattern across departments
 #used packages
 library(CyChecks)
 library(dplyr)
-library(tidyverse)
 library(ggplot2)
+library(plotly)
 
 ###Load data
 data("sals_dept.rda")
