@@ -3,7 +3,6 @@ library("tidyverse")
 
 # Department info... (should this be deleted now that it has been used?)
 # depts <- readxl::read_xlsx("data-raw/DeptOrgInfo.xlsx")%>%
-#   dplyr::mutate_at(vars(ORG_SHORT_NAME, DRCTY_DEPT_NAME), forcats::as_factor)%>%
 #   dplyr::rename_all(tolower)%>%
 #   dplyr::rename("organization" = "org_short_name")%>%
 #   dplyr::rename("department" = "drcty_dept_name")%>%
@@ -24,10 +23,9 @@ get_dat2 <- function(token, limit, offset){
   sals <- s %>%
     dplyr::select(-department)%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
-    dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
-    dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence), forcats::as_factor)%>%
+    dplyr::mutate_at(vars(fiscal_year, total_salary_paid, travel_subsistence), as.numeric)%>%
     dplyr::mutate(name = gsub(",","",name))%>%
-    dplyr::mutate(position = forcats::as_factor(stringr::str_trim(position, side = "right")))
+    dplyr::mutate(position = stringr::str_trim(position, side = "right"))
   return(sals)}
 all <- get_dat2(token, 150000, 0)
 load("R/sysdata.rda") # loads department info
@@ -51,8 +49,7 @@ get_dat <- function(token, limit, offset, fiscal_year){
   sals <- s %>%
     dplyr::select(-department)%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
-    dplyr::mutate_at(vars(total_salary_paid, travel_subsistence), as.numeric)%>%
-    dplyr::mutate_at(vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
+    dplyr::mutate_at(vars(total_salary_paid, travel_subsistence, fiscal_year), as.numeric)%>%
     dplyr::mutate(name = gsub(",","",name))
   return(sals)}
 s18 <- get_dat(token, limit, offset, fiscal_year = 2018) %>%

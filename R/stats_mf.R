@@ -15,9 +15,9 @@ fun1 <- function(data) {
                                       "gender",
                                       "total_salary_paid"), only_colnames = FALSE)
   assertthat::not_empty(data)
-  assertthat::assert_that(is.factor(data$position),
-                          is.factor(data$gender),
-                          is.numeric(data$total_salary_paid))
+  assertthat::assert_that(is.numeric(data$total_salary_paid))
+                          #is.factor(data$position),
+                          #is.factor(data$gender))
 
   # Make sure there are two genders in that department (eye roll)
   twogenders <- data %>%
@@ -121,5 +121,4 @@ stats_mf <- function(data = sals_dept){
     dplyr::arrange(p_val)
 
   return(yourstats)
-
 }

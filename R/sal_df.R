@@ -14,7 +14,6 @@
 #' @importFrom checkmate assertNumber assertTibble
 #' @importFrom tibble as_tibble
 #' @importFrom lubridate ymd_hms
-#' @importFrom forcats as_factor
 #' @importFrom stringr str_trim
 #' @importFrom jsonlite fromJSON
 #' @details An API (or APP) token isn't necessary for scraping data, but it will help speed up the data grabbing process and will allow users to get nearly unlimited data.
@@ -41,10 +40,9 @@ sal_df<- function(limit= 1000, offset = 0, fiscal_year = 2007, token = NULL){
   sals <- s %>%
     dplyr::select(-c(base_salary,department))%>%
     dplyr::mutate(base_salary_date = lubridate::ymd_hms(base_salary_date))%>%
-    dplyr::mutate_at(dplyr::vars(total_salary_paid, travel_subsistence), as.numeric)%>%
-    dplyr::mutate_at(dplyr::vars(fiscal_year, gender, place_of_residence, position), forcats::as_factor)%>%
+    dplyr::mutate_at(dplyr::vars(fiscal_year, total_salary_paid, travel_subsistence), as.numeric)%>%
     dplyr::mutate(name = gsub(",","",name)) %>%
-    dplyr::mutate(position = forcats::as_factor(stringr::str_trim(position, side = "right")))
+    dplyr::mutate(position = stringr::str_trim(position, side = "right"))
 
   checkmate::assertTibble(sals, min.rows = 1, ncols = 8)
   return(sals)
