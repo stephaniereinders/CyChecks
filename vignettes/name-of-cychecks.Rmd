@@ -49,21 +49,16 @@ data("sals_dept_profs")
 #view(sals_dept_profs)
 cychecks_dept_data <- sals_dept_profs
 str(cychecks_dept_data)
-
 ```
 
 ### listed below are the first 6 rows of the dataset just to give you an idea of how it looks
 ```{r}
-head(cychecks_dept_data)
-
+library(knitr)
+knitr::kable(summary(cychecks_dept_data), col.names = c("Base Salary Date","Fiscal Year","gender","Place of Residence",
+                                                        "Position","Total Salary Paid","Travel Subsistence","Base Salary",
+                                                        "Organization","Department","ID","Position Simplified"))
 ```
 
-### listed below are all the categorical variables a user can look into
-```{r}
-names(cychecks_dept_data)
-
-```
-## Package Description & Package Functions
  This package (CyChecks) is an R package that helps a user conveniently "check" various information concerning salary information for Iowa State University employees and faculty. CyChecks 
  
 CyChecks currently includes several functions that help the user navigate and explore this data more easliy, while also 
@@ -76,7 +71,7 @@ CyChecks currently includes several functions that help the user navigate and ex
 i.	Employee/salary/department dataset for 2007-2018
 ii.	Employee/salary/department/college dataset assumed to be valid for 2018
 
-## Function 1: Web Scrapping (aka sal_df)
+## Function 1: Web Scrapping (sal_df)
 -Get data from the web
 ```{r}
 #insert example of what function executes
@@ -84,21 +79,26 @@ ii.	Employee/salary/department/college dataset assumed to be valid for 2018
 ```
 
 
-## Function 2: Anonymize names (aka anonymize)
+## Function 2: Anonymize names (anonymize)
 -convert each individual's personal name to an alphanumeric id to mask the individual's real identity
 ```{r}
-#insert example of what function executes
 
+df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones"),
+                        "Salary" = c(5456, 5698, 5647, 5842, 5910)) # Create a dataframe
+kable(df_exmple)
+
+anon <- anonymize(df_exmple) # Anonymizing the column name 
+knitr::kable(anon, col.names = c("Name" , "Salary ($)", "Anonymous Name"))
 ```
 
-## Function 3:Get professor info (aka get_profs)
+## Function 3:Get professor info (get_profs)
 -find the pay gap between different positions
 ```{r}
 #insert example of what function executes
 
 ```
 
-## Function 4: Running statistics (aka stats_mf)
+## Function 4: Running statistics (stats_mf)
 Run stats to find significance between male versus female with respect to total salary
 ```{r}
 #insert example of what function executes
