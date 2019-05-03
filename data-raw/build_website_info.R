@@ -13,5 +13,5 @@ pkgdown::build_site()
 #build website for package [using] (https://pkgdown.r-lib.org/index.html) and https://pkgdown.r-lib.org/articles/pkgdown.html
 
 #use the below code to create package vignette
-usethis::use_vignette("name of vignette")
+#usethis::use_vignette("name of vignette")
 

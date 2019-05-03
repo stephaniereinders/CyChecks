@@ -114,7 +114,6 @@ The following graphs display some examples of the pay pattern across departments
 library(CyChecks)
 library(dplyr)
 library(ggplot2)
-library(plotly)
 
 ###Load data
 data("sals_dept.rda")
@@ -140,7 +139,6 @@ gender_pay <- cychecks_data %>%
   labs(subtitle = "Gender Vs Total Salary Paid Each Year",
        y="Total Salary Paid",
        x="Year")
-plotly::ggplotly(gender_pay) #interactive map
 
 
 gender_pay2 <- cychecks_data %>%
@@ -151,7 +149,7 @@ gender_pay2 <- cychecks_data %>%
   labs(subtitle = "Gender Vs Total Salary Paid Each Year",
        y="Total Salary Paid",
        x="Year")
-plotly::ggplotly(gender_pay2)
+
 #plot(gender_pay2)
 
 
