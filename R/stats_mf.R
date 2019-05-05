@@ -89,8 +89,8 @@ fun1 <- function(data) {
 #' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function
 #' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
-#' data(sals_dept)
-#' sals_dept %>%
+#' data(sals18)
+#' sals18 %>%
 #' dplyr::filter(department == "AGRONOMY") %>%
 #' dplyr::filter(stringr::str_detect(position, "PROF")) %>%
 #' stats_mf()
@@ -98,7 +98,7 @@ fun1 <- function(data) {
 #' @export
 
 # Actual p
-stats_mf <- function(data = sals_dept){
+stats_mf <- function(data = sals18){
 
   # Make sure it has the columns I want, and that it's not empty
   assertthat::assert_that(is.data.frame(data))
