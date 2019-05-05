@@ -24,12 +24,13 @@
 # sals18 <- get_dat(token, limit, offset, fiscal_year = 2018)
 #
 # # read in department info
-# depts <- readxl::read_xlsx("data-raw/Copy of Employees with Department and Org 4-8-19.xlsx")%>%
+# depts <- readxl::read_xlsx("data-raw/DeptOrgInfo.xlsx")%>%
 #   dplyr::mutate_at(vars(ORG_SHORT_NAME, DRCTY_DEPT_NAME), forcats::as_factor)%>%
 #   dplyr::rename_all(tolower)%>%
 #   dplyr::rename("organization" = "org_short_name")%>%
 #   dplyr::rename("department" = "drcty_dept_name")%>%
 #   dplyr::mutate(name = str_trunc(name, 20, ellipsis = FALSE))
+# write.csv(depts, file = "depts.csv")
 #
 # # merge with sal 18
 # sals18 <- left_join(sals18, depts, by = "name")
