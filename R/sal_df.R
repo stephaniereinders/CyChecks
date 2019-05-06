@@ -3,11 +3,14 @@
 #'
 #' See \href{https://github.com/vanichols/CyChecks}{CyChecks}
 #'
-#' @param limit How many data entries you'd like to receive (default = 1000)
-#' @param offset Where you'd like the dataentries to start pulling from (default = 0)
-#' @param fiscal_year The fiscal year the data are taken from. Limited to 2007-2018
+#' @param limit The number of data entries (rows in the dataframe) you'd like to receive (default = 1000)
+#' @param offset Where you'd like the data entries to start pulling from (default = 0). If using the
+#' default of 0, then the dataset will start pulling from the beginning of alphabet.
+#' This argument is useful to change when using the function multiple times.
+#' @param fiscal_year The fiscal year the data are taken from. Limited to 2007-2018.
+#' Can only enter one fiscal year at a time.
 #' @param token An API token. Only necessary for large amounts of datascraping. Generated from this \href{"https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w"}{website}
-#' @return A dataframe with salary information, position, and date for Iowa State University employees
+#' @return A dataframe with salary information, position, and gender for Iowa State University employees in a given fiscal year.
 #'
 #' @importFrom dplyr mutate select vars
 #' @importFrom lubridate ymd_hms

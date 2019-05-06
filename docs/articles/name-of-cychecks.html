@@ -78,9 +78,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>CyChecks</h1>
-                        <h4 class="author">Brianna Lawton</h4>
+                        <h4 class="author">Lydia English, Yones Khaledian, Brianna Lawton, Gina Nichols, Stephanie Reinders</h4>
             
-            <h4 class="date">2019-05-03</h4>
+            <h4 class="date">2019-05-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vanichols/CyChecks/blob/master/vignettes/name-of-cychecks.Rmd"><code>vignettes/name-of-cychecks.Rmd</code></a></small>
       <div class="hidden name"><code>name-of-cychecks.Rmd</code></div>
@@ -89,186 +89,448 @@
 
     
     
-<div id="abstract" class="section level2">
-<h2 class="hasAnchor">
-<a href="#abstract" class="anchor"></a>Abstract</h2>
-<p>Salary data for Iowa State University (ISU) employees is publicly available through the state government. CyChecks, an R package, was developed with the intent of examining and interpreting the university’s salary dataset. This package will allow users to compare pay between genders, positions, and departments, while displaying the results in a dynamic interface (shiny app). While this data is publicly available, it was also understood that salaries are sensitive, personal information and therefore an individual’s name that could easily be associated with their salary was anonymized. We hope Cychecks will provide useful fodder for discussing pay patterns within a publicly funded university.</p>
-</div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries. #### Some of the services this access could offer include:</p>
+<p>The pay gap between men and women in various positions continues to plague many industries, including adademia. Publicly funded universities, like Iowa State University in Ames, Iowa, are mandated by law to publish the salary information of all their employees. This provides a unique opportunity to examine the pay patterns across various departments at a large academic instution. While other websites and databases exist to examine similar datasets or compare pay across universites, these resources often aren’t user friendly or don’t show the kind of interactive graphics users may wish to see. CyChecks, an R package, was created to change this. This package provides users with publicly available datasets in a tidy form and interactive web graphics to get them started, but it also allows the users to access the data they want so that they are able to apply any R functions they wish to see.</p>
+<div id="some-of-the-services-cychecks-could-offer-include" class="section level3">
+<h3 class="hasAnchor">
+<a href="#some-of-the-services-cychecks-could-offer-include" class="anchor"></a>Some of the services CyChecks could offer include:</h3>
 <ol style="list-style-type: decimal">
 <li>Aiding job seekers in negotiating starting salaries.</li>
 <li>Shedding light on possible pay inequities with respect to gender.</li>
 <li>Identifying the highest paid positions at the university.</li>
 </ol>
 </div>
-<div id="literature-review" class="section level2">
-<h2 class="hasAnchor">
-<a href="#literature-review" class="anchor"></a>Literature Review</h2>
-<p>Pay patterns and/or pay disparities have been an on-going topic of discussion and focus for research since [insert date]. The [insert law] aimed to dismantle these disparities but unfortunately the female gender is still under xx.</p>
 </div>
-<div id="data-description" class="section level2">
+<div id="package-contents" class="section level2">
 <h2 class="hasAnchor">
-<a href="#data-description" class="anchor"></a>Data Description</h2>
-<p>The state of Iowa offers a large amount of public data at this <a href="https://data.iowa.gov/">site</a>. You can access the data by signing up for an API token <a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">here</a>. Iowa state employee salaries are available at this <a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">site</a>. Using an API token, CyChecks provides a function to easily get data for any given year. The data from this site does not include the employee’s home department. Unfortunately, after much exploring, the data linking names to departments is not easily accessible. Iowa State Univerisity’s Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, included is a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. It was discovered that employees that had left before the year 2019 will not listed under their respective department in this dataset. This isn’t ideal, but a reality of trying to display this sort of data.</p>
-<div id="the-following-displays-parts-of-the-dataset-more-explicitly-" class="section level3">
+<a href="#package-contents" class="anchor"></a>Package contents</h2>
+<ol style="list-style-type: decimal">
+<li>Datasets consistent of:
+<ol style="list-style-type: lower-roman">
+<li>Employee/salary/department dataset for 2007-2018</li>
+<li>Employee/salary/department/college dataset assumed to be valid for 2018</li>
+</ol>
+</li>
+<li>Functions to:</li>
+</ol>
+<ol style="list-style-type: lower-roman">
+<li>download data directly from the iowa.gov website</li>
+<li>anonymize names of downloaded data</li>
+<li>simplify professor position titles</li>
+<li>quickly identify departments with possible gender pay inequities</li>
+<li>Launch a Shiny App to help users explore the dataset provided in our package.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li>A Shiny app for interactively, visualizing data</li>
+</ol>
+</div>
+<div id="datasets" class="section level2">
+<h2 class="hasAnchor">
+<a href="#datasets" class="anchor"></a>Datasets</h2>
+<p>The state of Iowa offers a large amount of public data at this <a href="https://data.iowa.gov/">site</a>. You can access the data through the website, and it’s recommended that you sign up for an API token <a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">here</a> if you’d like to scrape lots of data. Iowa state employee salaries are available at this <a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">site</a>. CyChecks provides a function to easily get data for any given year through the above websites. The data from the government web site does not include the employee’s home department within the University, and a dataset consisting of the entire faculty and staff directory is not made publicly available. However, Iowa State Univerisity’s Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, we’ve included a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. Additionally, we’ve included a dataset of employee salary data and department information (again, with names anonymized) for fiscal year 2018. Since the directory information is only valid as of 2019, employees that had left before that year will not listed under their respective department in this dataset. This isn’t ideal, but a reality of trying to display University data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"sals18"</span>)
+sals18 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(department <span class="op">==</span><span class="st"> "AGRONOMY"</span> <span class="op">&amp;</span><span class="st"> </span>position <span class="op">==</span><span class="st"> "PROF"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(gender, total_salary_paid, department, position, id) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">kable</span>()</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">gender</th>
+<th align="right">total_salary_paid</th>
+<th align="left">department</th>
+<th align="left">position</th>
+<th align="left">id</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">M</td>
+<td align="right">105984.0</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">d0c1b5af</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="right">141439.1</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">8e137768</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="right">119634.0</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">8c54610e</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="right">114736.0</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">08f1e76c</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="right">132729.0</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">203b875b</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="right">99764.0</td>
+<td align="left">AGRONOMY</td>
+<td align="left">PROF</td>
+<td align="left">325fa758</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#functions" class="anchor"></a>Functions</h2>
+<div id="function-1-web-scraping-sal_df" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-following-displays-parts-of-the-dataset-more-explicitly-" class="anchor"></a>The following displays parts of the dataset more explicitly.</h3>
-<p>Below you will see the structure of the data, which displays information about the size of the dataset (number of observations), the number of variables (categories), and the type of data that variable provides.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(CyChecks)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"sals_dept_profs"</span>)
-<span class="co">#load(file = "./data/sals_dept_profs.rda")</span>
-<span class="co">#view(sals_dept_profs)</span>
-cychecks_dept_data &lt;-<span class="st"> </span>sals_dept_profs
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(cychecks_dept_data)
-<span class="co">#&gt; 'data.frame':    16633 obs. of  12 variables:</span>
-<span class="co">#&gt;  $ base_salary_date   : POSIXct, format: "2007-07-01" "2007-07-01" ...</span>
-<span class="co">#&gt;  $ fiscal_year        : Factor w/ 12 levels "2007","2008",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ gender             : Factor w/ 3 levels "M","F","*": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ place_of_residence : Factor w/ 963 levels "STORY","COOK",..: 1 1 1 1 7 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ position           : chr  "professor" "professor" "professor" "professor" ...</span>
-<span class="co">#&gt;  $ total_salary_paid  : num  82467 81893 102340 74169 120006 ...</span>
-<span class="co">#&gt;  $ travel_subsistence : num  4429 700 NA NA 6315 ...</span>
-<span class="co">#&gt;  $ base_salary        : chr  "84597" "71281" "94971" "74911" ...</span>
-<span class="co">#&gt;  $ organization       : Factor w/ 18 levels "AMES LABORATORY OF US DOE",..: NA NA NA NA NA 7 7 7 3 2 ...</span>
-<span class="co">#&gt;  $ department         : Factor w/ 233 levels "AMES LABORATORY",..: NA NA NA NA NA 86 97 99 36 2 ...</span>
-<span class="co">#&gt;  $ id                 : chr  "94e35beb" "aa677a76" "ff1d3cf6" "b2540156" ...</span>
-<span class="co">#&gt;  $ position_simplified: chr  "professor" "professor" "associate" "professor" ...</span></code></pre></div>
+<a href="#function-1-web-scraping-sal_df" class="anchor"></a>Function 1: Web Scraping (sal_df)</h3>
+<p>This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is “Iowa State University” for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. While the user may enter their API as an argument to this function, having an API isn’t necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span>
+ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">offset =</span> <span class="dv">1100</span>, <span class="dt">fiscal_year =</span> <span class="dv">2010</span>)
+<span class="kw">kable</span>(ex, <span class="dt">format =</span> <span class="st">"html"</span>)</code></pre></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+base_salary_date
+</th>
+<th style="text-align:right;">
+fiscal_year
+</th>
+<th style="text-align:left;">
+gender
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+place_of_residence
+</th>
+<th style="text-align:left;">
+position
+</th>
+<th style="text-align:right;">
+total_salary_paid
+</th>
+<th style="text-align:right;">
+travel_subsistence
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYAMUKAMA EMMANUEL
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+POSTDOC RES ASSOC
+</td>
+<td style="text-align:right;">
+36000.00
+</td>
+<td style="text-align:right;">
+5427.75
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+BYARS JANA LENA
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+ASST PROF
+</td>
+<td style="text-align:right;">
+47280.00
+</td>
+<td style="text-align:right;">
+939.88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYERLY JOHN
+</td>
+<td style="text-align:left;">
+MARSHALL
+</td>
+<td style="text-align:left;">
+ARCHITECT III
+</td>
+<td style="text-align:right;">
+57307.48
+</td>
+<td style="text-align:right;">
+56.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYERS JOHN LOUIS
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+CASUAL HOURLY
+</td>
+<td style="text-align:right;">
+1551.12
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+BYERS KAREN S
+</td>
+<td style="text-align:left;">
+DICKINSON
+</td>
+<td style="text-align:left;">
+CASUAL HOURLY
+</td>
+<td style="text-align:right;">
+6666.92
+</td>
+<td style="text-align:right;">
+338.25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+BYG ALTA JEAN
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+CLERK III
+</td>
+<td style="text-align:right;">
+40586.78
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYRD CHRISTOPHER JAM
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+CASUAL HOURLY
+</td>
+<td style="text-align:right;">
+1329.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYRD DAVID JOSEPH
+</td>
+<td style="text-align:left;">
+BOONE
+</td>
+<td style="text-align:left;">
+ASST SCIENTIST I
+</td>
+<td style="text-align:right;">
+45477.00
+</td>
+<td style="text-align:right;">
+658.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYRD SCOTT GARRISON
+</td>
+<td style="text-align:left;">
+STORY
+</td>
+<td style="text-align:left;">
+CASUAL HOURLY
+</td>
+<td style="text-align:right;">
+1088.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2010-07-01
+</td>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+BYRD WILLIAM J
+</td>
+<td style="text-align:left;">
+BOONE
+</td>
+<td style="text-align:left;">
+PROGRAM DIRECTOR
+</td>
+<td style="text-align:right;">
+99543.89
+</td>
+<td style="text-align:right;">
+5103.78
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="listed-below-are-the-first-6-rows-of-the-dataset-just-to-give-you-an-idea-of-how-it-looks" class="section level3">
+<div id="function-2-anonymize-names-anonymize" class="section level3">
 <h3 class="hasAnchor">
-<a href="#listed-below-are-the-first-6-rows-of-the-dataset-just-to-give-you-an-idea-of-how-it-looks" class="anchor"></a>listed below are the first 6 rows of the dataset just to give you an idea of how it looks</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cychecks_dept_data)
-<span class="co">#&gt;   base_salary_date fiscal_year gender place_of_residence  position</span>
-<span class="co">#&gt; 1       2007-07-01        2007      M              STORY professor</span>
-<span class="co">#&gt; 2       2007-07-01        2007      M              STORY professor</span>
-<span class="co">#&gt; 3       2007-07-01        2007      M              STORY professor</span>
-<span class="co">#&gt; 4       2007-07-01        2007      M              STORY professor</span>
-<span class="co">#&gt; 5       2007-07-01        2007      M               POLK professor</span>
-<span class="co">#&gt; 6       2007-07-01        2007      M              STORY professor</span>
-<span class="co">#&gt;   total_salary_paid travel_subsistence base_salary</span>
-<span class="co">#&gt; 1           82467.0            4429.17       84597</span>
-<span class="co">#&gt; 2           81893.4             700.00       71281</span>
-<span class="co">#&gt; 3          102340.3                 NA       94971</span>
-<span class="co">#&gt; 4           74169.0                 NA       74911</span>
-<span class="co">#&gt; 5          120006.0            6315.17      127306</span>
-<span class="co">#&gt; 6           80801.6            5791.86       72465</span>
-<span class="co">#&gt;                         organization department       id</span>
-<span class="co">#&gt; 1                               &lt;NA&gt;       &lt;NA&gt; 94e35beb</span>
-<span class="co">#&gt; 2                               &lt;NA&gt;       &lt;NA&gt; aa677a76</span>
-<span class="co">#&gt; 3                               &lt;NA&gt;       &lt;NA&gt; ff1d3cf6</span>
-<span class="co">#&gt; 4                               &lt;NA&gt;       &lt;NA&gt; b2540156</span>
-<span class="co">#&gt; 5                               &lt;NA&gt;       &lt;NA&gt; 74eb0279</span>
-<span class="co">#&gt; 6 COLLEGE OF LIBERAL ARTS &amp; SCIENCES   EEOB-LAS 9d2c3ad7</span>
-<span class="co">#&gt;   position_simplified</span>
-<span class="co">#&gt; 1           professor</span>
-<span class="co">#&gt; 2           professor</span>
-<span class="co">#&gt; 3           associate</span>
-<span class="co">#&gt; 4           professor</span>
-<span class="co">#&gt; 5           professor</span>
-<span class="co">#&gt; 6           associate</span></code></pre></div>
-</div>
-<div id="listed-below-are-all-the-categorical-variables-a-user-can-look-into" class="section level3">
-<h3 class="hasAnchor">
-<a href="#listed-below-are-all-the-categorical-variables-a-user-can-look-into" class="anchor"></a>listed below are all the categorical variables a user can look into</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cychecks_dept_data)
-<span class="co">#&gt;  [1] "base_salary_date"    "fiscal_year"         "gender"             </span>
-<span class="co">#&gt;  [4] "place_of_residence"  "position"            "total_salary_paid"  </span>
-<span class="co">#&gt;  [7] "travel_subsistence"  "base_salary"         "organization"       </span>
-<span class="co">#&gt; [10] "department"          "id"                  "position_simplified"</span></code></pre></div>
-</div>
-</div>
-<div id="package-description-package-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#package-description-package-functions" class="anchor"></a>Package Description &amp; Package Functions</h2>
-<p>This package (CyChecks) is an R package that helps a user conveniently “check” various information concerning salary information for Iowa State University employees and faculty. CyChecks</p>
-<p>CyChecks currently includes several functions that help the user navigate and explore this data more easliy, while also 1. A function to: 1. download data directly from the iowa.gov website 2. anonymize names of downloaded data 3. simplify professor and post-doc position titles 4. quickly identify departments with possible gender pay inequities 1. Data from: i. Employee/salary/department dataset for 2007-2018 ii. Employee/salary/department/college dataset assumed to be valid for 2018</p>
-</div>
-<div id="function-1-web-scrapping-aka-sal_df" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-1-web-scrapping-aka-sal_df" class="anchor"></a>Function 1: Web Scrapping (aka sal_df)</h2>
-<p>-Get data from the web</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span></code></pre></div>
-</div>
-<div id="function-2-anonymize-names-aka-anonymize" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-2-anonymize-names-aka-anonymize" class="anchor"></a>Function 2: Anonymize names (aka anonymize)</h2>
+<a href="#function-2-anonymize-names-anonymize" class="anchor"></a>Function 2: Anonymize names (anonymize)</h3>
 <p>-convert each individual’s personal name to an alphanumeric id to mask the individual’s real identity</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span></code></pre></div>
 </div>
-<div id="function-3get-professor-info-aka-get_profs" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-3get-professor-info-aka-get_profs" class="anchor"></a>Function 3:Get professor info (aka get_profs)</h2>
+<div id="function-3get-professor-info-get_profs" class="section level3">
+<h3 class="hasAnchor">
+<a href="#function-3get-professor-info-get_profs" class="anchor"></a>Function 3:Get professor info (get_profs)</h3>
 <p>-find the pay gap between different positions</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span></code></pre></div>
 </div>
-<div id="function-4-running-statistics-aka-stats_mf" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-4-running-statistics-aka-stats_mf" class="anchor"></a>Function 4: Running statistics (aka stats_mf)</h2>
-<p>Run stats to find significance between male versus female with respect to total salary</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span></code></pre></div>
+<div id="function-4-run-basic-statistics-stats_mf" class="section level3">
+<h3 class="hasAnchor">
+<a href="#function-4-run-basic-statistics-stats_mf" class="anchor"></a>Function 4: Run basic statistics (stats_mf)</h3>
+<p>This function uses one fiscal year of data to identify departments with possible gender pay dispartities. Within a department, the function identifies positions that have more than 1 female and male in that position. Within a department, the function then fits a simple linear model of the following form: total_salary ~ position + gender The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a ‘boo’ verdict, and a p-value higher than 0.20 earning an ‘ok’. This allows users to quickly filter to find departments with possible pay inequities associated with genders.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sals18)
+sals18 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">stat_mf</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(verdict <span class="op">==</span><span class="st"> 'boo'</span>)</code></pre></div>
 </div>
-<div id="analysis-and-results-graphs-and-tables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#analysis-and-results-graphs-and-tables" class="anchor"></a>Analysis and Results (Graphs and Tables)</h2>
-<p>The following graphs display some examples of the pay pattern across departments and over the years for different positons at Iowa State University.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#used packages</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(CyChecks)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)
-
-###Load data
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"sals_dept.rda"</span>)
-<span class="co">#&gt; Warning in data("sals_dept.rda"): data set 'sals_dept.rda' not found</span>
-<span class="co">#load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept.rda")</span>
-<span class="co">#view(sals_dept)</span>
-cychecks_data &lt;-<span class="st"> </span>sals_dept
-<span class="co">#view(cychecks_data)</span>
-<span class="co">#load(file = "C:/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/data/sals_dept_profs.rda")</span>
-<span class="co">#view(sals_dept_profs)</span>
-cychecks_dept_data &lt;-<span class="st"> </span>sals_dept_profs
-<span class="co">#view(cychecks_dept_data)</span>
-
-<span class="co">#clean data</span>
-<span class="co">#sals_dept &lt;- sals_dept %&gt;% filter(!is.na(gender), gender != "*")</span>
-<span class="co"># sals_dept_profs &lt;- sals_dept_profs %&gt;% filter(!is.na(gender), gender != "*")</span>
-<span class="co"># department &lt;- c("All departments", sort(unique(as.character(sals_dept$department))))</span>
-<span class="co"># fiscal_year &lt;- c("All years", sort(unique(as.character(sals_dept$fiscal_year))))</span>
-
-<span class="co">#plot data to analyze</span>
-gender_pay &lt;-<span class="st"> </span>cychecks_data <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> fiscal_year, <span class="dt">y =</span> total_salary_paid)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">col=</span>gender)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle =</span> <span class="st">"Gender Vs Total Salary Paid Each Year"</span>,
-       <span class="dt">y=</span><span class="st">"Total Salary Paid"</span>,
-       <span class="dt">x=</span><span class="st">"Year"</span>)
-
-
-gender_pay2 &lt;-<span class="st"> </span>cychecks_data <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> total_salary_paid)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">col=</span>gender)) <span class="op">+</span>
-<span class="st">   </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot.window">xlim</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">2020</span>)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot.window">ylim</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">100</span>)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle =</span> <span class="st">"Gender Vs Total Salary Paid Each Year"</span>,
-       <span class="dt">y=</span><span class="st">"Total Salary Paid"</span>,
-       <span class="dt">x=</span><span class="st">"Year"</span>)
-
-<span class="co">#plot(gender_pay2)</span></code></pre></div>
 </div>
-<div id="click-the-link-to-find-the-pay-pattern-in-your-department" class="section level2">
+<div id="figures-produced-with-package-contents" class="section level2">
 <h2 class="hasAnchor">
-<a href="#click-the-link-to-find-the-pay-pattern-in-your-department" class="anchor"></a>click the link to find the pay pattern in your department!</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#runShiny()</span></code></pre></div>
+<a href="#figures-produced-with-package-contents" class="anchor"></a>Figures produced with package contents</h2>
+<p>The following figures are used in the Shiny App to help the user visualize pay patterns.</p>
+This figure demonstrates the
+<div class="figure">
+<img src="name-of-cychecks_files/figure-html/fig1_ex-1.png" alt="Professor 2018 salaries by gender and position in the Agronomy Department" width="700"><p class="caption">
+Professor 2018 salaries by gender and position in the Agronomy Department
+</p>
+</div>
+<p>From this figure you can see that only 3 of the 6 professor positions have both male and females respresented. The gray lines connect mean salaries of each position - you can quickly see there is a negative slope to the lines, indicating females in the same positions on average earn less than their male counterparts in the same positions. You can also see there are less dots in the female category, indicating there are more males in the professor positions compared to females. This type of graph is accessible in our Shiny App <strong>PROF</strong> tab.</p>
+<p>An additional figure that looks at male versus female make-ups of departments is also included in the Shiny App.</p>
+<div class="figure">
+<img src="name-of-cychecks_files/figure-html/fig2_ex-1.png" alt="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018" width="700"><p class="caption">
+Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018
+</p>
+</div>
+<p>From this figure you can see the department has not hired a woman to a professor position since 2014. This is consistent with the previous figure, which showed there were no women in the ‘Assistant Professor’ position.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2 class="hasAnchor">
@@ -277,6 +539,7 @@ gender_pay2 &lt;-<span class="st"> </span>cychecks_data <span class="op">%&gt;%<
 <div id="limitations-future-work" class="section level2">
 <h2 class="hasAnchor">
 <a href="#limitations-future-work" class="anchor"></a>Limitations &amp; Future Work</h2>
+<p>We were only granted access to departmental affiliations for people employed by Iowa State University as of Jan 1 2019. If an employee left the university before that date, they will not be included in our dataset. This makes interpreting post-doctoral information particularly problematic, due to the transitory nature of that position. Despite these limitations, we believe this work opens the door to conversations about pay inequalities at ISU, and can serve as a resouce for individuals looking to negotiate starting salaries or request raises. Future work will include providing a way to quickly identify positions within a department that lack gender diversity, incorporating individuals who do not identify with one of the binary gender categories, and including a way to access departmental affiliations from the web.</p>
 </div>
 <div id="referencesbibliography" class="section level2">
 <h2 class="hasAnchor">
@@ -294,17 +557,11 @@ gender_pay2 &lt;-<span class="st"> </span>cychecks_data <span class="op">%&gt;%<
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#abstract">Abstract</a></li>
-      <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#literature-review">Literature Review</a></li>
-      <li><a href="#data-description">Data Description</a></li>
-      <li><a href="#package-description-package-functions">Package Description &amp; Package Functions</a></li>
-      <li><a href="#function-1-web-scrapping-aka-sal_df">Function 1: Web Scrapping (aka sal_df)</a></li>
-      <li><a href="#function-2-anonymize-names-aka-anonymize">Function 2: Anonymize names (aka anonymize)</a></li>
-      <li><a href="#function-3get-professor-info-aka-get_profs">Function 3:Get professor info (aka get_profs)</a></li>
-      <li><a href="#function-4-running-statistics-aka-stats_mf">Function 4: Running statistics (aka stats_mf)</a></li>
-      <li><a href="#analysis-and-results-graphs-and-tables">Analysis and Results (Graphs and Tables)</a></li>
-      <li><a href="#click-the-link-to-find-the-pay-pattern-in-your-department">click the link to find the pay pattern in your department!</a></li>
+<li><a href="#introduction">Introduction</a></li>
+      <li><a href="#package-contents">Package contents</a></li>
+      <li><a href="#datasets">Datasets</a></li>
+      <li><a href="#functions">Functions</a></li>
+      <li><a href="#figures-produced-with-package-contents">Figures produced with package contents</a></li>
       <li><a href="#conclusion">Conclusion</a></li>
       <li><a href="#limitations-future-work">Limitations &amp; Future Work</a></li>
       <li><a href="#referencesbibliography">References/Bibliography</a></li>

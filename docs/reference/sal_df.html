@@ -131,15 +131,18 @@ See CyChecks" />
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>limit</th>
-      <td><p>How many data entries you'd like to receive (default = 1000)</p></td>
+      <td><p>The number of data entries (rows in the dataframe) you'd like to receive (default = 1000)</p></td>
     </tr>
     <tr>
       <th>offset</th>
-      <td><p>Where you'd like the dataentries to start pulling from (default = 0)</p></td>
+      <td><p>Where you'd like the data entries to start pulling from (default = 0). If using the
+default of 0, then the dataset will start pulling from the beginning of alphabet.
+This argument is useful to change when using the function multiple times.</p></td>
     </tr>
     <tr>
       <th>fiscal_year</th>
-      <td><p>The fiscal year the data are taken from. Limited to 2007-2018</p></td>
+      <td><p>The fiscal year the data are taken from. Limited to 2007-2018.
+Can only enter one fiscal year at a time.</p></td>
     </tr>
     <tr>
       <th>token</th>
@@ -149,7 +152,7 @@ See CyChecks" />
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe with salary information, position, and date for Iowa State University employees</p>
+    <p>A dataframe with salary information, position, and gender for Iowa State University employees in a given fiscal year.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -159,17 +162,17 @@ See CyChecks" />
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>sal_df</span>()</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1,000 x 8</span><span>
 #&gt;    base_salary_date    fiscal_year gender name  place_of_reside~ position
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   
-#&gt; </span><span style='color: #555555;'> 1</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABAS~ STORY            POSTDOC~
-#&gt; </span><span style='color: #555555;'> 2</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        F      ABAT~ STORY            CASUAL ~
-#&gt; </span><span style='color: #555555;'> 3</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABBA~ COOK             SYS SUP~
-#&gt; </span><span style='color: #555555;'> 4</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABBA~ OAKLAND          CASUAL ~
-#&gt; </span><span style='color: #555555;'> 5</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABBE~ STORY            GRAD AS~
-#&gt; </span><span style='color: #555555;'> 6</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABBE~ STORY            CASUAL ~
-#&gt; </span><span style='color: #555555;'> 7</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        F      ABBO~ STORY            COMM SP~
-#&gt; </span><span style='color: #555555;'> 8</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        F      ABBO~ BOONE            ASST MG~
-#&gt; </span><span style='color: #555555;'> 9</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        M      ABBO~ STORY            PROF    
-#&gt; </span><span style='color: #555555;'>10</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span> 2007        F      ABBO~ STORY            CASUAL ~
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dttm&gt;</span><span>                    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   
+#&gt; </span><span style='color: #555555;'> 1</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABAS~ STORY            POSTDOC~
+#&gt; </span><span style='color: #555555;'> 2</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 F      ABAT~ STORY            CASUAL ~
+#&gt; </span><span style='color: #555555;'> 3</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABBA~ COOK             SYS SUP~
+#&gt; </span><span style='color: #555555;'> 4</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABBA~ OAKLAND          CASUAL ~
+#&gt; </span><span style='color: #555555;'> 5</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABBE~ STORY            GRAD AS~
+#&gt; </span><span style='color: #555555;'> 6</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABBE~ STORY            CASUAL ~
+#&gt; </span><span style='color: #555555;'> 7</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 F      ABBO~ STORY            COMM SP~
+#&gt; </span><span style='color: #555555;'> 8</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 F      ABBO~ BOONE            ASST MG~
+#&gt; </span><span style='color: #555555;'> 9</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 M      ABBO~ STORY            PROF    
+#&gt; </span><span style='color: #555555;'>10</span><span> 2007-07-01 </span><span style='color: #555555;'>00:00:00</span><span>        </span><span style='text-decoration: underline;'>2</span><span>007 F      ABBO~ STORY            CASUAL ~
 #&gt; </span><span style='color: #555555;'># ... with 990 more rows, and 2 more variables: total_salary_paid </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
 #&gt; #   travel_subsistence </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>sal_df</span>(<span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>fiscal_year</span> <span class='kw'>=</span> <span class='fl'>2015</span>)</div></span></pre>
   </div>

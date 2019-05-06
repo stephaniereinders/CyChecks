@@ -1,6 +1,6 @@
 ---
 title: "CyChecks"
-author: "Many"
+author: "Lydia English, Yones Khaledian, Brianna Lawton, Gina Nichols, Stephanie Reinders"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -17,71 +17,75 @@ knitr::opts_chunk$set(
 library(CyChecks)
 library(dplyr)
 library(ggplot2)
+library(knitr)
 ```
-## Abstract
-
-Salary data for Iowa State University (ISU) employees is publicly available through the state government. CyChecks, an R package, was developed with the intent of examining and interpreting the university's salary dataset. This package will allow users to compare pay between genders, positions, and departments, while displaying the results in a dynamic interface (shiny app). While this data is publicly available, it was also understood that salaries are sensitive, personal information and therefore an individual's name that could easily be associated with their salary was anonymized. We hope Cychecks will provide useful fodder for discussing pay patterns within a publicly funded university.
 
 
 ## Introduction
-The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries.
-#### Some of the services this access could offer include:
+  The pay gap between men and women in various positions continues to plague many industries, including adademia. Publicly funded universities, like Iowa State University in Ames, Iowa, are mandated by law to publish the salary information of all their employees. This provides a unique opportunity to examine the pay patterns across various departments at a large academic instution. 
+  While other websites and databases exist to examine similar datasets or compare pay across universites, these resources often aren't user friendly or don't show the kind of interactive graphics users may wish to see. CyChecks, an R package, was created to change this. This package provides users with publicly available datasets in a tidy form and interactive web graphics to get them started, but it also allows the users to access the data they want so that they are able to apply any R functions they wish to see. 
+
+### Some of the services CyChecks could offer include:
 
 1.	Aiding job seekers in negotiating starting salaries.
 2.	Shedding light on possible pay inequities with respect to gender.
 3.	Identifying the highest paid positions at the university.
 
-
-## Literature Review
-
-Pay patterns and/or pay disparities have been an on-going topic of discussion and focus for research since [insert date]. 
-The [insert law] aimed to dismantle these disparities but unfortunately the female gender is still under xx.
-
-Studies have shown gender pay gaps are often a result of gender-associated differences in the  aggressiveness of starting salary negotiations. Transparency about collegue pay could help address this issue.  
-
-## Package Contents
-
-The state of Iowa offers a large amount of public data at this [site](https://data.iowa.gov/). You can access the data by signing up for an API token [here](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w). Iowa state employee salaries are available at this [site](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w). Using an API token, CyChecks provides a function to easily get data for any given year.
-The data from this site does not include the employee's home department. Unfortunately, after much exploring, the data linking names to departments is not easily accessible. Iowa State Univerisity's Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, included is a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. It was discovered that employees that had left before the year 2019 will not listed under their respective department in this dataset. This isn't ideal, but a reality of trying to display this sort of data.
-
-
-## Package Description & Package Functions
- This package (CyChecks) is an R package that helps a user conveniently "check" salary information for Iowa State University employees and faculty. The package currently includes:
-
-1. A function to:
+## Package contents
+1. Datasets consistent of:
+    (i) Employee/salary/department dataset for 2007-2018 
+    (ii) Employee/salary/department/college dataset assumed to be valid for 2018
+2. Functions to:
    (i) download data directly from the iowa.gov website
    (ii) anonymize names of downloaded data
    (iii) simplify professor position titles
    (iv) quickly identify departments with possible gender pay inequities
-   (v) Launch a Shiny App to help you explore the dataset provided in our package.
-2. Data from:
-    (i) Employee/salary/department dataset for 2007-2018 
-    (ii) Employee/salary/department/college dataset assumed to be valid for 2018
-3. A shiny app for visualizing data
+   (v) Launch a Shiny App to help users explore the dataset provided in our package.
+3. A Shiny app for interactively, visualizing data
 
-## Function 1: Web Scrapping (sal_df)
--Get data from the web
+
+## Datasets
+
+  The state of Iowa offers a large amount of public data at this [site](https://data.iowa.gov/). You can access the data through the website, and it's recommended that you sign up for an API token [here](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w) if you'd like to scrape lots of data. Iowa state employee salaries are available at this [site](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w). CyChecks provides a function to easily get data for any given year through the above websites.
+  The data from the government web site does not include the employee's home department within the University, and a dataset consisting of the entire faculty and staff directory is not made publicly available. However, Iowa State Univerisity's Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, we've included a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. Additionally, we've included a dataset of employee salary data and department information (again, with names anonymized) for fiscal year 2018. Since the directory information is only valid as of 2019, employees that had left before that year will not listed under their respective department in this dataset. This isn't ideal, but a reality of trying to display University data.
+
+
+```{r data ex1}
+data("sals18")
+sals18 %>%
+  filter(department == "AGRONOMY" & position == "PROF") %>%
+  select(gender, total_salary_paid, department, position, id) %>%
+  head()%>%
+  kable()
+```
+
+## Functions
+
+### Function 1: Web Scraping (sal_df)
+  This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is "Iowa State University" for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. 
+  While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
 ```{r}
 #insert example of what function executes
-
+ex <- sal_df(limit = 10, offset = 1100, fiscal_year = 2010)
+kable(ex, format = "html")
 ```
 
 
-## Function 2: Anonymize names (anonymize)
+### Function 2: Anonymize names (anonymize)
 -convert each individual's personal name to an alphanumeric id to mask the individual's real identity
 ```{r}
 #insert example of what function executes
 
 ```
 
-## Function 3:Get professor info (get_profs)
+### Function 3:Get professor info (get_profs)
 -find the pay gap between different positions
 ```{r}
 #insert example of what function executes
 
 ```
 
-## Function 4: Run basic statistics (stats_mf)
+### Function 4: Run basic statistics (stats_mf)
 This function uses one fiscal year of data to identify departments with possible gender pay dispartities. Within a department, the function identifies positions that have more than 1 female and male in that position. Within a department, the function then fits a simple linear model of the following form:
 total_salary ~ position + gender
 The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a 'boo' verdict, and a p-value higher than 0.20 earning an 'ok'. This allows users to quickly filter to find departments with possible pay inequities associated with genders. 
@@ -94,21 +98,12 @@ sals18 %>%
 ```
 
 
-### Data
-
-The data *sals18* is included with our package, and it blah blah.  
-
-```{r data ex1}
-data("sals18")
-names(sals18)
-```
-
 ## Figures produced with package contents
 
 The following figures are used in the Shiny App to help the user visualize pay patterns. 
 
 This figure demonstrates the 
-```{r fig1 ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
+```{r fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
 data("sals_dept_profs") 
 
 sals_dept_profs %>%
@@ -140,7 +135,7 @@ From this figure you can see that only 3 of the 6 professor positions have both 
 
 An additional figure that looks at male versus female make-ups of departments is also included in the Shiny App. 
 
-```{r fig2 ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
+```{r fig2_ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
   sals_dept_profs %>%
    filter(gender %in% c("M", "F"),
           department == "AGRONOMY",
@@ -164,9 +159,11 @@ From this figure you can see the department has not hired a woman to a professor
 
 ## Conclusion
 
+
+
 ## Limitations & Future Work
 
-We were only granted access to departmental affiliations for people employed by Iowa State University as of Jan 1 2019. If an employee left the university before that date, they will not be included in our dataset. This makes interpreting post-doctoral information particularly problematic. Despite these limitations, we believe this work opens the door to conversations about pay inequalities at ISU, and can serve as a resouce for individuals looking to negotiate starting salaries or request raises. Future work will include providing a way to quickly identify positions within a department that lack gender diversity, incorporating individuals who do not identify with one of the binary gender categories, and including a way to access departmental affiliations from the web. 
+We were only granted access to departmental affiliations for people employed by Iowa State University as of Jan 1 2019. If an employee left the university before that date, they will not be included in our dataset. This makes interpreting post-doctoral information particularly problematic, due to the transitory nature of that position. Despite these limitations, we believe this work opens the door to conversations about pay inequalities at ISU, and can serve as a resouce for individuals looking to negotiate starting salaries or request raises. Future work will include providing a way to quickly identify positions within a department that lack gender diversity, incorporating individuals who do not identify with one of the binary gender categories, and including a way to access departmental affiliations from the web. 
 
 ## References/Bibliography
 
