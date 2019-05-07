@@ -11,9 +11,7 @@ fun1 <- function(data) {
   p_val <- NULL
   # Handle bad input
   assertthat::assert_that(is.data.frame(data))
-  assertable::assert_colnames(data, c("position",
-                                      "gender",
-                                      "total_salary_paid"), only_colnames = FALSE)
+  assertthat::assert_that(c("position", "gender", "total_salary_paid") %in% names(data))
   assertthat::not_empty(data)
   assertthat::assert_that(is.numeric(data$total_salary_paid))
                           #is.factor(data$position),
