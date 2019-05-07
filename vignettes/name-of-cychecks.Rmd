@@ -78,11 +78,27 @@ kable(ex, format = "html")
 
 ```
 
-### Function 3:Get professor info (get_profs)
--find the pay gap between different positions
-```{r}
-#insert example of what function executes
+### Function 3: Get professor info (get_profs)
+This function creates a new data frame with professor positions grouped into 12 categories of simplified position titles. It filters the position variable of sals_dept for any entries that contain the string 'PROF'. Then it creates a new variable called position_simplified, which contains the simplified position category. The table below shows the string that is searched for in the position variable and the corresponding position_simplified category assigned to it. This function was created specifically to run on the sals_dept dataset. If the function is used on a dataset with different position abreviations than those listed in the table, the resulting data frame will be suboptimal. 
 
+```{r, echo=FALSE}
+string <- c('EMER','DIST','UNIV','MORRILL','ADJ','AFFIL','VSTG','ASST','ASSOC','COLLAB','CHAIR or CHR','PROF')
+position_simplified <- c('emeritus','distinguished','university','Morrill','adjunct','affiliate','visting','assistant','associate','collab','chair','professor')
+
+df <- data.frame(string,position_simplified)
+df %>% kable()
+```
+
+The following code runs the get_profs function on the sals_dept dataset and filters for associate professors. Only the first six rows are displayed.
+
+```{r, echo=FALSE}
+data(sals_dept)
+sals_dept %>% 
+  get_profs() %>% 
+  filter(position_simplified == 'associate') %>%
+  select(fiscal_year,gender,place_of_residence,position_simplified) %>%
+  head() %>%
+  kable(format = "html")
 ```
 
 ### Function 4: Run basic statistics (stats_mf)
@@ -93,7 +109,7 @@ The function then sorts the departments by the p-value associated with the gende
 ```{r stats_mf ex, eval = F}
 data(sals18)
 sals18 %>%
-  stat_mf() %>%
+  stats_mf() %>%
   filter(verdict == 'boo')
 ```
 

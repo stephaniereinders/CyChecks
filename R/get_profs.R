@@ -27,13 +27,12 @@ assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
 # Filter dataframe for all positions that contain the string 'PROF'
 
 dataframe <- data %>%
-  dplyr::mutate(position = as.character(position)) %>%
   dplyr::filter(grepl('PROF', position))
 
 # Create a new variable 'position_simplified' that groups professor titles into groups
 # such as associate, visting, and emeritus.
 dataframe <- dataframe %>% dplyr::mutate(position_simplified = gsub(".*EMER.*",'emeritus', position),
-                          position_simplified = gsub(".*DISTG.*",'distinguished', position_simplified),
+                          position_simplified = gsub(".*DIST.*",'distinguished', position_simplified),
                           position_simplified = gsub(".*UNIV.*",'university',position_simplified),
                           position_simplified = gsub(".*MORRILL.*",'morrill',position_simplified),
                           position_simplified = gsub(".*ADJ.*",'adjunct',position_simplified),
