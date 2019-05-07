@@ -83,7 +83,6 @@ fun1 <- function(data) {
 #' @importFrom tidyr nest unnest
 #' @importFrom dplyr group_by summarise select rename mutate filter arrange
 #' @importFrom assertthat assert_that not_empty
-#' @importFrom assertable assert_colnames
 #' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function
 #' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
@@ -100,10 +99,10 @@ stats_mf <- function(data = sals18){
 
   # Make sure it has the columns I want, and that it's not empty
   assertthat::assert_that(is.data.frame(data))
-  assertable::assert_colnames(data, c("department",
-                                      "position",
-                                      "gender",
-                                      "total_salary_paid"), only_colnames = FALSE)
+  assertthat::assert_that("department" %in% names(data))
+  assertthat::assert_that("position" %in% names(data))
+  assertthat::assert_that("gender" %in% names(data))
+  assertthat::assert_that("total_salary_paid" %in% names(data))
   assertthat::not_empty(data)
   assertthat::assert_that(is.numeric(data$total_salary_paid))
 
