@@ -59,14 +59,6 @@ sals18 %>%
   kable()
 ```
 
-From Yones
-### listed below are the summary statistics of the dataset just to give you an idea of how it looks
-```{r}
-library(knitr)
-knitr::kable(summary(cychecks_dept_data), col.names = c("Base Salary Date","Fiscal Year","gender","Place of Residence",
-                                                        "Position","Total Salary Paid","Travel Subsistence","Base Salary",
-                                                        "Organization","Department","ID","Position Simplified"))
-```
 
 ## Functions
 

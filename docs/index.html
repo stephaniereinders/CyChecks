@@ -102,7 +102,8 @@
 <p><em>Summary</em></p>
 <p>This package currently includes:</p>
 <ol style="list-style-type: decimal">
-<li>A function to:
+<li>A function to:</li>
+</ol>
 <ol style="list-style-type: lower-roman">
 <li>download data directly from the iowa.gov website</li>
 <li>anonymize names of downloaded data</li>
@@ -110,7 +111,7 @@
 <li>quickly identify departments with possible gender pay inequities</li>
 <li>Launch a Shiny App to help you explore the dataset provided in our package.</li>
 </ol>
-</li>
+<ol start="2" style="list-style-type: decimal">
 <li>Data from:
 <ol style="list-style-type: lower-roman">
 <li>Employee/salary/department dataset for 2007-2018</li>
@@ -123,15 +124,15 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version CyChecks from <a href="https://CRAN.R-project.org">github</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"https://github.com/vanichols/CyChecks"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"https://github.com/vanichols/CyChecks"</span>)</code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>You can access the data using our <em>sal_df</em> function.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">fiscal_year =</span> <span class="dv">2015</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">fiscal_year =</span> <span class="dv">2015</span>)</code></pre></div>
 <p>You can visualize the dataset provided with the package (sals_dept) using our Shiny App, which can be launched using our <em>runShiny()</em> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/runShiny.html">runShiny</a></span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/runShiny.html">runShiny</a></span>()</code></pre></div>
 <p><a href="https://travis-ci.org/vanichols/CyChecks"><img src="https://travis-ci.org/vanichols/CyChecks.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/vanichols/CyChecks?branch=master"><img src="https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg" alt="Coverage status"></a></p>
 </div>
 </div>
