@@ -1,7 +1,6 @@
 # Function to be called inside real function
 fun1 <- function(data) {
 
-  data <- sals18
   # -------Start fun
   # just to calm down R CMD CHECK
   position <- NULL
@@ -11,6 +10,7 @@ fun1 <- function(data) {
   term <- NULL
   p.value <- NULL
   p_val <- NULL
+
   # Handle bad input
   assertthat::assert_that(is.data.frame(data))
   assertthat::assert_that("position" %in% names(data))
@@ -27,8 +27,9 @@ fun1 <- function(data) {
     dplyr::filter(gender %in% c("F", "M")) %>%
     tidyr::spread(gender, n)
 
+  # If there are only M/F (2 cols), assign p_val of NA
   if (ncol(twogenders) < 3) {
-    myres <- tibble(term = "gender",
+    myres <- tibble::tibble(term = "gender",
                     p_val = NA,
                     verdict = NA)
 
@@ -46,9 +47,9 @@ fun1 <- function(data) {
     # If it's empty, it needs to make a fake tibble
     # If it's not empty and has more than 1 position, fit a simple model
 
-    #--If#1
+    #--If#1 (not empty)
     if (nrow(mydsub) > 0) {
-      #--If#2
+      #--If#2 (more than 1 position)
       if (length(poslist) > 1) {
         # This is what I want it to do if mydsub isn't empty
         myres <- broom::tidy(stats::anova(
@@ -60,7 +61,7 @@ fun1 <- function(data) {
           dplyr::rename("p_val" = p.value) %>%
           dplyr::mutate(verdict = ifelse(p_val < 0.2, "boo", "ok"))
       } else {
-        # This is what I want it to do if mydsub isn't empty but there is only 1 row
+        # Not empty, only one position
         myres <-
           broom::tidy(stats::anova(stats::lm(total_salary_paid ~
                                                gender, data = mydsub))) %>%
@@ -70,14 +71,16 @@ fun1 <- function(data) {
           dplyr::mutate(verdict = ifelse(p_val < 0.2, "boo", "ok"))
       }
     } else {
-      # This is what I want if it IS empty
-      myres <- tibble(term = "gender",
+      # It's empty
+      myres <- tibble::tibble(term = "gender",
                       p_val = NA,
                       verdict = NA)
     }
   }
+
+  # If it made it through all that and still has a funky output, overwrite it
   if (ncol(myres) < 3) {
-    myres <- tibble(term = "gender",
+    myres <- tibble::tibble(term = "gender",
                     p_val = NA,
                     verdict = NA)
 
