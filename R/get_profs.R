@@ -22,7 +22,7 @@
 get_profs <- function(data=sals_dept){
 
 assertthat::assert_that(is.data.frame(data))
-assertable::assert_colnames(data, c("position"), only_colnames = FALSE)
+assertthat::assert_that("position" %in% names(data))
 
 # Filter dataframe for all positions that contain the string 'PROF'
 
