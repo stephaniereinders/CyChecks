@@ -29,7 +29,6 @@ Imports:
     checkmate,
     tibble,
     data.table,
-    assertable,
     broom,
     purrr,
     assertthat,
