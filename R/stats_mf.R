@@ -1,5 +1,7 @@
 # Function to be called inside real function
 fun1 <- function(data) {
+
+  data <- sals18
   # -------Start fun
   # just to calm down R CMD CHECK
   position <- NULL
@@ -11,11 +13,11 @@ fun1 <- function(data) {
   p_val <- NULL
   # Handle bad input
   assertthat::assert_that(is.data.frame(data))
-  assertthat::assert_that(c("position", "gender", "total_salary_paid") %in% names(data))
+  assertthat::assert_that("position" %in% names(data))
+  assertthat::assert_that("gender" %in% names(data))
+  assertthat::assert_that("total_salary_paid" %in% names(data))
   assertthat::not_empty(data)
   assertthat::assert_that(is.numeric(data$total_salary_paid))
-                          #is.factor(data$position),
-                          #is.factor(data$gender))
 
   # Make sure there are two genders in that department (eye roll)
   twogenders <- data %>%
@@ -34,7 +36,7 @@ fun1 <- function(data) {
     # Figure out which positions have both a M and F
     poslist <-  twogenders %>%
       dplyr::filter(!is.na(M),!is.na(`F`)) %>%
-      dplyr::filter((M > 1 & F > 1)) %>% #--you need more than 1 of each to do a comparison
+      dplyr::filter((M > 1 & `F` > 1)) %>% #--you need more than 1 of each to do a comparison
       dplyr::pull(position)
 
     # Filter to get only those positions
@@ -74,6 +76,13 @@ fun1 <- function(data) {
                       verdict = NA)
     }
   }
+  if (ncol(myres) < 3) {
+    myres <- tibble(term = "gender",
+                    p_val = NA,
+                    verdict = NA)
+
+  }
+
   return(myres)
 }
 
