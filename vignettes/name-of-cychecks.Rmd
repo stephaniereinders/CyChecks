@@ -59,6 +59,15 @@ sals18 %>%
   kable()
 ```
 
+From Yones
+### listed below are the summary statistics of the dataset just to give you an idea of how it looks
+```{r}
+library(knitr)
+knitr::kable(summary(cychecks_dept_data), col.names = c("Base Salary Date","Fiscal Year","gender","Place of Residence",
+                                                        "Position","Total Salary Paid","Travel Subsistence","Base Salary",
+                                                        "Organization","Department","ID","Position Simplified"))
+```
+
 ## Functions
 
 ### Function 1: Web Scraping (sal_df)
@@ -71,11 +80,17 @@ kable(ex, format = "html")
 ```
 
 
-### Function 2: Anonymize names (anonymize)
+
+## Function 2: Anonymize names (anonymize)
 -convert each individual's personal name to an alphanumeric id to mask the individual's real identity
 ```{r}
-#insert example of what function executes
 
+df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones"),
+                        "Salary" = c(5456, 5698, 5647, 5842, 5910)) # Create a dataframe
+kable(df_exmple)
+
+anon <- anonymize(df_exmple) # Anonymizing the column name 
+knitr::kable(anon, col.names = c("Name" , "Salary ($)", "Anonymous Name"))
 ```
 
 ### Function 3: Get professor info (get_profs)
