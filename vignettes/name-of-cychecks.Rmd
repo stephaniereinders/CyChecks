@@ -73,7 +73,7 @@ kable(ex, format = "html")
 
 
 
-## Function 2: Anonymize names (anonymize)
+### Function 2: Anonymize names (anonymize)
 -convert each individual's personal name to an alphanumeric id to mask the individual's real identity
 ```{r}
 
@@ -82,7 +82,7 @@ df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones")
 kable(df_exmple)
 
 anon <- anonymize(df_exmple) # Anonymizing the column name 
-knitr::kable(anon, col.names = c("Name" , "Salary ($)", "Anonymous Name"))
+knitr::kable(anon, col.names = c("Name" , "Salary", "Anonymous Name"))
 ```
 
 ### Function 3: Get professor info (get_profs)
@@ -126,7 +126,7 @@ sals18 %>%
 The following figures are used in the Shiny App to help the user visualize pay patterns. 
 
 This figure demonstrates the 
-```{r fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
+```{r fig.width = 6, fig.align='center', fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
 data("sals_dept_profs") 
 
 sals_dept_profs %>%
@@ -158,7 +158,7 @@ From this figure you can see that only 3 of the 6 professor positions have both 
 
 An additional figure that looks at male versus female make-ups of departments is also included in the Shiny App. 
 
-```{r fig2_ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
+```{r, fig.width = 6, fig.align='center', fig2_ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
   sals_dept_profs %>%
    filter(gender %in% c("M", "F"),
           department == "AGRONOMY",
