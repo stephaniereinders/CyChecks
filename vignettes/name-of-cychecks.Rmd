@@ -125,7 +125,8 @@ sals18 %>%
 
 The following figures are used in the Shiny App to help the user visualize pay patterns. 
 
-This figure demonstrates the 
+The direct figure below demonstrates gender versus the total salary paid ($thousands) for different professor positions.
+
 ```{r fig.width = 6, fig.align='center', fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
 data("sals_dept_profs") 
 
@@ -179,9 +180,21 @@ An additional figure that looks at male versus female make-ups of departments is
 From this figure you can see the department has not hired a woman to a professor position since 2014. This is consistent with the previous figure, which showed there were no women in the 'Assistant Professor' position. 
 
 
+## Shiny App
+  
+Feel free to check out the shiny app for this package by running the following code.
+
+```{r}
+#runShiny()
+```
+#![Here is a preview of what should appear when a user opens the CyChecks shiny app](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/vignettes/shiny_app_screenshot.PNG)
+
 
 ## Conclusion
 
+From the CyChecks package, a user is equipped with four different functions that can help them work through the above specified Iowa salary data in order to run analysis and cross-compare wages amoungst Iowa State University departments, while investigating gender and career position equity. This package, CyChecks, allows the user to scrap the dataset from the web, anonymize the names of invidivudals to mask identity for the sake of privacy, select anf filter specific professor data, and run basic statistical analysis against the data for years 2007 to 2018.
+
+Across the board, when graphically visualizing the data, it can be seen that there is a desparity between men and women's average yearly salary in STEM departments (i.e. Agronomy, Engineering, Mathematics) where there is a defined scarcity in female representation across these departments' academic professional careers (i.e. professor, assistance professor, professor emaritus, etc.). Conversely, it can been seen in some departments like the social sciences(i.e. education, language) within the university are majority female. Either way, this data visualization can make it easier for users to understand and interpret the trends in the data, while identifying where an initiative to close the pay gap within departments with a lack of diversity and gender  representation at each position level offered.
 
 
 ## Limitations & Future Work
@@ -190,5 +203,38 @@ We were only granted access to departmental affiliations for people employed by 
 
 ## References/Bibliography
 
-## Packaage Website/Vignette
-Follow the [link](https://vanichols.github.io/CyChecks/)
+1. [Data|State of Iowa](https://data.iowa.gov/) 
+
+2. [Equal Pay Act of 1963. (2019, May 03). Retrieved May 7, 2019, from https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963](https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963)
+
+3. [Equal Pay/Compensation Discrimination. (n.d.). Retrieved May 7, 2019, from https://www.eeoc.gov/laws/types/equalcompensation.cfm](https://www.eeoc.gov/laws/types/equalcompensation.cfm)
+
+4. [“Gender Pay Gap USA 2019: Statistics, Trends, Reasons and Solutions.” The Dough Roller, 3 Apr. 2019, www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.](www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.)
+
+5. [Pay Equity & Discrimination. (n.d.). Retrieved May 7, 2019, from https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/](https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/)
+  
+6. [Socrata Developer Portal. (2018, November 2). Retrieved May 7, 2019, from https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w)
+
+7. [State of Iowa Salary Book. (2019, January 18). Retrieved May 7, 2019, from https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w)
+
+8. [Women's Wages: Equal Pay for Women and the Wage Gap. (n.d.). Retrieved May 7, 2019, from https://nwlc.org/issue/equal-pay-and-the-wage-gap/](https://nwlc.org/issue/equal-pay-and-the-wage-gap/)
+  
+  
+## Package Website/Vignette
+Follow the [link](https://vanichols.github.io/CyChecks/) to checkout the CyCheck package to discover the pay pattern in your department!
+
+
+Here is a [link](CyChecks.pdf) to the CyChecks PPT that could provide more insight to users of the package.
+
+## Thank you!
+
+![CyChecks Hexsticker](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/vignettes/CyChecks_hexsticker.png)
+
+
+
+
+
+
+
+  
+  
