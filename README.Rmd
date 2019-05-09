@@ -85,3 +85,8 @@ With our package, we were able to partially recreate the PhDComics figure for th
 [![Travis build status](https://travis-ci.org/vanichols/CyChecks.svg?branch=master)](https://travis-ci.org/vanichols/CyChecks)
 [![Coverage status](https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg)](https://codecov.io/github/vanichols/CyChecks?branch=master)
 <!--[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) --> 
+
+```{r echo = FALSE, results = FALSE}
+# copy static figures to docs folder
+file.copy("./README_files", "./docs", overwrite = TRUE, recursive = TRUE)
+```
