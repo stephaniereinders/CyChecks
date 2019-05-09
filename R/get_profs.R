@@ -1,10 +1,8 @@
 #' Create a dataframe of professors' salary data
-#'
-#' @description Create a dataframe that only contains professors' salaray data
+#' @description Create a dataframe that only contains professors' salary data
 #'   from a larger dataframe of salary data. Create a new variable 'position_simplified'
 #'   that groups professor titles into categories such as associate, visting,
 #'   and emeritus.
-#' @name get_profs
 #' @title get_profs
 #' @usage get_profs(data)
 #' @importFrom dplyr mutate

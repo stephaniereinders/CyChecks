@@ -36,7 +36,8 @@ Imports:
     lubridate,
     stringr,
     digest,
-    shiny
+    shiny,
+    DT
 URL: https://github.com/vanichols/CyChecks
 BugReports: https://github.com/vanichols/CyChecks/issues
 Suggests: 

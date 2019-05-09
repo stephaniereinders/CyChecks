@@ -80,7 +80,7 @@
       <h1>CyChecks</h1>
                         <h4 class="author">Lydia English, Yones Khaledian, Brianna Lawton, Gina Nichols, Stephanie Reinders</h4>
             
-            <h4 class="date">2019-05-07</h4>
+            <h4 class="date">2019-05-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vanichols/CyChecks/blob/master/vignettes/name-of-cychecks.Rmd"><code>vignettes/name-of-cychecks.Rmd</code></a></small>
       <div class="hidden name"><code>name-of-cychecks.Rmd</code></div>
@@ -129,12 +129,13 @@
 <h2 class="hasAnchor">
 <a href="#datasets" class="anchor"></a>Datasets</h2>
 <p>The state of Iowa offers a large amount of public data at this <a href="https://data.iowa.gov/">site</a>. You can access the data through the website, and it’s recommended that you sign up for an API token <a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">here</a> if you’d like to scrape lots of data. Iowa state employee salaries are available at this <a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">site</a>. CyChecks provides a function to easily get data for any given year through the above websites. The data from the government web site does not include the employee’s home department within the University, and a dataset consisting of the entire faculty and staff directory is not made publicly available. However, Iowa State Univerisity’s Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, we’ve included a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. Additionally, we’ve included a dataset of employee salary data and department information (again, with names anonymized) for fiscal year 2018. Since the directory information is only valid as of 2019, employees that had left before that year will not listed under their respective department in this dataset. This isn’t ideal, but a reality of trying to display University data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"sals18"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">sals18 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(department <span class="op">==</span><span class="st"> "AGRONOMY"</span> <span class="op">&amp;</span><span class="st"> </span>position <span class="op">==</span><span class="st"> "PROF"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(gender, total_salary_paid, department, position, id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">  </span><span class="kw">kable</span>()</a></code></pre></div>
+<p>Here is an example of a subset of one of our built in datasets - sals18. We are filtering by department (Agronomy) and position (Prof).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"sals18"</span>)
+sals18 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(department <span class="op">==</span><span class="st"> "AGRONOMY"</span> <span class="op">&amp;</span><span class="st"> </span>position <span class="op">==</span><span class="st"> "PROF"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(gender, total_salary_paid, department, position, id) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">kable</span>()</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">gender</th>
@@ -195,15 +196,13 @@
 <div id="function-1-web-scraping-sal_df" class="section level3">
 <h3 class="hasAnchor">
 <a href="#function-1-web-scraping-sal_df" class="anchor"></a>Function 1: Web Scraping (sal_df)</h3>
-<p>This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is “Iowa State University” for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. While the user may enter their API as an argument to this function, having an API isn’t necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#insert example of what function executes</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">offset =</span> <span class="dv">1100</span>, <span class="dt">fiscal_year =</span> <span class="dv">2010</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">kable</span>(ex, <span class="dt">format =</span> <span class="st">"html"</span>)</a></code></pre></div>
+<p>This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is “Iowa State University” for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance.</p>
+<p>While the user may enter their API as an argument to this function, having an API isn’t necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">offset =</span> <span class="dv">1100</span>, <span class="dt">fiscal_year =</span> <span class="dv">2010</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(base_salary_date, travel_subsistence)) <span class="co"># trimming the dataframe so it's more easily readable</span>
+<span class="kw">kable</span>(ex, <span class="dt">format =</span> <span class="st">"html"</span>)</code></pre></div>
 <table class="table">
 <thead><tr>
-<th style="text-align:left;">
-base_salary_date
-</th>
 <th style="text-align:right;">
 fiscal_year
 </th>
@@ -222,15 +221,9 @@ position
 <th style="text-align:right;">
 total_salary_paid
 </th>
-<th style="text-align:right;">
-travel_subsistence
-</th>
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -249,14 +242,8 @@ POSTDOC RES ASSOC
 <td style="text-align:right;">
 36000.00
 </td>
-<td style="text-align:right;">
-5427.75
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -275,14 +262,8 @@ ASST PROF
 <td style="text-align:right;">
 47280.00
 </td>
-<td style="text-align:right;">
-939.88
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -301,14 +282,8 @@ ARCHITECT III
 <td style="text-align:right;">
 57307.48
 </td>
-<td style="text-align:right;">
-56.80
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -327,14 +302,8 @@ CASUAL HOURLY
 <td style="text-align:right;">
 1551.12
 </td>
-<td style="text-align:right;">
-0.00
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -353,14 +322,8 @@ CASUAL HOURLY
 <td style="text-align:right;">
 6666.92
 </td>
-<td style="text-align:right;">
-338.25
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -379,14 +342,8 @@ CLERK III
 <td style="text-align:right;">
 40586.78
 </td>
-<td style="text-align:right;">
-0.00
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -405,14 +362,8 @@ CASUAL HOURLY
 <td style="text-align:right;">
 1329.00
 </td>
-<td style="text-align:right;">
-0.00
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -431,14 +382,8 @@ ASST SCIENTIST I
 <td style="text-align:right;">
 45477.00
 </td>
-<td style="text-align:right;">
-658.01
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -457,14 +402,8 @@ CASUAL HOURLY
 <td style="text-align:right;">
 1088.00
 </td>
-<td style="text-align:right;">
-0.00
-</td>
 </tr>
 <tr>
-<td style="text-align:left;">
-2010-07-01
-</td>
 <td style="text-align:right;">
 2010
 </td>
@@ -483,22 +422,18 @@ PROGRAM DIRECTOR
 <td style="text-align:right;">
 99543.89
 </td>
-<td style="text-align:right;">
-5103.78
-</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div id="function-2-anonymize-names-anonymize" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-2-anonymize-names-anonymize" class="anchor"></a>Function 2: Anonymize names (anonymize)</h2>
-<p>-convert each individual’s personal name to an alphanumeric id to mask the individual’s real identity</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">df_exmple &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="st">"name"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Brianna"</span>,<span class="st">"Gina"</span>,<span class="st">"Lydia"</span>,<span class="st">"Stephanie"</span>,<span class="st">"Yones"</span>),</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                        <span class="st">"Salary"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">5456</span>, <span class="dv">5698</span>, <span class="dv">5647</span>, <span class="dv">5842</span>, <span class="dv">5910</span>)) <span class="co"># Create a dataframe</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">kable</span>(df_exmple)</a></code></pre></div>
+<div id="function-2-anonymize-names-anonymize" class="section level3">
+<h3 class="hasAnchor">
+<a href="#function-2-anonymize-names-anonymize" class="anchor"></a>Function 2: Anonymize names (anonymize)</h3>
+<p>This function allows the user to anonymize an aspect of the dataframe. While salary information is publicly available data, we also realize that this is sensitive, personal information and want to give the use the opportunity to anonymize something like names if they wish. In this function we can convert each individual’s name to an alphanumeric id to mask the individual’s real identity. The alphanumeric id is consistent across names so the user may still use a group_by function successfully, for instance. This function was used to anonymize all the datasets included in this package.</p>
+<p>Here are some examples:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_exmple &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="st">"name"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Brianna"</span>,<span class="st">"Gina"</span>,<span class="st">"Lydia"</span>,<span class="st">"Stephanie"</span>,<span class="st">"Yones"</span>),
+                        <span class="st">"Salary"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">5456</span>, <span class="dv">5698</span>, <span class="dv">5647</span>, <span class="dv">5842</span>, <span class="dv">5910</span>)) <span class="co"># Create a dataframe</span>
+<span class="kw">kable</span>(df_exmple)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -527,13 +462,13 @@ PROGRAM DIRECTOR
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">anon &lt;-<span class="st"> </span><span class="kw"><a href="../reference/anonymize.html">anonymize</a></span>(df_exmple) <span class="co"># Anonymizing the column name </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(anon, <span class="dt">col.names =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Name"</span> , <span class="st">"Salary ($)"</span>, <span class="st">"Anonymous Name"</span>))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">anon &lt;-<span class="st"> </span><span class="kw"><a href="../reference/anonymize.html">anonymize</a></span>(df_exmple) <span class="co"># Anonymizing the column name </span>
+
+knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(anon, <span class="dt">col.names =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"name"</span> , <span class="st">"Salary"</span>, <span class="st">"Anonymous Name"</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Name</th>
-<th align="right">Salary ($)</th>
+<th align="left">name</th>
+<th align="right">Salary</th>
 <th align="left">Anonymous Name</th>
 </tr></thead>
 <tbody>
@@ -564,10 +499,11 @@ PROGRAM DIRECTOR
 </tr>
 </tbody>
 </table>
+</div>
 <div id="function-3-get-professor-info-get_profs" class="section level3">
 <h3 class="hasAnchor">
 <a href="#function-3-get-professor-info-get_profs" class="anchor"></a>Function 3: Get professor info (get_profs)</h3>
-<p>This function creates a new data frame with professor positions grouped into 12 categories of simplified position titles. It filters the position variable of sals_dept for any entries that contain the string ‘PROF’. Then it creates a new variable called position_simplified, which contains the simplified position category. The table below shows the string that is searched for in the position variable and the corresponding position_simplified category assigned to it. This function was created specifically to run on the sals_dept dataset. If the function is used on a dataset with different position abreviations than those listed in the table, the resulting data frame will be suboptimal.</p>
+<p>This function creates a new data frame with professor positions grouped into 12 categories of simplified position titles. The function was created after the developers noticed that there were many varying titles of professor at the University, which made summarizing data difficult. <em>get_profs()</em> filters the position variable of the <em>sals_dept</em> dataset for any entries that contain the string ‘PROF’. Then it creates a new variable called <em>position_simplified</em>, which contains the simplified position category. The table below shows the string that is searched for in the position variable and the corresponding position_simplified category assigned to it. This function was created specifically to run on the sals_dept dataset. If the function is used on a dataset with different position abreviations than those listed in the table, the resulting data frame will be suboptimal.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">string</th>
@@ -731,35 +667,49 @@ associate
 <div id="function-4-run-basic-statistics-stats_mf" class="section level3">
 <h3 class="hasAnchor">
 <a href="#function-4-run-basic-statistics-stats_mf" class="anchor"></a>Function 4: Run basic statistics (stats_mf)</h3>
-<p>This function uses one fiscal year of data to identify departments with possible gender pay dispartities. Within a department, the function identifies positions that have more than 1 female and male in that position. Within a department, the function then fits a simple linear model of the following form: total_salary ~ position + gender The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a ‘boo’ verdict, and a p-value higher than 0.20 earning an ‘ok’. This allows users to quickly filter to find departments with possible pay inequities associated with genders.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sals18)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">sals18 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../reference/stats_mf.html">stats_mf</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(verdict <span class="op">==</span><span class="st"> 'boo'</span>)</a></code></pre></div>
+<p>This function uses one fiscal year of data to identify departments with possible gender pay dispartities. Within a department, the function identifies positions that have more than 1 female and male in that position. Within a department, the function then fits a simple linear model of the following form:</p>
+<p>total_salary ~ position + gender</p>
+<p>The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a ‘boo’ verdict, and a p-value higher than 0.20 earning an ‘ok’. While this may seem like a high p-value, we feel that 0.20 is an unliklely enough result to warrant further investigation. <em>stats_mf()</em> allows users to quickly filter and find departments with possible pay inequities associated with genders.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sals18)
+sals18 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/stats_mf.html">stats_mf</a></span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(verdict <span class="op">==</span><span class="st"> 'boo'</span>)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()</code></pre></div>
 </div>
 </div>
 <div id="figures-produced-with-package-contents" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figures-produced-with-package-contents" class="anchor"></a>Figures produced with package contents</h2>
 <p>The following figures are used in the Shiny App to help the user visualize pay patterns.</p>
-This figure demonstrates the
-<div class="figure">
-<img src="name-of-cychecks_files/figure-html/fig1_ex-1.png" alt="Professor 2018 salaries by gender and position in the Agronomy Department" width="700"><p class="caption">
+<p>The figure below demonstrates gender versus the total salary paid ($thousands) for different professor positions.</p>
+<div class="figure" style="text-align: center">
+<img src="name-of-cychecks_files/figure-html/fig1_ex-1.png" alt="Professor 2018 salaries by gender and position in the Agronomy Department" width="576"><p class="caption">
 Professor 2018 salaries by gender and position in the Agronomy Department
 </p>
 </div>
 <p>From this figure you can see that only 3 of the 6 professor positions have both male and females respresented. The gray lines connect mean salaries of each position - you can quickly see there is a negative slope to the lines, indicating females in the same positions on average earn less than their male counterparts in the same positions. You can also see there are less dots in the female category, indicating there are more males in the professor positions compared to females. This type of graph is accessible in our Shiny App <strong>PROF</strong> tab.</p>
-<p>An additional figure that looks at male versus female make-ups of departments is also included in the Shiny App.</p>
-<div class="figure">
-<img src="name-of-cychecks_files/figure-html/fig2_ex-1.png" alt="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018" width="700"><p class="caption">
+<p>An additional figure that looks at the gender make-up of departments is also included in the Shiny App.</p>
+<div class="figure" style="text-align: center">
+<img src="name-of-cychecks_files/figure-html/fig2_ex-1.png" alt="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018" width="576"><p class="caption">
 Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018
 </p>
 </div>
 <p>From this figure you can see the department has not hired a woman to a professor position since 2014. This is consistent with the previous figure, which showed there were no women in the ‘Assistant Professor’ position.</p>
 </div>
+<div id="shiny-app" class="section level2">
+<h2 class="hasAnchor">
+<a href="#shiny-app" class="anchor"></a>Shiny App</h2>
+<p>Feel free to check out the shiny app for this package by running the following code.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#runShiny()</span></code></pre></div>
+<div class="figure">
+<img src="figures/shiny_app_screenshot.PNG">
+</div>
+</div>
 <div id="conclusion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h2>
+<p>From the CyChecks package, the user is equipped with four different functions that can help them work through the above specified Iowa salary data in order to run analysis and cross-compare wages amoungst Iowa State University departments, while investigating gender and career position equity. This package, CyChecks, allows the user to scrape the dataset from the web, anonymize the names of invidivudals to mask identity for the sake of privacy, select and filter specific professor data, and run basic statistical analysis against the data for years 2007 to 2018.</p>
+<p>Across the board, when graphically visualizing the data, it can be seen that there is a disparity between men and women’s average yearly salary in STEM departments (i.e. Agronomy, Engineering, Mathematics) where there is a defined scarcity in female representation across these departments’ academic professional careers (i.e. professor, assistance professor, professor emaritus, etc.). Conversely, some departments within the university, like the social sciences (i.e. education, language), are majority female. Either way, this data visualization can make it easier for users to understand and interpret the trends in the data, as well as identify where an initiative should be undertaken to close the pay gap within departments that lack diversity and gender representation at each position level.</p>
 </div>
 <div id="limitations-future-work" class="section level2">
 <h2 class="hasAnchor">
@@ -769,11 +719,28 @@ Number and gender of employees in professor positions in the Agronomy Dept. base
 <div id="referencesbibliography" class="section level2">
 <h2 class="hasAnchor">
 <a href="#referencesbibliography" class="anchor"></a>References/Bibliography</h2>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://data.iowa.gov/">Data|State of Iowa</a></p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963">Equal Pay Act of 1963. (2019, May 03). Retrieved May 7, 2019, from https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963</a></p></li>
+<li><p><a href="https://www.eeoc.gov/laws/types/equalcompensation.cfm">Equal Pay/Compensation Discrimination. (n.d.). Retrieved May 7, 2019, from https://www.eeoc.gov/laws/types/equalcompensation.cfm</a></p></li>
+<li><p><a href="www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.">“Gender Pay Gap USA 2019: Statistics, Trends, Reasons and Solutions.” The Dough Roller, 3 Apr. 2019, www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.</a></p></li>
+<li><p><a href="https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/">Pay Equity &amp; Discrimination. (n.d.). Retrieved May 7, 2019, from https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/</a></p></li>
+<li><p><a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">Socrata Developer Portal. (2018, November 2). Retrieved May 7, 2019, from https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w</a></p></li>
+<li><p><a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">State of Iowa Salary Book. (2019, January 18). Retrieved May 7, 2019, from https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w</a></p></li>
+<li><p><a href="https://nwlc.org/issue/equal-pay-and-the-wage-gap/">Women’s Wages: Equal Pay for Women and the Wage Gap. (n.d.). Retrieved May 7, 2019, from https://nwlc.org/issue/equal-pay-and-the-wage-gap/</a></p></li>
+</ol>
 </div>
-<div id="packaage-websitevignette" class="section level2">
+<div id="package-websitevignette" class="section level2">
 <h2 class="hasAnchor">
-<a href="#packaage-websitevignette" class="anchor"></a>Packaage Website/Vignette</h2>
-<p>Follow the <a href="https://vanichols.github.io/CyChecks/">link</a></p>
+<a href="#package-websitevignette" class="anchor"></a>Package Website/Vignette</h2>
+<p>Follow the <a href="https://vanichols.github.io/CyChecks/">link</a> to checkout the CyCheck package to discover the pay pattern in your department!</p>
+</div>
+<div id="enjoy-exploring" class="section level2">
+<h2 class="hasAnchor">
+<a href="#enjoy-exploring" class="anchor"></a>Enjoy Exploring!</h2>
+<div class="figure">
+<img src="figures/CyChecks_hexsticker.png">
+</div>
 </div>
   </div>
 
@@ -786,12 +753,13 @@ Number and gender of employees in professor positions in the Agronomy Dept. base
       <li><a href="#package-contents">Package contents</a></li>
       <li><a href="#datasets">Datasets</a></li>
       <li><a href="#functions">Functions</a></li>
-      <li><a href="#function-2-anonymize-names-anonymize">Function 2: Anonymize names (anonymize)</a></li>
       <li><a href="#figures-produced-with-package-contents">Figures produced with package contents</a></li>
+      <li><a href="#shiny-app">Shiny App</a></li>
       <li><a href="#conclusion">Conclusion</a></li>
       <li><a href="#limitations-future-work">Limitations &amp; Future Work</a></li>
       <li><a href="#referencesbibliography">References/Bibliography</a></li>
-      <li><a href="#packaage-websitevignette">Packaage Website/Vignette</a></li>
+      <li><a href="#package-websitevignette">Package Website/Vignette</a></li>
+      <li><a href="#enjoy-exploring">Enjoy Exploring!</a></li>
       </ul>
 </div>
       </div>

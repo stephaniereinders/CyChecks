@@ -1,4 +1,4 @@
-#' Salary information for Iowa State Univeristy employees in2018
+#' Salary information for Iowa State Univeristy employees in 2018
 #'
 #' A dataset containing the salary information, position, and gender of over
 #' 9,000 employees at Iowa State University

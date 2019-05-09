@@ -13,6 +13,9 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
+  #fig.path='figures/'
+  #fig.path = "man/figures/vignette-",
+  #out.width = "100%"
 )
 library(CyChecks)
 library(dplyr)
@@ -33,14 +36,14 @@ library(knitr)
 
 ## Package contents
 1. Datasets consistent of:
-    (i) Employee/salary/department dataset for 2007-2018 
-    (ii) Employee/salary/department/college dataset assumed to be valid for 2018
+      (i) Employee/salary/department dataset for 2007-2018 
+      (ii) Employee/salary/department/college dataset assumed to be valid for 2018
 2. Functions to:
-   (i) download data directly from the iowa.gov website
-   (ii) anonymize names of downloaded data
-   (iii) simplify professor position titles
-   (iv) quickly identify departments with possible gender pay inequities
-   (v) Launch a Shiny App to help users explore the dataset provided in our package.
+      (i) download data directly from the iowa.gov website
+      (ii) anonymize names of downloaded data
+      (iii) simplify professor position titles
+      (iv) quickly identify departments with possible gender pay inequities
+      (v) Launch a Shiny App to help users explore the dataset provided in our package.
 3. A Shiny app for interactively, visualizing data
 
 
@@ -49,7 +52,7 @@ library(knitr)
   The state of Iowa offers a large amount of public data at this [site](https://data.iowa.gov/). You can access the data through the website, and it's recommended that you sign up for an API token [here](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w) if you'd like to scrape lots of data. Iowa state employee salaries are available at this [site](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w). CyChecks provides a function to easily get data for any given year through the above websites.
   The data from the government web site does not include the employee's home department within the University, and a dataset consisting of the entire faculty and staff directory is not made publicly available. However, Iowa State Univerisity's Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1st 2019. Since acquiring this information is not reproducible to the average user, we've included a full dataset (with names anonymized) of all salary info (from years 2007 to 2018) cross-referenced by department in the CyChecks package. Additionally, we've included a dataset of employee salary data and department information (again, with names anonymized) for fiscal year 2018. Since the directory information is only valid as of 2019, employees that had left before that year will not listed under their respective department in this dataset. This isn't ideal, but a reality of trying to display University data.
 
-
+Here is an example of a subset of one of our built in datasets - sals18. We are filtering by department (Agronomy) and position (Prof). 
 ```{r data ex1}
 data("sals18")
 sals18 %>%
@@ -64,29 +67,32 @@ sals18 %>%
 
 ### Function 1: Web Scraping (sal_df)
   This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is "Iowa State University" for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. 
-  While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
+
+While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
 ```{r}
-#insert example of what function executes
 ex <- sal_df(limit = 10, offset = 1100, fiscal_year = 2010) %>%
-  select(-c(base_salary_date, travel_subsistence))
+  select(-c(base_salary_date, travel_subsistence)) # trimming the dataframe so it's more easily readable
 kable(ex, format = "html")
 ```
 
 
 ### Function 2: Anonymize names (anonymize)
--convert each individual's personal name to an alphanumeric id to mask the individual's real identity
-```{r}
+  This function allows the user to anonymize an aspect of the dataframe. While salary information is publicly available data, we also realize that this is sensitive, personal information and want to give the use the opportunity to anonymize something like names if they wish. In this function we can convert each individual's name to an alphanumeric id to mask the individual's real identity. The alphanumeric id is consistent across names so the user may still use a group_by function successfully, for instance. This function was used to anonymize all the datasets included in this package. 
 
+Here are some examples:
+```{r}
 df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones"),
                         "Salary" = c(5456, 5698, 5647, 5842, 5910)) # Create a dataframe
 kable(df_exmple)
-
 anon <- anonymize(df_exmple) # Anonymizing the column name 
+
 knitr::kable(anon, col.names = c("name" , "Salary", "Anonymous Name"))
+
 ```
 
 ### Function 3: Get professor info (get_profs)
-This function creates a new data frame with professor positions grouped into 12 categories of simplified position titles. It filters the position variable of sals_dept for any entries that contain the string 'PROF'. Then it creates a new variable called position_simplified, which contains the simplified position category. The table below shows the string that is searched for in the position variable and the corresponding position_simplified category assigned to it. This function was created specifically to run on the sals_dept dataset. If the function is used on a dataset with different position abreviations than those listed in the table, the resulting data frame will be suboptimal. 
+This function creates a new data frame with professor positions grouped into 12 categories of simplified position titles. The function was created after the developers noticed that there were many varying titles of professor at the University, which made summarizing data difficult. 
+*get_profs()* filters the position variable of the *sals_dept* dataset for any entries that contain the string 'PROF'. Then it creates a new variable called *position_simplified*, which contains the simplified position category. The table below shows the string that is searched for in the position variable and the corresponding position_simplified category assigned to it. This function was created specifically to run on the sals_dept dataset. If the function is used on a dataset with different position abreviations than those listed in the table, the resulting data frame will be suboptimal. 
 
 ```{r, echo=FALSE}
 string <- c('EMER','DIST','UNIV','MORRILL','ADJ','AFFIL','VSTG','ASST','ASSOC','COLLAB','CHAIR or CHR','PROF')
@@ -110,8 +116,10 @@ sals_dept %>%
 
 ### Function 4: Run basic statistics (stats_mf)
 This function uses one fiscal year of data to identify departments with possible gender pay dispartities. Within a department, the function identifies positions that have more than 1 female and male in that position. Within a department, the function then fits a simple linear model of the following form:
+
 total_salary ~ position + gender
-The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a 'boo' verdict, and a p-value higher than 0.20 earning an 'ok'. This allows users to quickly filter to find departments with possible pay inequities associated with genders. 
+
+The function then sorts the departments by the p-value associated with the gender term of the linear model, with the lowest p-values appearing first. The function then assigns a verdict, with a p-value less than 0.20 illiciting a 'boo' verdict, and a p-value higher than 0.20 earning an 'ok'. While this may seem like a high p-value, we feel that 0.20 is an unliklely enough result to warrant further investigation. *stats_mf()* allows users to quickly filter and find departments with possible pay inequities associated with genders. 
 
 ```{r stats_mf ex, eval = F}
 data(sals18)
@@ -126,8 +134,9 @@ sals18 %>%
 
 The following figures are used in the Shiny App to help the user visualize pay patterns. 
 
-This figure demonstrates the 
-```{r fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
+The figure below demonstrates gender versus the total salary paid ($thousands) for different professor positions.
+
+```{r fig.width = 6, fig.align='center', fig1_ex, echo = F, fig.cap="Professor 2018 salaries by gender and position in the Agronomy Department"}
 data("sals_dept_profs") 
 
 sals_dept_profs %>%
@@ -155,11 +164,12 @@ sals_dept_profs %>%
  
 ```
 
+
 From this figure you can see that only 3 of the 6 professor positions have both male and females respresented. The gray lines connect mean salaries of each position - you can quickly see there is a negative slope to the lines, indicating females in the same positions on average earn less than their male counterparts in the same positions. You can also see there are less dots in the female category, indicating there are more males in the professor positions compared to females. This type of graph is accessible in our Shiny App **PROF** tab. 
 
-An additional figure that looks at male versus female make-ups of departments is also included in the Shiny App. 
+An additional figure that looks at the gender make-up of departments is also included in the Shiny App. 
 
-```{r fig2_ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
+```{r, fig.width = 6, fig.align='center', fig2_ex, echo = F, fig.cap="Number and gender of employees in professor positions in the Agronomy Dept. based on departmental affiliations in 2018"}
   sals_dept_profs %>%
    filter(gender %in% c("M", "F"),
           department == "AGRONOMY",
@@ -177,12 +187,26 @@ An additional figure that looks at male versus female make-ups of departments is
 
 ```
 
+
 From this figure you can see the department has not hired a woman to a professor position since 2014. This is consistent with the previous figure, which showed there were no women in the 'Assistant Professor' position. 
 
 
+## Shiny App
+  
+Feel free to check out the shiny app for this package by running the following code. 
+```{r}
+#runShiny()
+```
+![](figures/shiny_app_screenshot.PNG)
+
+```{r fig.cap="Here is a preview of how the shiny app interface should appear."}
+```
 
 ## Conclusion
 
+From the CyChecks package, the user is equipped with four different functions that can help them work through the above specified Iowa salary data in order to run analysis and cross-compare wages amoungst Iowa State University departments, while investigating gender and career position equity. This package, CyChecks, allows the user to scrape the dataset from the web, anonymize the names of invidivudals to mask identity for the sake of privacy, select and filter specific professor data, and run basic statistical analysis against the data for years 2007 to 2018.
+
+Across the board, when graphically visualizing the data, it can be seen that there is a disparity between men and women's average yearly salary in STEM departments (i.e. Agronomy, Engineering, Mathematics) where there is a defined scarcity in female representation across these departments' academic professional careers (i.e. professor, assistance professor, professor emaritus, etc.). Conversely, some departments within the university, like the social sciences (i.e. education, language), are majority female. Either way, this data visualization can make it easier for users to understand and interpret the trends in the data, as well as identify where an initiative should be undertaken to close the pay gap within departments that lack diversity and gender representation at each position level.
 
 
 ## Limitations & Future Work
@@ -191,5 +215,28 @@ We were only granted access to departmental affiliations for people employed by 
 
 ## References/Bibliography
 
-## Packaage Website/Vignette
-Follow the [link](https://vanichols.github.io/CyChecks/)
+1. [Data|State of Iowa](https://data.iowa.gov/) 
+
+2. [Equal Pay Act of 1963. (2019, May 03). Retrieved May 7, 2019, from https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963](https://en.wikipedia.org/wiki/Equal_Pay_Act_of_1963)
+
+3. [Equal Pay/Compensation Discrimination. (n.d.). Retrieved May 7, 2019, from https://www.eeoc.gov/laws/types/equalcompensation.cfm](https://www.eeoc.gov/laws/types/equalcompensation.cfm)
+
+4. [“Gender Pay Gap USA 2019: Statistics, Trends, Reasons and Solutions.” The Dough Roller, 3 Apr. 2019, www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.](www.doughroller.net/personal-finance/the-employment-battle-of-men-vs-women/.)
+
+5. [Pay Equity & Discrimination. (n.d.). Retrieved May 7, 2019, from https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/](https://iwpr.org/issue/employment-education-economic-change/pay-equity-discrimination/)
+  
+6. [Socrata Developer Portal. (2018, November 2). Retrieved May 7, 2019, from https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w](https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w)
+
+7. [State of Iowa Salary Book. (2019, January 18). Retrieved May 7, 2019, from https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w](https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w)
+
+8. [Women's Wages: Equal Pay for Women and the Wage Gap. (n.d.). Retrieved May 7, 2019, from https://nwlc.org/issue/equal-pay-and-the-wage-gap/](https://nwlc.org/issue/equal-pay-and-the-wage-gap/)
+  
+  
+## Package Website/Vignette
+Follow the [link](https://vanichols.github.io/CyChecks/) to checkout the CyCheck package to discover the pay pattern in your department!
+
+
+## Enjoy Exploring!
+
+![](figures/CyChecks_hexsticker.png)
+

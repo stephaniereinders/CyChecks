@@ -1,8 +1,7 @@
-
-#' Anonymize some information in the dataframe.
+#' Anonymize information in the dataframe.
 #'
-#' @param df The name of the file includes a dataframe.
-#' @param cols_to_anon The columns to anonymize. The default is people's names
+#' @param df The dataframe you wish to anonymize
+#' @param cols_to_anon The columns to anonymize. The default is people's names.
 #' @param algo The algorithms to be used. The available choices are md5, which is also the default, sha1, crc32, sha256, sha512, xxhash32, xxhash64, and murmur32.
 #' @importFrom digest digest
 #' @export

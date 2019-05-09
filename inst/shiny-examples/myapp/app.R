@@ -3,7 +3,7 @@ require(ggplot2)
 require(dplyr)
 require(tidyr)
 require(stringr)
-library(DT)
+require(DT)
 
 # read in data
 #load(file = "sals_dept.rda")

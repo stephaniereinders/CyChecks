@@ -3,7 +3,7 @@
 \docType{data}
 \name{sals18}
 \alias{sals18}
-\title{Salary information for Iowa State Univeristy employees in2018}
+\title{Salary information for Iowa State Univeristy employees in 2018}
 \format{A dataframe with 9,989 rows and 10 variables
 \describe{
 \item{base_salary_date}{the date base salary was computed}

@@ -84,21 +84,22 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="cychecks" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#cychecks" class="anchor"></a>CyChecks</h1></div>
-<!-- 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) 
--->
+<a href="#cychecks" class="anchor"></a>CyChecks <img align="right" width="150" height="175" src="README_files/static-figures/hexsticker.png">
+</h1></div>
 <p><em>Overview</em></p>
-<p>The goal of CyChecks is to allow users easy access to the publicly available data concerning Iowa State University (the Cyclones) employee salaries.</p>
+<p>The goal of CyChecks is to allow users easy access to the publicly available Iowa State University (the Cyclones) employee salary data.</p>
 <p>Some of the services this access could offer include:</p>
 <ol style="list-style-type: decimal">
-<li>Aiding job seekers in negotiating starting salaries.</li>
-<li>Shedding light on possible pay inequities with respect to gender</li>
-<li>Identifying positions that are lacking gender diversity</li>
+<li>Aid job seekers in negotiating starting salaries.</li>
+<li>Shed light on possible pay inequities with respect to gender.</li>
+<li>Identify positions that are lacking gender diversity.</li>
 </ol>
 <p><em>Background</em></p>
-<p>The state of Iowa offers a large amount of public data at <a href="https://data.iowa.gov/">this site</a>. You can access the data by signing up for an API token <a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">here</a>. Iowa state employee salaries are available at <a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">this site</a>. Using an API token input by the user, CyChecks provides a function to easily get data for any given year.</p>
-<p>The data from this site does not include the employee’s home department. Unfortunately, to our knowledge the data linking names to departments is not easily accessible. ISU’s Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1 2019. Since acquiring this information is not reproducible to the average user, we’ve included a full dataset (with names anonymized) of all salary info (2007 - 2018) cross-referenced by department in the CyChecks package. We realize employees that have left before 2019 will not have their department listed in this dataset. This isn’t ideal, and we hope Iowa State University will provide public access to department affiliations in the future.</p>
+<p>In 2008 <a href="http://phdcomics.com/comics/archive.php?comicid=1086">PhDComics</a> produced an interesting figure summarising US academic institution salaries:</p>
+<p><img align="center" width="600" src="README_files/static-figures/phdcomics.gif"></p>
+<p>One might wonder - are Iowa State University (ISU) salaries consistent with this national data? Using the CyChecks package one can find out!</p>
+<p>The state of Iowa offers a large amount of public data at <a href="https://data.iowa.gov/">this site</a>. You can access the data with or without an API token, but can sign up for one <a href="https://dev.socrata.com/foundry/data.iowa.gov/s3p7-wy6w">here</a>. Iowa state employee salaries are available at <a href="https://data.iowa.gov/State-Finances/State-of-Iowa-Salary-Book/s3p7-wy6w">this site</a>. CyChecks provides a function to easily scrape this data for any given year.</p>
+<p>The data from this site does not include the employee’s home department. Unfortunately, to our knowledge the data linking names to departments is not easily accessible. ISU’s Human Resources Department kindly provided a list of employees with their home departments and associated colleges valid as of January 1 2019. Since acquiring this information is not reproducible to the average user, we’ve included a full dataset (with names anonymized) of all salary info (2007 - 2018) cross-referenced by department in the CyChecks package. We realize employees that have left before 2019 will not have their department listed in this dataset. This isn’t ideal, and we hope ISU will provide public access to department affiliations in the future.</p>
 <p><em>Summary</em></p>
 <p>This package currently includes:</p>
 <ol style="list-style-type: decimal">
@@ -122,17 +123,19 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version CyChecks from <a href="https://CRAN.R-project.org">github</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"https://github.com/vanichols/CyChecks"</span>)</a></code></pre></div>
+<p>You can install the developmental version CyChecks from <a href="https://CRAN.R-project.org">github</a> with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"https://github.com/vanichols/CyChecks"</span>)</code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<a href="#examples" class="anchor"></a>Examples</h2>
 <p>You can access the data using our <em>sal_df</em> function.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">fiscal_year =</span> <span class="dv">2015</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">fiscal_year =</span> <span class="dv">2015</span>)</code></pre></div>
 <p>You can visualize the dataset provided with the package (sals_dept) using our Shiny App, which can be launched using our <em>runShiny()</em> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/runShiny.html">runShiny</a></span>()</a></code></pre></div>
-<p><a href="https://travis-ci.org/vanichols/CyChecks"><img src="https://travis-ci.org/vanichols/CyChecks.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/vanichols/CyChecks?branch=master"><img src="https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg" alt="Coverage status"></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/runShiny.html">runShiny</a></span>()</code></pre></div>
+<p>With our package, we were able to partially recreate the PhDComics figure for the Cyclones in 2018. You can see that our data is not consistent with national averages: our football coach gets paid four times as much as the President, not twice as much.</p>
+<p><img align="center" width="600" src="README_files/static-figures/CyChecks-comic.png"></p>
+<p><a href="https://travis-ci.org/vanichols/CyChecks"><img src="https://travis-ci.org/vanichols/CyChecks.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/vanichols/CyChecks?branch=master"><img src="https://codecov.io/gh/vanichols/CyChecks/branch/master/graph/badge.svg" alt="Coverage status"></a> <!--[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) --></p>
 </div>
 </div>
   </div>

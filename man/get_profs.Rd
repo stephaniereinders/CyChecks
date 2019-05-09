@@ -14,7 +14,7 @@ profs A dataframe of professors' salary data with tidied position
 categories
 }
 \description{
-Create a dataframe that only contains professors' salaray data
+Create a dataframe that only contains professors' salary data
 from a larger dataframe of salary data. Create a new variable 'position_simplified'
 that groups professor titles into categories such as associate, visting,
 and emeritus.

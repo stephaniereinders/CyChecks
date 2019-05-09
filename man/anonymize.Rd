@@ -2,14 +2,14 @@
 % Please edit documentation in R/anonymizing.R
 \name{anonymize}
 \alias{anonymize}
-\title{Anonymize some information in the dataframe.}
+\title{Anonymize information in the dataframe.}
 \usage{
 anonymize(df, cols_to_anon = "name", algo = "crc32")
 }
 \arguments{
-\item{df}{The name of the file includes a dataframe.}
+\item{df}{The dataframe you wish to anonymize}
 
-\item{cols_to_anon}{The columns to anonymize. The default is people's names}
+\item{cols_to_anon}{The columns to anonymize. The default is people's names.}
 
 \item{algo}{The algorithms to be used. The available choices are md5, which is also the default, sha1, crc32, sha256, sha512, xxhash32, xxhash64, and murmur32.}
 }
@@ -17,7 +17,7 @@ anonymize(df, cols_to_anon = "name", algo = "crc32")
 Returns a dataframe with an anonymized column named 'id'.
 }
 \description{
-Anonymize some information in the dataframe.
+Anonymize information in the dataframe.
 }
 \examples{
 DF <- data.frame(name = c("John", "Jon", "Jonathan", "Jon"),
