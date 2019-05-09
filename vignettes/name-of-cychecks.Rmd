@@ -13,6 +13,9 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
+  #fig.path='figures/'
+  #fig.path = "man/figures/vignette-",
+  #out.width = "100%"
 )
 library(CyChecks)
 library(dplyr)
@@ -64,9 +67,9 @@ sals18 %>%
 
 ### Function 1: Web Scraping (sal_df)
   This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is "Iowa State University" for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. 
-  While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
+While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
 ```{r}
-#insert example of what function executes
+
 ex <- sal_df(limit = 10, offset = 1100, fiscal_year = 2010)
 kable(ex, format = "html")
 ```
@@ -182,13 +185,15 @@ From this figure you can see the department has not hired a woman to a professor
 
 ## Shiny App
   
-Feel free to check out the shiny app for this package by running the following code.
-
+Feel free to check out the shiny app for this package by running the following code. 
 ```{r}
 #runShiny()
 ```
-#![Here is a preview of what should appear when a user opens the CyChecks shiny app](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/vignettes/shiny_app_screenshot.PNG)
+![shiny app preview](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/figures/shiny_app_screenshot.PNG)
 
+```{r fig.cap="Here is a preview of how the shiny app interface should appear."}
+#<img align="center" width="500" src="figures/shiny_app_screenshot.PNG">
+```
 
 ## Conclusion
 
@@ -224,17 +229,7 @@ We were only granted access to departmental affiliations for people employed by 
 Follow the [link](https://vanichols.github.io/CyChecks/) to checkout the CyCheck package to discover the pay pattern in your department!
 
 
-Here is a [link](CyChecks.pdf) to the CyChecks PPT that could provide more insight to users of the package.
+## Enjoy Exploring!
 
-## Thank you!
+![CyChecks Hexsticker](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/figures/CyChecks_hexsticker.png)
 
-![CyChecks Hexsticker](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/vignettes/CyChecks_hexsticker.png)
-
-
-
-
-
-
-
-  
-  

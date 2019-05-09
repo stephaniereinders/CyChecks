@@ -197,7 +197,7 @@ sals18 <span class="op">%&gt;%</span>
 <h3 class="hasAnchor">
 <a href="#function-1-web-scraping-sal_df" class="anchor"></a>Function 1: Web Scraping (sal_df)</h3>
 <p>This function allows users to access salary information from the State of Iowa government, scraping that data from the web and converting it into a tibble for the user to examine. In the process of using this function, two columns from the original dataset have been deleted: department and base_salary. Department is “Iowa State University” for all rows, so it is redundant, and base_salary, while perhaps more useful in terms of examining what the University chooses to pay their employees, is a blank field for most rows and also consists of text entries when employees are paid by the hour, for example. Therefore we used total_salary_paid in all our subsequent figures and analyses, even though we know this metric can be mislading sometimes due to supplemented funded by summer grants, for instance. While the user may enter their API as an argument to this function, having an API isn’t necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insert example of what function executes</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 ex &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sal_df.html">sal_df</a></span>(<span class="dt">limit =</span> <span class="dv">10</span>, <span class="dt">offset =</span> <span class="dv">1100</span>, <span class="dt">fiscal_year =</span> <span class="dv">2010</span>)
 <span class="kw">kable</span>(ex, <span class="dt">format =</span> <span class="st">"html"</span>)</code></pre></div>
 <table class="table">
@@ -764,11 +764,11 @@ Number and gender of employees in professor positions in the Agronomy Dept. base
 <a href="#shiny-app" class="anchor"></a>Shiny App</h2>
 <p>Feel free to check out the shiny app for this package by running the following code.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#runShiny()</span></code></pre></div>
+<div class="figure">
+<img src="../figures/shiny_app_screenshot.PNG" alt="shiny app preview"><p class="caption">shiny app preview</p>
 </div>
-<div id="here-is-a-preview-of-what-should-appear-when-a-user-opens-the-cychecks-shiny-app" class="section level1">
-<h1 class="hasAnchor">
-<a href="#here-is-a-preview-of-what-should-appear-when-a-user-opens-the-cychecks-shiny-app" class="anchor"></a><img src="shiny_app_screenshot.PNG" alt="Here is a preview of what should appear when a user opens the CyChecks shiny app">
-</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&lt;img align="center" width="500" src="figures/shiny_app_screenshot.PNG"&gt;</span></code></pre></div>
+</div>
 <div id="conclusion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h2>
@@ -798,14 +798,12 @@ Number and gender of employees in professor positions in the Agronomy Dept. base
 <h2 class="hasAnchor">
 <a href="#package-websitevignette" class="anchor"></a>Package Website/Vignette</h2>
 <p>Follow the <a href="https://vanichols.github.io/CyChecks/">link</a> to checkout the CyCheck package to discover the pay pattern in your department!</p>
-<p>Here is a <a href="CyChecks.pdf">link</a> to the CyChecks PPT that could provide more insight to users of the package.</p>
 </div>
-<div id="thank-you" class="section level2">
+<div id="enjoy-exploring" class="section level2">
 <h2 class="hasAnchor">
-<a href="#thank-you" class="anchor"></a>Thank you!</h2>
+<a href="#enjoy-exploring" class="anchor"></a>Enjoy Exploring!</h2>
 <div class="figure">
-<img src="CyChecks_hexsticker.png" alt="CyChecks Hexsticker"><p class="caption">CyChecks Hexsticker</p>
-</div>
+<img src="../figures/CyChecks_hexsticker.png" alt="CyChecks Hexsticker"><p class="caption">CyChecks Hexsticker</p>
 </div>
 </div>
   </div>
@@ -821,15 +819,11 @@ Number and gender of employees in professor positions in the Agronomy Dept. base
       <li><a href="#functions">Functions</a></li>
       <li><a href="#figures-produced-with-package-contents">Figures produced with package contents</a></li>
       <li><a href="#shiny-app">Shiny App</a></li>
-      <li>
-<a href="#here-is-a-preview-of-what-should-appear-when-a-user-opens-the-cychecks-shiny-app"><img src="shiny_app_screenshot.PNG" alt="Here is a preview of what should appear when a user opens the CyChecks shiny app"></a><ul class="nav nav-pills nav-stacked">
-<li><a href="#conclusion">Conclusion</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
       <li><a href="#limitations-future-work">Limitations &amp; Future Work</a></li>
       <li><a href="#referencesbibliography">References/Bibliography</a></li>
       <li><a href="#package-websitevignette">Package Website/Vignette</a></li>
-      <li><a href="#thank-you">Thank you!</a></li>
-      </ul>
-</li>
+      <li><a href="#enjoy-exploring">Enjoy Exploring!</a></li>
       </ul>
 </div>
       </div>

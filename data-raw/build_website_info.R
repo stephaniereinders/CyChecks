@@ -1,17 +1,17 @@
 ##Steps to make package a website
 
-# Install release version from CRAN
+#step1: Install release version from CRAN
 install.packages("pkgdown")
 
-#Usage:run the code below to create the docs folder and build the website
+#step2: Run the code below to create the docs folder and build the website
 pkgdown::build_site()
 
-#pushed the docs folder to our GitHub repo
+#step3: Push the docs folder to our GitHub repo
 #now able to change settings on our CyChecks GitHub repo/package -->
 
 #Referenced
-#build website for package [using] (https://pkgdown.r-lib.org/index.html) and https://pkgdown.r-lib.org/articles/pkgdown.html
+#here is a helpful [link] ((https://pkgdown.r-lib.org/index.html) that describes how to build a website for your package. You can also look [here] (https://pkgdown.r-lib.org/articles/pkgdown.html) as well.
 
-#use the below code to create package vignette
-#usethis::use_vignette("name of vignette")
+#use the below code to create a package vignette (for report to include additonal info)
+usethis::use_vignette("name of vignette")
 
