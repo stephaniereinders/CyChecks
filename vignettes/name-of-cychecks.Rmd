@@ -67,13 +67,13 @@ sals18 %>%
   While the user may enter their API as an argument to this function, having an API isn't necessary for grabbing small amounts of data. Other arguments that the user can change include the number of rows in their datatable (limit), where those rows start (offset), and the year from which their data originates (fiscal_year). 
 ```{r}
 #insert example of what function executes
-ex <- sal_df(limit = 10, offset = 1100, fiscal_year = 2010)
+ex <- sal_df(limit = 10, offset = 1100, fiscal_year = 2010) %>%
+  select(-c(base_salary_date, travel_subsistence))
 kable(ex, format = "html")
 ```
 
 
-
-## Function 2: Anonymize names (anonymize)
+### Function 2: Anonymize names (anonymize)
 -convert each individual's personal name to an alphanumeric id to mask the individual's real identity
 ```{r}
 
@@ -82,7 +82,7 @@ df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones")
 kable(df_exmple)
 
 anon <- anonymize(df_exmple) # Anonymizing the column name 
-knitr::kable(anon, col.names = c("Name" , "Salary ($)", "Anonymous Name"))
+knitr::kable(anon, col.names = c("name" , "Salary", "Anonymous Name"))
 ```
 
 ### Function 3: Get professor info (get_profs)
@@ -117,7 +117,8 @@ The function then sorts the departments by the p-value associated with the gende
 data(sals18)
 sals18 %>%
   stats_mf() %>%
-  filter(verdict == 'boo')
+  filter(verdict == 'boo')%>%
+  head()
 ```
 
 
