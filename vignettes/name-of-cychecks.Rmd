@@ -189,10 +189,9 @@ Feel free to check out the shiny app for this package by running the following c
 ```{r}
 #runShiny()
 ```
-![shiny app preview](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/figures/shiny_app_screenshot.PNG)
+![shiny app preview](figures/shiny_app_screenshot.PNG)
 
 ```{r fig.cap="Here is a preview of how the shiny app interface should appear."}
-#<img align="center" width="500" src="figures/shiny_app_screenshot.PNG">
 ```
 
 ## Conclusion
@@ -231,5 +230,5 @@ Follow the [link](https://vanichols.github.io/CyChecks/) to checkout the CyCheck
 
 ## Enjoy Exploring!
 
-![CyChecks Hexsticker](/Users/lawto/Desktop/Spring2019/STAT585/finalproj/CyChecks/CyChecks/figures/CyChecks_hexsticker.png)
+![CyChecks Hexsticker](figures/CyChecks_hexsticker.png)
 
