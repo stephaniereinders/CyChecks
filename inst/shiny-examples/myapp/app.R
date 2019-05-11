@@ -1,9 +1,10 @@
 library(shiny)
-require(ggplot2)
-require(dplyr)
-require(tidyr)
-require(stringr)
-require(DT)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(DT)
+library(CyChecks)
 
 # create data -------------------------------------------------------------
 
@@ -20,8 +21,6 @@ profs <-
   filter(grepl("PROF", position)) %>%
   mutate(prof_simp = ifelse(position %in% myprofs, position, "OTHER"),
          prof_simp = factor(prof_simp, levels = c(myprofs, "OTHER")))
-
-#sals_dept_profs <- sals_dept_profs %>% filter(!is.na(gender), gender != "*")
 
 # drop-down menus
 department <- c("All departments", sort(unique(as.character(sals_dept$department))))
