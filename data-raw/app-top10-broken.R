@@ -31,7 +31,6 @@ fiscal_year <- c(sort(unique(as.character(sals_dept$fiscal_year))))
 # user interface ----------------------------------------------------------
 
 
-
 ui <- fluidPage(
   # App Title
   titlePanel("CyChecks"),
@@ -96,7 +95,6 @@ server <- function(input, output){
 
 
   liq_all <- reactive({
-    # Show all departments but filter on years
     if (input$department == "All departments") {
       sals_dept %>%
         filter(fiscal_year == input$fiscal_year)
@@ -111,14 +109,15 @@ server <- function(input, output){
 
 
   liq_all_ns <- reactive({
-    # Show all departments
     if (input$department == "All departments") {
       sals_dept %>%
+        filter(fiscal_year == input$fiscal_year) %>%
         group_by(fiscal_year, gender) %>%
         summarise(n = n())
     } else {
       sals_dept %>%
-        filter(department == input$department) %>%
+        filter(department == input$department,
+               fiscal_year == input$fiscal_year) %>%
         group_by(fiscal_year, gender) %>%
         summarise(n = n())
     }
@@ -196,7 +195,6 @@ server <- function(input, output){
 
   liq_prof <- reactive({
 
-    # Show all departments and all years
     if (input$department == "All departments"){
       profs %>%
         filter(fiscal_year == input$fiscal_year,
@@ -212,7 +210,6 @@ server <- function(input, output){
   })
 
   liq_prof_ns <- reactive({
-    # Show all departments
     if (input$department == "All departments") {
       profs %>%
         group_by(fiscal_year, gender) %>%

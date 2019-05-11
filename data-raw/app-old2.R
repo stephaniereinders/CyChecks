@@ -119,18 +119,41 @@ server <- function(input, output){
   # All scatter -------------------------------------------------------------
 
   output$allDat1 <- renderPlot({
-      ggplot(data = filter(liq_all(), total_salary_paid < 500000),
-             aes(x = total_salary_paid/1000,
-             fill = gender)) +
-        geom_density(alpha = 0.5, color = "black") +
-        labs(x = NULL, y = "Total Salary Paid\nThousands of $", fill = "Gender") +
+    # Plot for all departments, all years
+    if (input$department == "All departments"){
+      ggplot(data = liq_all(), aes(x = gender,
+                                   y= total_salary_paid/1000,
+                                   color = gender)) +
+        geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
+        stat_summary(fun.y = mean, geom = "line", color = "gray") +
+        stat_summary(fun.y = mean, geom = "point", size = 3,  pch = 17) +
+        labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = "Gender") +
         theme_bw() +
-        scale_fill_manual(values = c(M = "darkblue",
+        scale_color_manual(values = c(M = "darkblue",
                                       `F` = "goldenrod")) +
-        theme(legend.position = c(0.99, 0.99),
-              legend.justification = c(1, 1),
+        theme(legend.position = c(0.01, 0.99),
+              legend.justification = c(0, 1),
               legend.background = element_rect(linetype = "solid",
                                                color = "black"))
+
+    }
+    # Plot for single department, all years
+    else {
+      ggplot(data = liq_all() %>% filter(gender != "*"),
+             aes(x = gender, y = total_salary_paid/1000, color = gender, group = position)) +
+        geom_jitter(size = 2, width = 0.2, alpha = 0.5) +
+        stat_summary(fun.y = mean, geom = "line", color = "gray") +
+        #stat_summary(fun.y = mean, geom = "point", size = 3,  pch = 17) +
+        theme_bw() +
+        labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = "Gender") +
+        scale_color_manual(values = c(M = "darkblue",
+                                      `F` = "goldenrod")) +
+        theme(legend.position = c(0.01, 0.99),
+              legend.justification = c(0, 1),
+              legend.background = element_rect(linetype = "solid",
+                                               color = "black"))
+
+    }
 
   })
 
@@ -146,8 +169,7 @@ server <- function(input, output){
       theme_bw() +
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
-      labs(x = NULL, y = "Number of Employees", color = "Gender",
-           title = "If an employee left before Jan 1 2019\n they are not included in our dataset.\nPlease ask ISU to make yearly departmental\naffiliations publicly available.") +
+      labs(x = NULL, y = "Number of Employees", color = "Gender") +
       theme(legend.position = c(0.01,0.99),
             legend.justification = c(0,1),
             legend.background = element_rect(linetype = "solid", color = "black"))
@@ -255,10 +277,7 @@ server <- function(input, output){
       geom_point(color = "white", size = 2, pch = 21, fill = "black") +
       scale_fill_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
-      labs(x = NULL,
-           y = "Total Salary Paid\nThousands of $",
-           color = NULL,
-           title = "Professors with modified titles\nare not included in this figure") +
+      labs(x = NULL, y = "Total Salary Paid\nThousands of $", color = NULL) +
       theme_bw() +
       guides(color = F, fill = F) +
       facet_wrap(~prof_simp) #+
@@ -278,9 +297,8 @@ server <- function(input, output){
       geom_point(size = 2) +
       theme_bw() +
       labs(x = NULL,
-           y = "Number of Employees\nWIth Professor Titles",
-           color = "Gender",
-           title = "If an employee left before Jan 1 2019\n they are not included in our dataset.\nPlease ask ISU to make yearly departmental\naffiliations publicly available.") +
+           y = "Number of Employees",
+           color = "Gender") +
       scale_color_manual(values = c(M = "darkblue",
                                    `F` = "goldenrod")) +
       theme(
