@@ -1,40 +1,46 @@
-library(tidyverse)
-library(janitor)
+top10dat <- sals_dept %>%
+  filter(fiscal_year == 2018)  %>%
+  top_n(10, total_salary_paid) %>%
+  mutate(rank = rank(total_salary_paid, ties.method="first")) %>%
+  select(fiscal_year, position, total_salary_paid, rank, gender) %>%
+  arrange(-rank) %>%
+  mutate(rank2 = as.character(rank))
 
-myprofs <- c("ASST PROF", "ASSOC PROF", "PROF")
+ggplot(data = top10dat,
+       aes(x = reorder(rank2, -rank),
+           y = total_salary_paid/1000,
+           fill = gender)) +
+  geom_col() +
+  theme_bw() +
+  labs(x = NULL, y = "Total Salary Paid\nThousands of $", fill = "Gender") +
+  scale_fill_manual(values = c(M = "darkblue",
+                               `F` = "goldenrod")) +
 
-sals18 %>%
-  filter(grepl("PROF", position),
-         department == "AGRONOMY") %>%
-  tabyl(position) %>%
-  arrange(-percent)
+  scale_x_discrete(labels = top10dat$position) +
 
-raw <- sals18 %>%
-  filter(grepl("PROF", position)) %>%
-  mutate(prof_simp = ifelse(position %in% myprofs, position, "OTHER"),
-         prof_simp = factor(prof_simp, levels = c(myprofs, "OTHER"))) %>%
-  filter(department == "AGRONOMY")
+    theme(
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+    legend.position = c(0.99, 0.99),
+    legend.justification = c(1, 1),
+    legend.background = element_rect(linetype = "solid", color = "black"
+    ))
 
-mns <- raw %>%
-  filter(prof_simp != "OTHER") %>%
-  group_by(prof_simp, gender) %>%
-  summarise(total_salary_paid = mean(total_salary_paid))
-
-
-ggplot(raw, aes(gender, total_salary_paid)) +
-  geom_col(data = raw %>%
-             filter(prof_simp != "OTHER") %>%
-             group_by(prof_simp, gender) %>%
-             summarise(total_salary_paid = mean(total_salary_paid)),
-           aes(gender, total_salary_paid)) +
-  geom_point() +
-  facet_wrap(~prof_simp)
 
 sals_dept %>%
-  filter(grepl("PROF", position), department == "AGRONOMY") %>%
-  group_by(fiscal_year, gender) %>%
-  summarise(n = n()) %>%
-
-  ggplot(aes(fiscal_year, n, color = gender)) +
-  geom_line() +
+  filter(fiscal_year == 2018,
+         total_salary_paid < 500000,
+         department == "AGRONOMY") %>%
+  group_by(gender) %>%
+  mutate(rank = rank(total_salary_paid, ties.method = "first"),
+         tot = max(rank),
+         pct = rank/tot) %>%
+  ggplot(aes(pct, total_salary_paid, color = gender)) +
   geom_point()
+
+
+sals_dept %>%
+  filter(fiscal_year == 2018,
+         total_salary_paid < 500000,
+         department == "AGRONOMY") %>%
+  ggplot(aes(total_salary_paid, color = gender, fill = gender)) +
+  geom_density(alpha = 0.5)
