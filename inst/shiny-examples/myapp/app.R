@@ -123,7 +123,7 @@ server <- function(input, output){
              aes(x = total_salary_paid/1000,
              fill = gender)) +
         geom_density(alpha = 0.5, color = "black") +
-        labs(x = NULL, y = "Total Salary Paid\nThousands of $", fill = "Gender") +
+        labs(x = NULL, y = "Density", fill = "Gender") +
         theme_bw() +
         scale_fill_manual(values = c(M = "darkblue",
                                       `F` = "goldenrod")) +
@@ -200,27 +200,23 @@ server <- function(input, output){
 
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
-      profs %>%
-        filter(prof_simp != "OTHER")
+      profs
     }
     # Show all departments but filter on years
     else if (input$department == "All departments"){
       profs %>%
-        filter(fiscal_year == input$fiscal_year,
-               prof_simp != "OTHER")
+        filter(fiscal_year == input$fiscal_year)
     }
     # Show all years but filter on department
     else if (input$fiscal_year == "All years"){
       profs %>%
-        filter(department == input$department,
-               prof_simp != "OTHER")
+        filter(department == input$department)
     }
     # Filter on department and year
     else {
       profs %>%
         filter(department == input$department,
-               fiscal_year == input$fiscal_year,
-               prof_simp != "OTHER")
+               fiscal_year == input$fiscal_year)
     }
 
   })
@@ -241,12 +237,14 @@ server <- function(input, output){
     }
   })
 
-  # Prof scatter ------------------------------------------------------------
+  # Prof scatter + bar ------------------------------------------------------------
   output$prof1 <- renderPlot({
-    ggplot(data = liq_prof(),
+
+    ggplot(data = filter(liq_prof(), prof_simp != "OTHER"),
            aes(x = gender,
                y = total_salary_paid/1000)) +
       geom_col(data = liq_prof() %>%
+                 filter(prof_simp != "OTHER") %>%
                  group_by(prof_simp, gender) %>%
                  summarise(total_salary_paid = mean(total_salary_paid)),
                            aes(x = gender,

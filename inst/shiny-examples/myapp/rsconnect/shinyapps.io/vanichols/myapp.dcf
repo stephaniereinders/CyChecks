@@ -5,8 +5,8 @@ account: vanichols
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 923414
-bundleId: 2076616
+bundleId: 2077289
 url: https://vanichols.shinyapps.io/myapp/
-when: 1557550374.83353
+when: 1557593227.14647
 asMultiple: FALSE
 asStatic: FALSE
