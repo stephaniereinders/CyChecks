@@ -2,8 +2,8 @@
 
 export("%>%")
 export(anonymize)
+export(cy_RunShiny)
 export(get_profs)
-export(runShiny)
 export(sal_df)
 export(stats_mf)
 importFrom(assertthat,assert_that)

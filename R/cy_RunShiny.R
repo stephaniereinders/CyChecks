@@ -1,14 +1,14 @@
-#' @name runShiny
+#' @name cy_RunShiny
 #' @title Run Shiny App
 #' @description Launch Shiny App that displays pay information for subsets of Iowa State University Employees
 #' @return a Shiny App
 #' @examples
 #' \dontrun{
-#' runShiny()
+#' cy_RunShiny()
 #' }
 #' @export
 
-runShiny <- function() {
+cy_RunShiny <- function() {
   appDir <- system.file("shiny-examples", "myapp", package = "CyChecks")
   if (appDir == ""){
     stop("Couldn't locate example directory. Try re-installing `CyChecks`", call. = FALSE)
