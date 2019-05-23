@@ -108,7 +108,7 @@ ui <- fluidPage(
 # server ------------------------------------------------------------------
 
 server <- function(input, output){
-  # All tab----
+  # Pay by dept tab----
   liq_all <- reactive({
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
@@ -193,13 +193,14 @@ server <- function(input, output){
         summarise(n = n())
     }
   })
-  # All scatter -------------------------------------------------------------
+
+  # Density plot (all) -------------------------------------------------------------
 
   output$allDat1 <- renderPlot({
     ggplot(data = filter(liq_all(), total_salary_paid < 500000),
            aes(x = total_salary_paid/1000,
                fill = gender)) +
-      geom_density(alpha = 0.5, color = "black") +
+      geom_density(alpha = 0.5, color = "black", adjust = 2) +
       labs(x = "Salary (in thousands of $)", y = "Density", fill = "Gender",
            title = "Density plot of employee salaries, by gender") +
       theme_bw() +
@@ -244,7 +245,7 @@ server <- function(input, output){
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       labs(x = "Fiscal Year", y = "Number of Employees", color = "Gender",
-           title = "The number of employees over time") +
+           title = "Number of employees over time, by gender") +
       theme(legend.position = c(0.01,0.99),
             legend.justification = c(0,1),
             legend.background = element_rect(linetype = "solid", color = "black"),
@@ -261,7 +262,7 @@ server <- function(input, output){
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       labs(x = "Fiscal Year", y = "Number of Employees", color = "Gender",
-           title = "The number of employees over time") +
+           title = "Number of employees over time, by gender") +
       theme(legend.position = c(0.01,0.99),
             legend.justification = c(0,1),
             legend.background = element_rect(linetype = "solid", color = "black"),
@@ -363,9 +364,9 @@ server <- function(input, output){
       scale_fill_manual(values = c(M = "darkblue",
                                    `F` = "goldenrod")) +
       labs(x = NULL,
-           y = "Total Salary Paid\nthousands of $",
+           y = "Total Salary Paid\nThousands of $",
            color = NULL,
-           title = "Salaries of three professor positions, \nin Thousands of $") +
+           title = "Salaries of three professor positions, by gender") +
       theme_bw() +
       guides(color = F, fill = F) +
       facet_wrap(~prof_simp)+
@@ -391,9 +392,9 @@ server <- function(input, output){
       scale_fill_manual(values = c(M = "darkblue",
                                    `F` = "goldenrod")) +
       labs(x = NULL,
-           y = "Total Salary Paid\nthousands of $",
+           y = "Total Salary Paid\nThousands of $",
            color = NULL,
-           title = "Salaries of three professor positions, \nin Thousands of $") +
+           title = "Salaries of three professor positions, by gender") +
       theme_bw() +
       guides(color = F, fill = F) +
       facet_wrap(~prof_simp)+
@@ -415,7 +416,7 @@ server <- function(input, output){
       labs(x = "Fiscal Year",
            y = "Number of Employees",
            color = "Gender",
-           title = "The number of employees with \n'professor' titles over time") +
+           title = "Number of employees with \n'professor' titles over time, by gender") +
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       theme(
@@ -438,7 +439,7 @@ server <- function(input, output){
       labs(x = "Fiscal Year",
            y = "Number of Employees",
            color = "Gender",
-           title = "The number of employees with \n'professor' titles over time") +
+           title = "Number of employees with \n'professor' titles over time, by gender") +
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       theme(
