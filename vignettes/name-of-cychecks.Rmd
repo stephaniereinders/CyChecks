@@ -84,7 +84,7 @@ Here are some examples:
 df_exmple <- data.frame("name" = c("Brianna","Gina","Lydia","Stephanie","Yones"),
                         "Salary" = c(5456, 5698, 5647, 5842, 5910)) # Create a dataframe
 kable(df_exmple)
-anon <- anonymize(df_exmple) # Anonymizing the column name 
+anon <- cy_Anonymize(df_exmple) # Anonymizing the column name 
 
 knitr::kable(anon, col.names = c("name" , "Salary", "Anonymous Name"))
 
@@ -195,7 +195,7 @@ From this figure you can see the department has not hired a woman to a professor
   
 Feel free to check out the shiny app for this package by running the following code. 
 ```{r}
-#runShiny()
+#cy_RunShiny()
 ```
 ![](figures/shiny_app_screenshot.PNG)
 
