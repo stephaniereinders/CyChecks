@@ -97,8 +97,10 @@ ui <- fluidPage(
                  )
         ))
         ),
-      tabPanel("Problem Areas"),
-      tabPanel("About")
+      tabPanel("Problem Areas",
+               includeMarkdown("ProblemAreas.md")),
+      tabPanel("About",
+               includeMarkdown("About.md"))
         )
 )
 
@@ -108,8 +110,8 @@ ui <- fluidPage(
 # server ------------------------------------------------------------------
 
 server <- function(input, output){
-  # Pay by dept tab----
-  liq_all <- reactive({
+  # All tab----
+  dept_all <- reactive({
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
       sals_dept %>%
@@ -166,7 +168,7 @@ server <- function(input, output){
   })
 
 
-  liq_all_ns <- reactive({
+  dept_all_ns <- reactive({
     # Show all departments
     if (input$department == "All departments") {
       sals_dept %>%
@@ -193,14 +195,13 @@ server <- function(input, output){
         summarise(n = n())
     }
   })
-
-  # Density plot (all) -------------------------------------------------------------
+  # All scatter -------------------------------------------------------------
 
   output$allDat1 <- renderPlot({
-    ggplot(data = filter(liq_all(), total_salary_paid < 500000),
+    ggplot(data = filter(dept_all(), total_salary_paid < 500000),
            aes(x = total_salary_paid/1000,
                fill = gender)) +
-      geom_density(alpha = 0.5, color = "black", adjust = 2) +
+      geom_density(alpha = 0.5, color = "black") +
       labs(x = "Salary (in thousands of $)", y = "Density", fill = "Gender",
            title = "Density plot of employee salaries, by gender") +
       theme_bw() +
@@ -237,7 +238,7 @@ server <- function(input, output){
 
   output$allDat2 <- renderPlot({
     # Plot for all departments, all years
-    ggplot(data = liq_all_ns(),
+    ggplot(data = dept_all_ns(),
            aes(x = fiscal_year, y = n, color = gender)) +
       geom_line() +
       geom_point(size = 2) +
@@ -245,7 +246,8 @@ server <- function(input, output){
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       labs(x = "Fiscal Year", y = "Number of Employees", color = "Gender",
-           title = "Number of employees over time, by gender") +
+           title = "The number of employees over time") +
+      expand_limits(y = 0)+
       theme(legend.position = c(0.01,0.99),
             legend.justification = c(0,1),
             legend.background = element_rect(linetype = "solid", color = "black"),
@@ -262,14 +264,15 @@ server <- function(input, output){
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
       labs(x = "Fiscal Year", y = "Number of Employees", color = "Gender",
-           title = "Number of employees over time, by gender") +
+           title = "The number of employees over time") +
+      expand_limits(y = 0)+
       theme(legend.position = c(0.01,0.99),
             legend.justification = c(0,1),
             legend.background = element_rect(linetype = "solid", color = "black"),
             plot.title = element_text(face = "bold", size = 12, hjust = 0.5))
   })
-  # liq_prof ----------------------------------------------------------------
-  liq_prof <- reactive({
+  # dept_prof ----------------------------------------------------------------
+  dept_prof <- reactive({
 
     # Show all departments and all years
     if (input$department == "All departments" & input$fiscal_year == 'All years'){
@@ -319,7 +322,7 @@ server <- function(input, output){
 
   })
 
-  liq_prof_ns <- reactive({
+  dept_prof_ns <- reactive({
     # Show all departments
     if (input$department == "All departments") {
       profs %>%
@@ -350,10 +353,10 @@ server <- function(input, output){
   # Prof scatter + bar ------------------------------------------------------------
   output$prof1 <- renderPlot({
 
-    ggplot(data = filter(liq_prof(), prof_simp != "OTHER"),
+    ggplot(data = filter(dept_prof(), prof_simp != "OTHER"),
            aes(x = gender,
                y = total_salary_paid/1000)) +
-      geom_col(data = liq_prof() %>%
+      geom_col(data = dept_prof() %>%
                  filter(prof_simp != "OTHER") %>%
                  group_by(prof_simp, gender) %>%
                  summarise(total_salary_paid = mean(total_salary_paid)),
@@ -364,9 +367,9 @@ server <- function(input, output){
       scale_fill_manual(values = c(M = "darkblue",
                                    `F` = "goldenrod")) +
       labs(x = NULL,
-           y = "Total Salary Paid\nThousands of $",
+           y = "Total Salary Paid\nthousands of $",
            color = NULL,
-           title = "Salaries of three professor positions, by gender") +
+           title = "Salaries of three professor positions, \nin Thousands of $") +
       theme_bw() +
       guides(color = F, fill = F) +
       facet_wrap(~prof_simp)+
@@ -392,9 +395,9 @@ server <- function(input, output){
       scale_fill_manual(values = c(M = "darkblue",
                                    `F` = "goldenrod")) +
       labs(x = NULL,
-           y = "Total Salary Paid\nThousands of $",
+           y = "Total Salary Paid\nthousands of $",
            color = NULL,
-           title = "Salaries of three professor positions, by gender") +
+           title = "Salaries of three professor positions, \nin Thousands of $") +
       theme_bw() +
       guides(color = F, fill = F) +
       facet_wrap(~prof_simp)+
@@ -405,7 +408,7 @@ server <- function(input, output){
 
   # Prof line graph ------------------------------------------------------------
   output$prof2 <- renderPlot({
-    ggplot(data = liq_prof_ns(),
+    ggplot(data = dept_prof_ns(),
            aes(x = fiscal_year,
                y = n,
                color = gender,
@@ -416,9 +419,10 @@ server <- function(input, output){
       labs(x = "Fiscal Year",
            y = "Number of Employees",
            color = "Gender",
-           title = "Number of employees with \n'professor' titles over time, by gender") +
+           title = "The number of employees with \n'professor' titles over time") +
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
+      expand_limits(y = 0)+
       theme(
         legend.position = c(0.01, 0.99),
         legend.justification = c(0, 1),
@@ -439,9 +443,10 @@ server <- function(input, output){
       labs(x = "Fiscal Year",
            y = "Number of Employees",
            color = "Gender",
-           title = "Number of employees with \n'professor' titles over time, by gender") +
+           title = "The number of employees with \n'professor' titles over time") +
       scale_color_manual(values = c(M = "darkblue",
                                     `F` = "goldenrod")) +
+      expand_limits(y = 0)+
       theme(
         legend.position = c(0.01, 0.99),
         legend.justification = c(0, 1),
