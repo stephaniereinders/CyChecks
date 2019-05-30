@@ -91,23 +91,23 @@ fun1 <- function(data) {
 
 #' Function to compare M vs F salaries within a department
 #'
-#' @name stats_mf
+#' @name cy_GenderStats
 #' @importFrom tidyr nest unnest
 #' @importFrom dplyr group_by summarise select rename mutate filter arrange
 #' @importFrom assertthat assert_that not_empty
-#' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'. If you want to use aggregated/simplified position categories created by the function 'get_profs', you must change the name of the new column 'XX' to 'position' in order to run it through this function
+#' @param data A dataframe of ISU salary data with academic department info. Default is for year 2018. Column names must include 'department', 'position', 'gender', and 'total_salary_paid'.
 #' @return A dataframe of department, nested data, p-value for gender pay gap after accounting for position, and a verdict
 #' @examples
 #' data(sals18)
 #' sals18 %>%
 #' dplyr::filter(department == "AGRONOMY") %>%
 #' dplyr::filter(stringr::str_detect(position, "PROF")) %>%
-#' stats_mf()
+#' cy_GenderStats()
 #'
 #' @export
 
 # Actual p
-stats_mf <- function(data = sals18){
+cy_GenderStats <- function(data = sals18){
 
   # Make sure it has the columns I want, and that it's not empty
   assertthat::assert_that(is.data.frame(data))
