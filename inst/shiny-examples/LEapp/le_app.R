@@ -97,8 +97,6 @@ ui <- fluidPage(
                  )
         ))
         ),
-      tabPanel("Problem Areas",
-               includeMarkdown("ProblemAreas.md")),
       tabPanel("About",
                includeMarkdown("About.md"))
         )
