@@ -39,7 +39,7 @@ ui <- fluidPage(
                  mainPanel(
                    fluidRow(
                     column(width = 6,
-                          selectInput("department", label = ("Department"), # - Based on gender
+                          selectizeInput("department", label = ("Department"), # - Based on gender
                                       choices = department,
                                       selected = "AGRONOMY")),
                     column(width = 6, selectInput("fiscal_year", label = ("Year"), # - Based on gender
