@@ -30,8 +30,8 @@ couple issues that we'd like to be completely transparant about.
     State University decides to publicly release directory information,
     we will make that publicly available.
 
-2.  All of our salary estimates are based up the "total salary paid" for
-    a given fiscal year. This is because total salary paid is always
+2.  All of our salary estimates are based upon the "total salary paid"
+    for a given fiscal year. This is because total salary paid is always
     reported for all employees. However, this is not the same thing as
     the "base salary" for an employee. For instance, some professors are
     paid on 9-month appointments but will supplement their summer income
